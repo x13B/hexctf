@@ -18,5 +18,10 @@
 		"typescript": "^5.0.0",
 		"vite": "^4.4.2"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@prisma/client": "^5.2.0",
+		"prisma": "^5.2.0",
+		"sqlite3": "^5.1.6"
+	}
 }
