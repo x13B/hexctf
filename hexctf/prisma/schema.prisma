@@ -10,13 +10,135 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// schema.prisma
+
+// User model
 model User {
-  userID      Int    @id @default(autoincrement())
-  username    String @unique
-  password    String
-  email       String @unique
+  userID   Int     @id @default(autoincrement())
+  email    String  @unique
+  username String  @unique
+  password String
+  admin    Admin[] @relation("UserToAdmin")
+  looking  LookingForGroupTable[] @relation("UserToLFG")
+  chats    ChatHistory[] @relation("UserToChat")
 }
 
+// Admin model
 model Admin {
-  
+  adminID   Int     @id @default(autoincrement())
+  userID    Int
+  username  String
+  headAdmin Boolean
+  user      User    @relation("UserToAdmin", fields: [userID], references: [userID])
+  chats     Chats[] @relation("AdminToChats")
+}
+
+// Teams model
+model Teams {
+  teamID   Int     @id @default(autoincrement())
+  teamName String  @unique
+  competitionID Int?
+  chats    Chats[] @relation("TeamsToChat")
+  leaders  Leaderboard[] @relation("TeamToLeaderboard")
+  answered questionsAnswered[] @relation("TeamToAnswered")
+}
+
+// Leaderboard model
+model Leaderboard {
+  teamID        Int     @id
+  teamName      String
+  pointsEarned  Int     @default(0)
+  boardPosition Int     @unique
+  teams         Teams   @relation("TeamToLeaderboard", fields: [teamID], references: [teamID])
+}
+
+// CompetitionSettings model
+model CompetitionSettings {
+  competitionName String @unique
+  startDate       DateTime?
+  endDate         DateTime?
+  numTeams        Int    @default(1)
+  teamSize        Int?
+}
+
+// Categories model
+model Categories {
+  categoryID   Int     @id @default(autoincrement())
+  categoryName String  @unique
+  questions    Question[] @relation("CategoryToQuestion")
+}
+
+// Question model
+model Question {
+  questionID        Int     @id @default(autoincrement())
+  categoryID        Int
+  questionDescription String
+  questionAnswer     String
+  pointValue        Int    @default(0)
+  category          Categories @relation("CategoryToQuestion", fields: [categoryID], references: [categoryID])
+  hint              Hints[] @relation("HintToQuestion")
+}
+
+// questionsAnswered model
+model questionsAnswered {
+  questionID Int
+  teamID     Int
+  teamName   String
+  pointsValue Int?
+  team       Teams   @relation("TeamToAnswered", fields: [teamID], references: [teamID])
+  @@unique([questionID, teamID])
+}
+
+// Hints model
+model Hints {
+  hintID      Int    @id
+  questionID  Int
+  pointPenalty Int
+  question    Question @relation("HintToQuestion", fields: [questionID], references: [questionID])
+}
+
+// HintSeen model
+model HintSeen {
+  hintID Int  
+  teamID Int
+  @@unique([hintID, teamID])
+}
+
+// LookingForGroupTable model
+model LookingForGroupTable {
+  postID      Int     @id
+  userID      Int
+  userName    String
+  description String?
+  user        User    @relation("UserToLFG", fields: [userID], references: [userID])
+  posts       LookingForGroupHistory[] @relation("PostToLFG")
+}
+
+// LookingForGroupHistory model
+model LookingForGroupHistory {
+  postHistoryID Int   @id
+  userID        Int
+  userName      String
+  description   String
+  post          LookingForGroupTable @relation("PostToLFG", fields: [postHistoryID], references: [postID])
+}
+
+// Chats model
+model Chats {
+  chatID   Int    @id @default(autoincrement())
+  adminID  Int
+  teamID   Int
+  admin    Admin  @relation("AdminToChats", fields: [adminID], references: [adminID])
+  team     Teams  @relation("TeamsToChat", fields: [teamID], references: [teamID])
+  chats    ChatHistory[] @relation("ChatToHistory")
+}
+
+// ChatHistory model
+model ChatHistory {
+  chatHistoryID Int     @id @default(autoincrement())
+  chatID        Int
+  userID        Int
+  chatResponse  String
+  chat          Chats   @relation("ChatToHistory", fields: [chatID], references: [chatID])
+  user          User    @relation("UserToChat", fields: [userID], references: [userID])
 }
