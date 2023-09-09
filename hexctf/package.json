@@ -22,6 +22,7 @@
 	"type": "module",
 	"dependencies": {
 		"@prisma/client": "^5.2.0",
+		"mysql": "^2.18.1",
 		"sqlite3": "^5.1.6"
 	}
 }
