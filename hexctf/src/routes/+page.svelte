@@ -3,3 +3,5 @@
 
 <h1>Welcome</h1>
 <h2>HexCTF</h2>
+<a href="/">Login</a>
+<a href="/">Create Account</a>
