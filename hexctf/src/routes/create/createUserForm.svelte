@@ -1,13 +1,16 @@
 <script lang="ts">
-    let username: String;
-    let password: String;
-    let email: String;
-    
-    // This is a test arrow function to print input out to the console. 
-    // It grabs the correct user input. 
-    // TODO: Make a create user function that inserts to database 
+    let users: any = [];
+
+    let username: string;
+    let password: string;
+    let email: string;
     const submitForm = () => {
         console.log(username, password, email);
+    }
+
+    async function fetchUsers() {
+        const res = await fetch('api/users');
+        users = await res.json();
     }
 </script>
 
@@ -21,3 +24,10 @@
     <input type="text" placeholder="Enter an email" bind:value={email}><br>
     <button>Create Account</button>
 </form>
+
+<h1>Users</h1>
+<ul>
+  {#each users as user (user.userID)}
+    <li>{user.name}</li>
+  {/each}
+</ul>
