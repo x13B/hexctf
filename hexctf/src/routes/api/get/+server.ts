@@ -17,3 +17,21 @@ export async function GET() {
     await prisma.$disconnect();
   }
 }
+
+export async function POST(username: string, password: string, email: string) {
+  const prisma = new PrismaClient();
+
+  try {
+    const data = await prisma.user.create({
+      data: {
+        username: username,
+        password: password,
+        email: email,
+      }
+    });
+  } catch (error) {
+    console.error("The following error occurred in POST", error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}

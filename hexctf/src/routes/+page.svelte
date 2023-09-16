@@ -5,3 +5,4 @@
 <h2>HexCTF</h2>
 <a href="/login">Login</a>
 <a href="/create">Create Account</a>
+<a href="/LFG">LFG</a>
