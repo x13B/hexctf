@@ -7,14 +7,14 @@
   let password: string;
   let email: string;
 
-  // =================================================================
-  // This function gets all the users from the database
-  // and displays them to the page. 
-  // It fetches data from server.js file in /get 
   const submitForm = () => {
     console.log(username, password, email);
   }
   
+  // =================================================================
+  // This function gets all the users from the database
+  // and displays them to the page. 
+  // It fetches data from server.js file in /get 
   onMount(async () => {
     try {
       const response = await fetch('../get'); 
