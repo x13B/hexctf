@@ -4,7 +4,7 @@
 
     onMount(async () => {
       try {
-        const response = await fetch('../api/get'); 
+        const response = await fetch('../api/getUsers'); 
         if (response.ok) {
           users = await response.json();
           console.log(users);

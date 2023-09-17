@@ -1,23 +1,49 @@
 <script lang="ts">
-  let users: any = [];
+  let formData = {
+    username: '',
+    password: '',
+    email: '',
+  }
 
-  let username: string;
-  let password: string;
-  let email: string;
+  async function handleSubmit(event: Event) {
+    event.preventDefault();
+    
+    try {
+      console.log(formData.username, formData.password, formData.email);
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-  const handleCreateUser = () => {
-    console.log(username, password, email);
+      if (response.ok) {
+        console.log('User registered successfully');
+      } else {
+        console.error('User registration failed');
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
   }
 </script>
 
-<!-- Generic form to submit user data -->
-<form on:submit={handleCreateUser} >
-  Username:
-  <input type="text" placeholder="Enter a username" bind:value={username}><br>
-  Password:
-  <input type="password" placeholder="Enter a password" bind:value={password}><br>
-  Email:
-  <input type="text" placeholder="Enter an email" bind:value={email}><br>
-  <button>Create Account</button>
-</form>
-
+<main>
+  <h1>Register</h1>
+  <form on:submit={handleSubmit}>
+    <label>
+      Username:
+      <input type="text" bind:value={formData.username} />
+    </label>
+    <label>
+      Password:
+      <input type="password" bind:value={formData.password} />
+    </label>
+    <label>
+      Email:
+      <input type="email" bind:value={formData.email} />
+    </label>
+    <button type="submit">Register</button>
+  </form>
+</main>
