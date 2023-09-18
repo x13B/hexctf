@@ -35,6 +35,5 @@ export async function POST(request: any){
           status: 500,
           body: JSON.stringify({ error: 'User registration failed', details: error.message }),
         };
-      }
-      
+      }     
 }
