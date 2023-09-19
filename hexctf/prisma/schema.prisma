@@ -22,6 +22,14 @@ model User {
   admin    Admin[] @relation("UserToAdmin")
   looking  LookingForGroupTable[] @relation("UserToLFG")
   chats    ChatHistory[] @relation("UserToChat")
+  scores   QuizScores[] @relation("UserToScore")
+}
+
+model QuizScores {
+  id Int @id
+  username Int
+  score Float
+  user User @relation("UserToScore", fields: [id], references: [userID])
 }
 
 // Admin model
