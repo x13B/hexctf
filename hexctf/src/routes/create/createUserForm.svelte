@@ -31,7 +31,8 @@
 
 <main>
   <h1>Register</h1>
-  <form on:submit={handleSubmit}>
+  <!-- <form on:submit={handleSubmit}> -->
+  <form action="">
     <label>
       Username:
       <input type="text" bind:value={formData.username} />

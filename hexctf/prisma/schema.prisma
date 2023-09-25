@@ -8,15 +8,14 @@ generator client {
 datasource db {
   provider = "sqlite"
   // url      = env("DATABASE_URL")
-  url = "file:./hexctfDatabase.db"
+  url = "file:hexctf/prisma/hexctfDatabase.db"
 }
 
 // schema.prisma
 model User {
-  UserID   Int     @id
-  username String  @unique
+  UserID   Int     @id @default(autoincrement())
+  username String
   password String  @unique 
-  email    String  @unique
   isAdmin  Boolean @default(false)
   Results  QuizResults[] @relation("UserToResults")
 }

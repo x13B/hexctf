@@ -7,7 +7,7 @@
         const response = await fetch('../api/getUsers'); 
         if (response.ok) {
           users = await response.json();
-          console.log(users);
+          console.log("from function user", users);
         } else {
           console.error('Failed to fetch data:', response.status);
         }
@@ -22,8 +22,11 @@
 <!-- Iterate through each user and display them -->
 <h1>Users</h1>
 <ul>
-  {#each users as user (user.userID)}
-    <!-- <li>{user.username}</li> -->
-    <li>User: {user.username}, Email: {user.email}</li>
+  {#each users as user (user.UserID)}
+    {#if user.isAdmin === true}
+      <li>This is the admin: {user.UserID}</li> 
+    {:else}
+      <li>Non-Admin User: {user.UserID}, password: {user.password}</li>
+    {/if}
   {/each}
 </ul>
