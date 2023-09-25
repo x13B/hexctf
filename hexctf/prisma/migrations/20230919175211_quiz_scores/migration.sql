@@ -1,7 +1,0 @@
--- CreateTable
-CREATE TABLE "QuizScores" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "username" INTEGER NOT NULL,
-    "score" REAL NOT NULL,
-    CONSTRAINT "QuizScores_id_fkey" FOREIGN KEY ("id") REFERENCES "User" ("userID") ON DELETE RESTRICT ON UPDATE CASCADE
-);
