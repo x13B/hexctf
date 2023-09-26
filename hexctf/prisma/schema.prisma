@@ -65,7 +65,7 @@ model Quiz {
 model QuizResults {
   quizId Int 
   UserId Int
-  score  Int
+  score  Int @default(-1)
   Quiz   Quiz @relation("QuizToResults", fields: [quizId], references: [quizId])
   User   User @relation("UserToResults", fields: [UserId], references: [UserID])
   @@unique([quizId, UserId])
