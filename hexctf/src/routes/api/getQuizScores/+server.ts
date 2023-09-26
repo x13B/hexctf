@@ -1,0 +1,18 @@
+import { PrismaClient} from "@prisma/client";
+import { json } from '@sveltejs/kit';
+
+// This function gets all quiz scores
+export async function GET() {
+  const prisma = new PrismaClient();
+
+  try {
+    const data = await prisma.quizResults.findMany();
+     // Return a 200 OK response with the data
+    return json(data);
+} catch (error) {
+     // Return a 500 Internal Server Error response
+      return json({ error: 'Error fetching data from the database' });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
