@@ -73,10 +73,33 @@
       console.error("Error fetching data:", error);
     }
   })
- 
+
   // This function will sort members in alternating order from high to low
-  function easySort() {
-    console.log("easy sort working");
+  const easySort = () => {
+    // Reset the teams before sorting
+    teamsMadeBySort = [];
+    
+    // Sort the teams in ascending order
+    userScores.sort((a:any, b:any) => a.score - b.score);
+    
+    // Will point from beginning to mid of array
+    let leftPtr: number = 0;
+
+    // Will point from end to mid of array
+    let rightPtr: number = userScores.length - 1;
+
+    // Make empty array for each team
+    for (let i = 0; i < numGroups; i++) {
+      teamsMadeBySort.push([]);
+    }
+
+    for (let i = 0; leftPtr <= rightPtr; i++) {
+      teamsMadeBySort[i % numGroups].push(userScores[leftPtr]);
+      leftPtr++;
+    }
+
+    console.log("Teams made by easy sort", teamsMadeBySort);
+
   }
 
   // Using Fisher-Yates algorithm to randomly sort
@@ -135,7 +158,7 @@
       }
     }
 
-    console.log('teams', teamsMadeBySort);
+    console.log('teams made by random sort:', teamsMadeBySort);
   }
   
   // This function will sort players based on weighted score using edit distance algorithm
