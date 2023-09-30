@@ -1,39 +1,46 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '$lib';
 import * as bcrypt from 'bcrypt';
-
-const prisma = new PrismaClient();
 
 // For hashing passwords
 const salt = 10;
 
 export async function POST(request: any){
+    let data;
 
-    const { email, password, username } = JSON.parse(request.body);
+      try {
+        console.log("before parsing body");
+        console.log(request['request']);
+        data = JSON.parse(request.body);
+        console.log("data", data);
 
-    // bcrypt.hash(password, salt, (err:any) => {
-    //     if (err) {
-    //         console.error("Error hashing password", err);
-    //     }
-    // });
+        console.log("before creating user");
+        const result = await prisma.user.create({
+            data: {
+                username: data.username,
+                password: data.password,
+            }
+        });
+        
+        console.log("Before returning");
+        return {
+            status: 200,
+            body: {
+              success: true,
+              message: "Registration successful",
+            },
+          };
 
-    // try {
-    //     const user = await prisma.user.create({
-    //         data: {
-    //         username,
-    //         password,
-    //         email,
-    //         },
-    //     });
+      } catch (error) {
+        console.log("Entered catch block");
+        console.error("Error: ", error);
 
-    //     return {
-    //         status: 200,
-    //         body: JSON.stringify({ message: "Data inserted successfully"}),
-    //     };
-    // } catch (error: any) {
-    //     console.error('Error registering user:', error);
-    //     return {
-    //       status: 500,
-    //       body: JSON.stringify({ error: 'User registration failed', details: error.message }),
-    //     };
-    //   }     
+        return {
+            status: 400,
+            body: {
+                success: false,
+                message: "An error occurred trying to create a new user",
+            },
+        };
+
+      }
 }

@@ -1,12 +1,26 @@
-<script lang="ts">   
-
-  let username: number;
+<script lang="ts">
+  let username: string;
   let password: string;
 
-  const handleSubmit = (event: Event) => {
-    event.preventDefault();
+  async function handleSubmit() {
+    console.log(JSON.stringify({username, password}));
 
-    console.log(username, password);
+    const res = await fetch('../api/register', {
+      method: 'post',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({username, password}),
+    }).then((response) => {
+      if (response.status === 500) {
+        console.log("INTERNAL SERVER ERROR OCCURRED");
+      } else if (response.status === 200) {
+        console.log("OK");
+      }
+    }).catch((error) => {
+      console.log("AN ERROR OCCURRED: ", error);
+    })
   }
 </script>
 
@@ -26,4 +40,4 @@
         </label>
         <button type="submit">Register</button>
     </form>
-    </main>
+</main>
