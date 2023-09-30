@@ -1,39 +1,50 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '$lib';
+import type { RequestHandler } from '@sveltejs/kit';
 import * as bcrypt from 'bcrypt';
-
-const prisma = new PrismaClient();
 
 // For hashing passwords
 const salt = 10;
 
 export async function POST(request: any){
+    console.log("In server function", request.body)
 
-    const { email, password, username } = JSON.parse(request.body);
+    let data;
+    try {
+        data = JSON.parse(request.body);
+    } catch (error) {
+        console.error("Error parsing JSON:", error);
+        return {
+            status: 500,
+            body: {
+                success: false,
+                message: "Error parsing JSON"
+            }
+        }
+    }
 
-    // bcrypt.hash(password, salt, (err:any) => {
-    //     if (err) {
-    //         console.error("Error hashing password", err);
-    //     }
-    // });
+    console.log("From server", data);
 
-    // try {
-    //     const user = await prisma.user.create({
-    //         data: {
-    //         username,
-    //         password,
-    //         email,
-    //         },
-    //     });
+    try {
+        const result = await prisma.user.create({
+            data: {
+                username: data.username,
+                password: data.password,
+            }
+        })
+    } catch (error) {
+        console.error("Error creating user:", error);
+        return {
+            status: 500,
+            body: {
+                success: false,
+                message: "Error creating user"
+            }
+        }
+    }
 
-    //     return {
-    //         status: 200,
-    //         body: JSON.stringify({ message: "Data inserted successfully"}),
-    //     };
-    // } catch (error: any) {
-    //     console.error('Error registering user:', error);
-    //     return {
-    //       status: 500,
-    //       body: JSON.stringify({ error: 'User registration failed', details: error.message }),
-    //     };
-    //   }     
+    return {
+        body: {
+            success: true
+        }
+    }
 }
