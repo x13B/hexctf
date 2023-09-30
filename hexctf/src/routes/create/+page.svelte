@@ -1,12 +1,22 @@
 <script lang="ts">   
 
-  let username: number;
-  let password: string;
+  let username: string = '';
+  let password: string = '';
 
-  const handleSubmit = (event: Event) => {
-    event.preventDefault();
+  async function handleSubmit() {
+    const res = await fetch('../api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({username, password}),
+    });
 
-    console.log(username, password);
+    if (res.ok) {
+      console.log("Success");
+    } else {
+      console.log(res);
+    }
   }
 </script>
 
