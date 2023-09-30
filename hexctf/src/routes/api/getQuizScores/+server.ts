@@ -1,9 +1,8 @@
-import { PrismaClient} from "@prisma/client";
+import prisma from "$lib";
 import { json } from '@sveltejs/kit';
 
 // This function gets all quiz scores
 export async function GET() {
-  const prisma = new PrismaClient();
 
   try {
     const data = await prisma.quizResults.findMany();
