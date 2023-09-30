@@ -4,12 +4,6 @@
   // Holds all users in the competition
   let users: any = [];
 
-  // type Groups = {
-  //   quizId: number,
-  //   UserId: number,
-  //   score: number,
-  // };
-
   // Holds admin ID
   let adminIDNumber: number;
 
@@ -34,6 +28,9 @@
   // Hides team button until teams are formed
   let showTeamsButton: boolean = false;
   
+  // Hides sort buttons until number of groups if defined
+  let showSortButtons: boolean = false;
+
   // This gets all users in the database
   onMount(async () => {
     try {
@@ -67,7 +64,7 @@
         userScores = await res.json();
         
         // Filters out the scores that are less than 0
-        const filteredScores = userScores.filter((user:any) => user.score > 0);
+        const filteredScores = userScores.filter((user:any) => user.score >= 0);
         userScores = filteredScores;
       } else {
         console.error("Failed to get users", res.status);
@@ -77,40 +74,7 @@
     }
   })
  
-  // This function will easy sort the users into groups
-  // TODO: continue working on this function
-  function sortGroups(groups: any, numGroups: number) {
-    // console.log("Sorting teams");
-    // let officialTeams = Array.from({length: numGroups}, () => []);
-
-    // // Filter out admin
-    // let teams = groups.filter((group:any) => group.score != -1);
-
-    // let front = 0;
-    // let back = teams.length - 1;
-    // console.log("Starting Sort")
-    // while (front <= back) {
-    //   console.log("First sort");
-    //   for (let i = 0; i < officialTeams.length; i++) {
-    //     console.log("Pushing front:", teams[front]);
-    //     officialTeams[i].push(teams[front]);
-    //     front++;
-    //   }
-    //   console.log(officialTeams)
-    //   console.log("Second sort");
-    //   for (let j = officialTeams.length - 1; j >= 0; j--) { // Corrected line
-    //     console.log("Pushing", teams[back]);
-    //     officialTeams[j].push(teams[back]);
-    //     back--;
-    //   }
-    //   console.log(officialTeams)
-    //   break;
-    // }
-    // console.log("End Sort")
-
-    // return teams;
-  }
-
+  // This function will sort members in alternating order from high to low
   function easySort() {
     console.log("easy sort working");
   }
@@ -133,35 +97,57 @@
     return shuffledArray;
   };
 
+  // This function will generate random groups regardless of quiz score
   function randomSort() {
+    // Reset teams to an empty array to prevent adding more data
+    teamsMadeBySort = [];
+
+    // Show the show teams button
     showTeamsButton = true;
 
+    // Shuffle all players 
     let shuffledTeams = shuffleArray(userScores);
+
+    // Used to keep track of current index of randomized array
     let index: number = 0;
+
+    // Determine the number of players per team
     const membersPerTeam: number = Math.floor(userScores.length / numGroups);
     
-    
+    // Iterate and create teams based on calculation
     for (let i = 0; i < numGroups; i++) {
       let team: any = [];
 
-      for (let j = 0; j < 2; j++) {
+      for (let j = 0; j < membersPerTeam; j++) {
         team.push(shuffledTeams[index]);
         index++;
       }
+
+      // Add team to teams array
       teamsMadeBySort.push(team);
     }
 
-    console.log("teams", teamsMadeBySort);
+    // Handle remaining players if the number of players is odd
+    while (index < shuffledTeams.length) {
+      for (let i = 0; i < numGroups && index < shuffledTeams.length; i++) {
+        teamsMadeBySort[i].push(shuffledTeams[index]);
+        index++;
+      }
+    }
+
+    console.log('teams', teamsMadeBySort);
   }
   
+  // This function will sort players based on weighted score using edit distance algorithm
   function complexFairSort() {
     console.log("Complex fair sort working");
   }
     
-  // This hides the submit button to avoid changing group number
+  // This function toggles buttons to prevent resubmission of data
   function hideButton() {
     groupsButtonVisible = false;
     inputVisible = false;
+    showSortButtons = true;
   }
 
 </script>
@@ -178,7 +164,7 @@
   Select the number of groups per team:
   {#if groupsButtonVisible === true && inputVisible === true} 
     <input type="number" bind:value={numGroups}>
-    <button on:click={hideButton} class="group-button" disabled={numGroups <= 0}>submit</button>
+    <button on:click={hideButton} class="group-button" disabled={numGroups <= 1}>submit</button>
   {/if}
 </form>
 
@@ -186,7 +172,7 @@
 
 <!-- Check to see if the number of groups is valid before sorting teams -->
 <div>
-  {#if numGroups > 0}
+  {#if showSortButtons === true}
     <strong>Select a sorting method:</strong>
     <button on:click={easySort}>Easy Sort</button>
     <button on:click={randomSort}>Random Sort</button>
@@ -223,8 +209,8 @@
       <div>
         <h2>Team: {i + 1}</h2>
         <ul>
-          {#each teamArray as player, j}
-            <li>{player.UserId} {j}</li>
+          {#each teamArray as player}
+            <li>Team member: {player.UserId}</li>
           {/each}
         </ul>
       </div>
