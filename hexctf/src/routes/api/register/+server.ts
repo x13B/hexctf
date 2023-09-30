@@ -1,50 +1,46 @@
 import prisma from '$lib';
-import type { RequestHandler } from '@sveltejs/kit';
 import * as bcrypt from 'bcrypt';
 
 // For hashing passwords
 const salt = 10;
 
 export async function POST(request: any){
-    console.log("In server function", request.body)
-
     let data;
-    try {
+
+      try {
+        console.log("before parsing body");
+        console.log(request['request']);
         data = JSON.parse(request.body);
-    } catch (error) {
-        console.error("Error parsing JSON:", error);
-        return {
-            status: 500,
-            body: {
-                success: false,
-                message: "Error parsing JSON"
-            }
-        }
-    }
+        console.log("data", data);
 
-    console.log("From server", data);
-
-    try {
+        console.log("before creating user");
         const result = await prisma.user.create({
             data: {
                 username: data.username,
                 password: data.password,
             }
-        })
-    } catch (error) {
-        console.error("Error creating user:", error);
+        });
+        
+        console.log("Before returning");
         return {
-            status: 500,
+            status: 200,
+            body: {
+              success: true,
+              message: "Registration successful",
+            },
+          };
+
+      } catch (error) {
+        console.log("Entered catch block");
+        console.error("Error: ", error);
+
+        return {
+            status: 400,
             body: {
                 success: false,
-                message: "Error creating user"
-            }
-        }
-    }
+                message: "An error occurred trying to create a new user",
+            },
+        };
 
-    return {
-        body: {
-            success: true
-        }
-    }
+      }
 }

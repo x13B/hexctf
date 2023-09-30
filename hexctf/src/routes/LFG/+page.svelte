@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
+  let sortUsed: string = '';
+
   // Holds all users in the competition
   let users: any = [];
 
@@ -98,6 +100,12 @@
       leftPtr++;
     }
 
+    // Toggle showTeamsButton
+    showSortButtons = true;
+
+    // Set string to current algorithm
+    sortUsed = "Easy Sort";
+
     console.log("Teams made by easy sort", teamsMadeBySort);
 
   }
@@ -157,6 +165,9 @@
         index++;
       }
     }
+    
+    // Set string to current algorithm
+    sortUsed = "Random Sort";
 
     console.log('teams made by random sort:', teamsMadeBySort);
   }
@@ -225,9 +236,9 @@
 
 <div>
   {#if showTeamsButton === false}
-    <strong>Currently no teams are formed</strong>
+    <h3>Currently no teams are formed</h3>
   {:else}
-    <strong>Current Teams</strong>
+    <h3>Current Teams using {sortUsed}</h3>
     {#each teamsMadeBySort as teamArray, i}
       <div>
         <h2>Team: {i + 1}</h2>
