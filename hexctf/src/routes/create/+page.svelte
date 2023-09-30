@@ -1,26 +1,25 @@
 <script lang="ts">
-  let username: string;
-  let password: string;
+  import { goto } from '$app/navigation';
 
-  async function handleSubmit() {
-    console.log(JSON.stringify({username, password}));
+  let username = ''
+  let password = ''
 
-    const res = await fetch('../api/register', {
-      method: 'post',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({username, password}),
-    }).then((response) => {
-      if (response.status === 500) {
-        console.log("INTERNAL SERVER ERROR OCCURRED");
-      } else if (response.status === 200) {
-        console.log("OK");
-      }
-    }).catch((error) => {
-      console.log("AN ERROR OCCURRED: ", error);
-    })
+  const register = async (e: SubmitEvent ) => {
+    e.preventDefault()
+    await (
+      await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      })
+    ).json()
+
+    goto('/login')
   }
 </script>
 
@@ -29,15 +28,15 @@
 <!-- This will display the form used to create an account -->
 <main>
     <h1>Register</h1>
-    <form on:submit={handleSubmit}>
+    <form on:submit={register}>
         <label>
         Username:
-        <input type="text" bind:value={username} />
+        <input type="text" bind:value={username}/>
         </label>
         <label>
         Password:
-        <input type="password" bind:value={password} />
+        <input type="password" bind:value={password}/>
         </label>
-        <button type="submit">Register</button>
+        <input disabled={!username || !password} type="submit" value="Signup"/>
     </form>
 </main>
