@@ -30,6 +30,9 @@
 
   // Holds the teams for the competition
   let teamsMadeBySort: any = [];
+
+  // Hides team button until teams are formed
+  let showTeamsButton: boolean = false;
   
   // This gets all users in the database
   onMount(async () => {
@@ -131,6 +134,8 @@
   };
 
   function randomSort() {
+    showTeamsButton = true;
+
     let shuffledTeams = shuffleArray(userScores);
     let index: number = 0;
     const membersPerTeam: number = Math.floor(userScores.length / numGroups);
@@ -209,21 +214,20 @@
     {/each}
 </div>
 
-{#if teamsMadeBySort.length > 0}
-  <!-- <strong>Teams have not been defined</strong> -->
-<!-- {:else} -->
-  <div>
+<div>
+  {#if showTeamsButton === false}
+    <strong>Currently no teams are formed</strong>
+  {:else}
     <strong>Current Teams</strong>
-    {teamsMadeBySort}
-    {#each teamsMadeBySort as teamArray}
+    {#each teamsMadeBySort as teamArray, i}
       <div>
-        <h2>Team:</h2>
+        <h2>Team: {i + 1}</h2>
         <ul>
-          {#each teamArray as player}
-            <li>{player.name}</li>
+          {#each teamArray as player, j}
+            <li>{player.UserId} {j}</li>
           {/each}
         </ul>
       </div>
     {/each}
-  </div>
-{/if}
+  {/if}
+</div>
