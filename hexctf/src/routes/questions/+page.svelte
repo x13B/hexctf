@@ -21,6 +21,6 @@
 <h1>Questions</h1>
 <ul>
     {#each questions as q (q.QuestionId)}
-      <li>{q.QuestionId} - {q.Description} - {q.points}</li>
+      <div>{q.QuestionId} - {q.Description} - {q.points} - {q.categoryId}</div>
     {/each}
 </ul>

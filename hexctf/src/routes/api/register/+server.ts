@@ -8,9 +8,10 @@ export const POST: RequestHandler = async ({ request }) => {
   const createdUser = await prisma.user.create({
     data: {
       username,
-      password,
+      password
     },
   });
+
 
   return json(createdUser);
 };
