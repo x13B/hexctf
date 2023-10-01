@@ -39,7 +39,7 @@
       const response = await fetch('../api/getUsers'); 
       if (response.ok) {
         users = await response.json();
-
+        console.log(users);
         // This will get the admin user id from the dataset
         users.forEach((user:any) => {
           if (user.isAdmin === true) {
