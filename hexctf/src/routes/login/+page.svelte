@@ -1,28 +1,16 @@
 <script lang="ts">   
-
-    let username: number;
-    let password: string;
-  
-    const handleSubmit = (event: Event) => {
-      event.preventDefault();
-  
-      console.log(username, password);
-    }
-  </script>
+    import { enhance } from "$app/forms";
+</script>
 
 <h1>This is the login page</h1>
 
 <main>
     <h1>Login</h1>
-    <form on:submit={handleSubmit}>
-        <label>
-            Username
-            <input bind:value={username} type="text">
-        </label>
-        <label>
-            Password
-            <input bind:value={password} type="password">
-        </label>
-        <button type="submit">Log in</button>
+    <form method="POST">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" /><br />
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" /><br />
+        <button type="submit">Login</button>
     </form>
 </main>
