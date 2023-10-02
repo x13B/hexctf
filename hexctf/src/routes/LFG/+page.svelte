@@ -41,12 +41,12 @@
         users = await response.json();
         console.log(users);
         // This will get the admin user id from the dataset
-        users.forEach((user:any) => {
-          if (user.isAdmin === true) {
-            adminIDNumber = user.UserID;
-            adminName = user.username;
-          }
-        });
+        // users.forEach((user:any) => {
+        //   if (user.isAdmin === true) {
+        //     adminIDNumber = user.UserID;
+        //     adminName = user.username;
+        //   }
+        // });
 
         // console.log("from function user", users);
       } else {
@@ -216,7 +216,7 @@
 
 <!-- This will be removed when login functionality works -->
 <ul>
-  {#each users as user (user.UserID)}
+  {#each users as user (user.id)}
     {#if adminIDNumber !== user.UserID}
       <li>Non-Admin User: {user.UserID}, password: {user.password}</li>
     {/if}
