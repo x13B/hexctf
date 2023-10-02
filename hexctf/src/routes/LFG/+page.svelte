@@ -41,12 +41,12 @@
         users = await response.json();
         console.log(users);
         // This will get the admin user id from the dataset
-        // users.forEach((user:any) => {
-        //   if (user.isAdmin === true) {
-        //     adminIDNumber = user.UserID;
-        //     adminName = user.username;
-        //   }
-        // });
+        users.forEach((user:any) => {
+          if (user.isAdmin === true) {
+            adminIDNumber = user.id;
+            adminName = user.username;
+          }
+        });
 
         // console.log("from function user", users);
       } else {
@@ -217,8 +217,8 @@
 <!-- This will be removed when login functionality works -->
 <ul>
   {#each users as user (user.id)}
-    {#if adminIDNumber !== user.UserID}
-      <li>Non-Admin User: {user.UserID}, password: {user.password}</li>
+    {#if adminIDNumber !== user.id}
+      <li>Non-Admin User: {user.username}</li>
     {/if}
   {/each}
 </ul>
@@ -230,7 +230,7 @@
 <br>
 <div>
     {#each userScores as score (score.UserId)}
-      <li>User Score: {score.UserId}: {score.score}</li>
+      <li>User Score: {score.username}: {score.score}</li>
     {/each}
 </div>
 
@@ -244,7 +244,7 @@
         <h2>Team: {i + 1}</h2>
         <ul>
           {#each teamArray as player}
-            <li>Team member: {player.UserId}</li>
+            <li>Team member: {player.username}</li>
           {/each}
         </ul>
       </div>
