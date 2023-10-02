@@ -6,10 +6,8 @@ import { json } from '@sveltejs/kit';
 export async function GET() {
 
   try {
-    console.log("Inside get function");
     const data = await prisma.user.findMany();
-    console.log("Adfter findMany");
-    console.log(data);
+    
      // Return a 200 OK response with the data
     return json(data);
 } catch (error) {
