@@ -68,6 +68,8 @@
         // Filters out the scores that are less than 0
         const filteredScores = userScores.filter((user:any) => user.score >= 0);
         userScores = filteredScores;
+        
+        console.log(userScores);
       } else {
         console.error("Failed to get users", res.status);
       }
@@ -75,38 +77,36 @@
       console.error("Error fetching data:", error);
     }
   })
-
+  
   // This function will sort members in alternating order from high to low
   const easySort = () => {
     // Reset the teams before sorting
     teamsMadeBySort = [];
     
+    // Toggle showTeamsButton
+    showTeamsButton = true;
+  
+    // Set string to current algorithm
+    sortUsed = "Easy Sort";
+
     // Sort the teams in ascending order
     userScores.sort((a:any, b:any) => a.score - b.score);
     
     // Will point from beginning to mid of array
     let leftPtr: number = 0;
-
+    
     // Will point from end to mid of array
     let rightPtr: number = userScores.length - 1;
-
+    
     // Make empty array for each team
     for (let i = 0; i < numGroups; i++) {
       teamsMadeBySort.push([]);
     }
-
+    
     for (let i = 0; leftPtr <= rightPtr; i++) {
       teamsMadeBySort[i % numGroups].push(userScores[leftPtr]);
       leftPtr++;
     }
-
-    // Toggle showTeamsButton
-    showSortButtons = true;
-
-    // Set string to current algorithm
-    sortUsed = "Easy Sort";
-
-    console.log("Teams made by easy sort", teamsMadeBySort);
 
   }
 
@@ -168,13 +168,17 @@
     
     // Set string to current algorithm
     sortUsed = "Random Sort";
-
-    console.log('teams made by random sort:', teamsMadeBySort);
   }
   
   // This function will sort players based on weighted score using edit distance algorithm
   function complexFairSort() {
     console.log("Complex fair sort working");
+  }
+
+  let showRoster: boolean = false;
+
+  function showStudentRoster() {
+    showRoster = !showRoster;
   }
     
   // This function toggles buttons to prevent resubmission of data
@@ -195,10 +199,10 @@
 <!-- Once submitted, it will hide the button to prevent resubmitting -->
 <!-- The button is disabled until a postive value in entered -->
 <form on:submit|preventDefault>
-  Select the number of groups per team:
   {#if groupsButtonVisible === true && inputVisible === true} 
+    Select the number of groups per team:
     <input type="number" bind:value={numGroups}>
-    <button on:click={hideButton} class="group-button" disabled={numGroups <= 1}>submit</button>
+    <button on:click={hideButton} class="group-button" disabled={numGroups <= 1}>Submit</button>
   {/if}
 </form>
 
@@ -214,40 +218,56 @@
   {/if}
 </div>
 
-<!-- This will be removed when login functionality works -->
-<ul>
-  {#each users as user (user.id)}
-    {#if adminIDNumber !== user.id}
-      <li>Non-Admin User: {user.username}</li>
-    {/if}
-  {/each}
-</ul>
-
-<div>
-  The admins id number is: {adminIDNumber}<br>
-  The number of groups is: {numGroups}
-</div>
 <br>
 <div>
-    {#each userScores as score (score.UserId)}
-      <li>User Score: {score.username}: {score.score}</li>
-    {/each}
+    Show Student Roster:
+    <button on:click={showStudentRoster}>Submit</button>
+    <br>
+    {#if showRoster === true}
+      <h3>Student Name</h3>
+      ================
+      {#each users as student (student.id)}
+        {#if student.isAdmin !== true}
+          <li><strong>{student.username}</strong></li>
+        {/if}
+      {/each}
+    {/if}
 </div>
 
 <div>
   {#if showTeamsButton === false}
-    <h3>Currently no teams are formed</h3>
+  <h3>Currently no teams are formed</h3>
   {:else}
-    <h3>Current Teams using {sortUsed}</h3>
+  <h2>Teams for the Competition</h2>
+  <h3>Current Teams using {sortUsed}</h3>
     {#each teamsMadeBySort as teamArray, i}
-      <div>
-        <h2>Team: {i + 1}</h2>
-        <ul>
-          {#each teamArray as player}
-            <li>Team member: {player.username}</li>
-          {/each}
-        </ul>
-      </div>
-    {/each}
-  {/if}
+    <div>
+      <h2>Team: {i + 1}</h2>
+          <ul>
+            {#each teamArray as player (player.UserId)}
+            <li>Team member: {player.UserId}</li>
+            {/each}
+          </ul>
+        </div>
+        {/each}
+    {/if}
 </div>
+      <!-- This will be removed when login functionality works -->
+      <!-- <ul>
+        {#each users as user (user.id)}
+          {#if adminIDNumber !== user.id}
+            <li>Non-Admin User: {user.username}</li>
+          {/if}
+        {/each}
+      </ul> -->
+      
+      <!-- <div>
+        The admins id number is: {adminIDNumber}<br>
+        The number of groups is: {numGroups}
+      </div> -->
+      <!-- <br>
+      <div>
+          {#each userScores as score (score.UserId)}
+            <li>UserID: {score.UserId} | user score: {score.score}</li>
+          {/each}
+      </div> -->
