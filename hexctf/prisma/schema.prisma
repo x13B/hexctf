@@ -13,7 +13,7 @@ datasource db {
 
 // schema.prisma
 model User {
-  id       Int  @id @unique
+  id       String  @id @unique
   username String  @unique
   //password String
   isAdmin  Boolean @default(false)
@@ -24,8 +24,8 @@ model User {
 
 // For Lucia
 model Session {
-  id             Int @id @unique
-  user_id        Int
+  id             String @id @unique
+  user_id        String
   active_expires BigInt
   idle_expires   BigInt
   user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
@@ -34,9 +34,9 @@ model Session {
 }
 
 model Key {
-  id              Int  @id @unique
+  id              String  @id @unique
   hashed_password String?
-  user_id         Int
+  user_id         String
   user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id])
@@ -86,7 +86,7 @@ model Quiz {
 
 model QuizResults {
   quizId Int 
-  UserId Int
+  UserId String
   score  Int @default(-1)
   Quiz   Quiz @relation("QuizToResults", fields: [quizId], references: [quizId])
   User   User @relation("UserToResults", fields: [UserId], references: [id])
