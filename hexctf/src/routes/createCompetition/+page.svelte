@@ -32,12 +32,27 @@
     }
 
     // Let's you add new categories without overwriting the old ones.
-    const createNewCategory = () => {
+    // const createNewCategory = () => {
+    //   const newCategoryObj = {
+    //     CategoryId: categories.length + 1,
+    //     CategoryName: newCategory,
+    //   };
+
+    //   categories.push(newCategoryObj);
+    //   // Trigger a reactivity update by assigning a new array
+    //   categories = [...categories];
+
+    //   // Clear the input field after adding the category
+    //   newCategory = '';
+
+    // };
+    const createNewCategory = async () => {
       const newCategoryObj = {
         CategoryId: categories.length + 1,
         CategoryName: newCategory,
       };
 
+      // Add the category to your local array
       categories.push(newCategoryObj);
       // Trigger a reactivity update by assigning a new array
       categories = [...categories];
@@ -45,7 +60,25 @@
       // Clear the input field after adding the category
       newCategory = '';
 
-      console.log(categories);
+      try {
+        const res = await fetch('/api/addCategory', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newCategoryObj),
+        });
+
+        if (res.ok) {
+          console.log('Category added successfully to the database');
+          // You can optionally fetch the updated list of categories from the server
+          // and update your local categories array here.
+        } else {
+          console.error('Failed to add category to the database:', res.statusText);
+        }
+      } catch (error) {
+        console.error('Error adding category to the database:', error);
+      }
     };
 
     async function submitOptions() {
@@ -56,7 +89,7 @@
         //   headers: {
         //     'Content-Type' : 'application/json'
         //   },
-        //   body: JSON.stringify({ selectedCategories.length, catName })
+        //   body: JSON.stringify({ })
         // });
 
         // if (res.ok) {
