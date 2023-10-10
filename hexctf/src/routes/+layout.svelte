@@ -6,6 +6,7 @@
     <a href="/LFG">LFG</a>
     <a href="/board">Leaderboard</a>
     <a href="/chat">Chatbot</a>
+    <a href="/createCompetition">Create Competition</a>
 </nav>
 
 <slot />
