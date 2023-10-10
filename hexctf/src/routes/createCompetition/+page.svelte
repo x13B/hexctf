@@ -1,21 +1,37 @@
 <script lang="ts">
+    import { onMount } from "svelte";
+
     let showForm = false;
     let selectedCategories: string[];
-    let cat_test: string[] = ["Category 1", "Category 2", "Category 3", "Category 4"];
+    let categories: any[];
     let newCategory: string;
     let catName: string;
     let numQuestions: number;
     let start: Date;
     let end: Date;
 
+    onMount(async () => {
+    try {
+      const res = await fetch('../api/getCategories');
+      if (res.ok) {
+        categories = await res.json();      
+        console.log(categories);
+      } else {
+        console.error("Failed to get categories", res.status);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  })
+
     const displayForm = () => {
         showForm = true;
     }
 
     const createNewCategory = (cat: string) => {
-        cat_test.push(cat);
+        categories.push(cat);
         // Trigger a reactivity update by assigning a new array
-        cat_test = [...cat_test];
+        categories = [...categories];
     }
 
     const viewOptions = () => {
@@ -33,10 +49,10 @@
         <input type="text" name="comp-name" placeholder="Name of competition" bind:value={catName}/><br>
         
         <label for="category">Categories:</label><br>
-        {#each cat_test as category (category)}
+        {#each categories as category (category.CategoryId)}
             <label>
                 <input type="checkbox" name="cat-options" bind:group={selectedCategories} value={category}/>
-                {category}
+                {category.CategoryName}
             </label><br>
         {/each}
         
