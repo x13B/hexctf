@@ -60,13 +60,16 @@
       // Clear the input field after adding the category
       newCategory = '';
 
+      let id: number = newCategoryObj.CategoryId;
+      let name: string = newCategoryObj.CategoryName;
+
       try {
         const res = await fetch('/api/addCategory', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(newCategoryObj),
+          body: JSON.stringify({id, name}),
         });
 
         if (res.ok) {
@@ -82,8 +85,8 @@
     };
 
     async function submitOptions() {
-        console.log(catName, selectedCategories, numQuestions, start, end);
-
+        // console.log(catName, selectedCategories, numQuestions, start, end);
+        // console.log(selectedCategories);
         // const res = await fetch('../api/addCategory', {
         //   method: 'POST',
         //   headers: {
