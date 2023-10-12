@@ -18,7 +18,80 @@
   let showQuestionsAdded: boolean = true;
   let showQuizName: boolean = false;
 
+  let categoriesLoaded: boolean = false;
+
+  // onMount(async () => {
+  //   console.log("Fetching quiz name");
+  //   try {
+  //     const res = await fetch('../api/getQuizName');
+  //     if (res.ok) {
+  //       let quizDetails: any[] = [];
+  //       quizDetails = await res.json();
+
+  //       quizName = quizDetails[0]["quizName"];  
+  //       showQuizName = true;  
+        
+  //     } else {
+  //       quizName = '';
+  //       console.error("Failed to get categories", res.status);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // })
+  
+  // onMount(async () => {
+  //   console.log("Fetching quiz questions");
+  //   try {
+  //     const res = await fetch('../api/getQuizQuestions');
+  //     if (res.ok) {
+  //       let quizQuestionDetails: any[] = [];
+  //       quizQuestionDetails = await res.json();
+  //       questions = quizQuestionDetails;
+        
+  //       console.log("Details fetched=\n", questions);
+        
+  //     } else {
+  //       console.error("Failed to get categories", res.status);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // })
+  
   onMount(async () => {
+    console.log("Fetching categories");
+    try {
+      const res = await fetch('../api/getCategories');
+      if (res.ok) {
+        categories = await res.json();      
+        console.log("Categories: ", categories);
+        categoriesLoaded = true;
+
+      } else {
+        console.error("Failed to get categories", res.status);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+
+    console.log("Fetching quiz questions");
+    try {
+      const res = await fetch('../api/getQuizQuestions');
+      if (res.ok) {
+        let quizQuestionDetails: any[] = [];
+        quizQuestionDetails = await res.json();
+        questions = quizQuestionDetails;
+        
+        console.log("Details fetched=\n", questions);
+        
+      } else {
+        console.error("Failed to get categories", res.status);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+
     console.log("Fetching quiz name");
     try {
       const res = await fetch('../api/getQuizName');
@@ -37,41 +110,7 @@
       console.error("Error fetching data:", error);
     }
   })
-  
-  onMount(async () => {
-    console.log("Fetching quiz questions");
-    try {
-      const res = await fetch('../api/getQuizQuestions');
-      if (res.ok) {
-        let quizQuestionDetails: any[] = [];
-        quizQuestionDetails = await res.json();
-        questions = quizQuestionDetails;
-        
-        console.log("Details fetched=\n", questions);
-        
-      } else {
-        console.error("Failed to get categories", res.status);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  })
-  
-  onMount(async () => {
-    console.log("Fetching categories");
-    try {
-      const res = await fetch('../api/getCategories');
-      if (res.ok) {
-        categories = await res.json();      
-        console.log("Categories: ", categories);
 
-      } else {
-        console.error("Failed to get categories", res.status);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  })
   const displayForm = () => {
     showForm = true;
   }
@@ -197,13 +236,16 @@
 </form>
 
 <br>
-<!-- {#each categories as category (category.iter)}
-  <div>
-    <p>Category ID: {category.CategoryId}</p>
-    <p>Category Name: {category.CategoryName}</p>
-  </div>
-{/each} -->
-<!-- ... (other code) ... -->
+<div>
+  Categories<br>
+  {#if categoriesLoaded === true}
+      <ul>
+        {#each categories as {CategoryId, CategoryName}}
+          <li>{CategoryId}: {CategoryName}</li>
+        {/each}
+      </ul>
+    {/if}
+</div>
 
 <form action="#">
   {#if showQuizName === false}
@@ -212,7 +254,7 @@
     <label for="name">ENTER QUIZ NAME: </label>
     <input type="text" bind:value={quizName} placeholder="Enter Quiz Name"/>
   {:else}
-    <h2>{quizName}</h2>
+    <h2>QUIZ NAME: {quizName}</h2>
   {/if}
   <br>
   <label for="selected-questions">SELECTED QUESTIONS</label>
@@ -228,8 +270,12 @@
   <input type="text" bind:value={question_answer}/>
   <br>
   <label for="category">Category: </label>
-  
-  {categories}
+  {#if categoriesLoaded === true}
+    {#each categories as cat (cat.CategoryId)}
+      {cat.CategoryName}
+      <input type="radio" name="{cat.CatgoryId}" bind:value={categorySelected}>
+    {/each}
+  {/if}
   <button type="submit" on:click={addQuestion}>Add Question</button>
   <br>
   <button type="submit" on:click={submitQuiz}>Submit Quiz</button>
