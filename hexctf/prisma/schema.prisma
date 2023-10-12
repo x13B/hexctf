@@ -83,6 +83,15 @@ model Quiz {
   quizId   Int     @id
   quizName String  @unique
   results  QuizResults[] @relation("QuizToResults")
+  questions QuizQuestions[] @relation("QuizToQuizQuestions")
+}
+
+model QuizQuestions {
+  quizQuestionsId Int @id
+  quizId          Int
+  questionBody    String
+  questionAnswer  String
+  Quiz            Quiz @relation("QuizToQuizQuestions", fields: [quizId], references: [quizId])
 }
 
 model QuizResults {
