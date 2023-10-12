@@ -18,6 +18,7 @@
   let showMadeQuiz: boolean = false;
   let quizName: string = '';
   let showQuestionsAdded: boolean = true;
+  let showQuizName: boolean = false;
 
   onMount(async () => {
     try {
@@ -110,7 +111,7 @@
     let body: string = newQuestion.questionBody;
     let answer: string = newQuestion.questionAnswer;
     let cat: string = newQuestion.categoryName;
-    
+
     try {
       const res = await fetch("../api/addQuizQuestions", {
         method: 'POST',
@@ -151,6 +152,7 @@
     }
     showMadeQuiz = true;
     showQuestionsAdded = false;
+    showQuizName = true;
   }
 </script>
 
@@ -184,9 +186,11 @@
 {/if}
 
 <br>
+{#if showQuizName === true}
+  <h1>{quizName}</h1>
+{/if}
 
 {#if showMadeQuiz !== false}
-   <h1>{quizName}</h1>
    {#each questions as q (q.id)}
     <strong>Question: {q.body}</strong>
     <strong>Answer:   {q.answer}</strong>
@@ -197,10 +201,12 @@
 
 {#if showQuizForm !== false}
     <form action="#">
-      <label for="New-Quiz">CREATE A NEW QUIZ</label>
-      <br>
-      <label for="name">ENTER QUIZ NAME: </label>
-      <input type="text" bind:value={quizName}/>
+      {#if showQuizName === false}
+        <label for="New-Quiz">CREATE A NEW QUIZ</label>
+        <br>
+        <label for="name">ENTER QUIZ NAME: </label>
+        <input type="text" bind:value={quizName}/>
+      {/if}
       <br>
       <label for="selected-questions">SELECTED QUESTIONS</label>
       <br>
