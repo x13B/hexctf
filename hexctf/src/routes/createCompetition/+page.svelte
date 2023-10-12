@@ -71,7 +71,10 @@
     };
 
     async function submitOptions() {
-        // console.log(catName, selectedCategories, numQuestions, start, end);
+      console.log(selectedCategories);
+      console.log("Startime: ", start);
+      console.log("End time: ", end);
+      console.log(catName, selectedCategories, numQuestions, start, end);
         // console.log(selectedCategories);
         // const res = await fetch('../api/addCategory', {
         //   method: 'POST',
@@ -114,10 +117,10 @@
         <input type="number" bind:value={numQuestions}/><br>
         
         <label for="length">Start Date:</label>
-        <input type="date" bind:value={start}/><br>
+        <input type="datetime-local" bind:value={start}/><br>
         
         <label for="length">End Date:</label>
-        <input type="date" bind:value={end}/><br>
+        <input type="datetime-local" bind:value={end}/><br>
         
         <button type="submit" on:click={submitOptions}>Submit</button>
     </form>
