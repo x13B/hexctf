@@ -104,6 +104,11 @@
         ...questions,
         { id: questionId, body: question_body, answer: question_answer, category: categorySelected }
       ];
+
+      questions.sort((a, b) => a.category.localeCompare(b.category));
+      
+      console.log(questions);
+
       questionId++; // Increment the questionId
       question_body = '';
       question_answer = '';
@@ -180,8 +185,11 @@
       <input type="text" bind:value={question_answer}/>
       <br>
       <label for="category">Category: </label>
-      {#each selectedCategories as cat, i}
-        {categories[i].CategoryName}<input type="checkbox" bind:value={categorySelected}/>
+      {#each categories as cat, i}
+        <label>
+          {cat.CategoryName}
+          <input type="radio" bind:group={categorySelected} value={cat.CategoryName} />
+        </label>
       {/each}
       <button type="submit" on:click={addQuestion}>Add Question</button>
     </form>
