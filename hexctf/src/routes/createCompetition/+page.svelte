@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-
-    let showForm = false;
+  import { onMount } from "svelte";
+  
+  let showForm = false;
     let selectedCategories: string[];
     let categories: any[];
     let newCategory: string;
@@ -10,6 +10,12 @@
     let start: Date;
     let end: Date;
     let data_loaded: boolean = false;
+    let showQuizForm: boolean = false;
+    let questions: any[] = [];
+    let question_body: string = '';
+    let question_answer: string = '';
+    let questionId: number = 1;
+    let categorySelected: string = '';
 
     onMount(async () => {
       try {
@@ -75,6 +81,8 @@
       console.log("Startime: ", start);
       console.log("End time: ", end);
       console.log(catName, selectedCategories, numQuestions, start, end);
+
+      showQuizForm = true;
         // console.log(selectedCategories);
         // const res = await fetch('../api/addCategory', {
         //   method: 'POST',
@@ -89,6 +97,16 @@
         // } else {
         //   console.error("Someting happened: ", res);
         // }
+    }
+
+    const addQuestion = () => {
+      questions = [
+        ...questions,
+        { id: questionId, body: question_body, answer: question_answer, category: categorySelected }
+      ];
+      questionId++; // Increment the questionId
+      question_body = '';
+      question_answer = '';
     }
 </script>
 
@@ -123,5 +141,48 @@
         <input type="datetime-local" bind:value={end}/><br>
         
         <button type="submit" on:click={submitOptions}>Submit</button>
+    </form>
+{/if}
+
+<br>
+
+{#if showQuizForm !== false}
+    <form action="#">
+      <label for="New-Quiz">CREATE A NEW QUIZ</label>
+      <br>
+      <label for="name">ENTER QUIZ NAME: </label>
+      <input type="text"/>
+      <br>
+      <label for="selected-questions">SELECTED QUESTIONS</label>
+      <br>
+      <ul>
+        {#each questions as question (question.id)}
+          <li>
+            <div>
+              <strong>Question:</strong> {question.body}
+            </div>
+            <div>
+              <strong>Answer:</strong> {question.answer}
+            </div>
+            <div>
+              <strong>Category:</strong> {question.category}
+            </div>
+          </li>
+        {/each}
+      </ul>
+      <br>
+      <label for="questions">ADD A QUESTION </label>
+      <br>
+      <label for="question">Question: </label>
+      <input type="text" bind:value={question_body}/>
+      <br>
+      <label for="answer">Answer: </label>
+      <input type="text" bind:value={question_answer}/>
+      <br>
+      <label for="category">Category: </label>
+      {#each selectedCategories as cat, i}
+        {categories[i].CategoryName}<input type="checkbox" bind:value={categorySelected}/>
+      {/each}
+      <button type="submit" on:click={addQuestion}>Add Question</button>
     </form>
 {/if}
