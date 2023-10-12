@@ -14,6 +14,9 @@
   let question_answer: string = '';
   let questionId: number = 1;
   let categorySelected: string = '';
+  const quizID: number = 1;
+  let showMadeQuiz: boolean = false;
+  let quizName: string = '';
 
   onMount(async () => {
     try {
@@ -110,6 +113,16 @@
     question_body = '';
     question_answer = '';
   }
+
+  const submitQuiz = async () => {
+    console.log("Quiz ID: ", quizID);
+    for (let i = 0; i < questions.length; i++) {
+      console.log("\nQuestion: ", questions[i].body);
+      console.log("Answer: ", questions[i].answer);
+      console.log("Catgory: ", questions[i].category);
+    }
+    showMadeQuiz = true;
+  }
 </script>
 
 <h1>This is the create competition page</h1>
@@ -143,12 +156,22 @@
 
 <br>
 
+{#if showMadeQuiz !== false}
+   <h1>{quizName}</h1>
+   {#each questions as q (q.id)}
+    <strong>Question: {q.body}</strong>
+    <strong>Answer:   {q.answer}</strong>
+    <strong>Category: {q.category}</strong>
+    <br>
+   {/each}
+{/if}
+
 {#if showQuizForm !== false}
     <form action="#">
       <label for="New-Quiz">CREATE A NEW QUIZ</label>
       <br>
       <label for="name">ENTER QUIZ NAME: </label>
-      <input type="text"/>
+      <input type="text" bind:value={quizName}/>
       <br>
       <label for="selected-questions">SELECTED QUESTIONS</label>
       <br>
@@ -185,6 +208,6 @@
       {/each}
       <button type="submit" on:click={addQuestion}>Add Question</button>
       <br>
-      <button type="submit">Submit Quiz</button>
+      <button type="submit" on:click={submitQuiz}>Submit Quiz</button>
     </form>
 {/if}
