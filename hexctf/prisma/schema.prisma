@@ -87,10 +87,11 @@ model Quiz {
 }
 
 model QuizQuestions {
-  quizQuestionsId Int @id
+  quizQuestionsId Int @id @default(autoincrement())
   quizId          Int
   questionBody    String
   questionAnswer  String
+  Category        String
   Quiz            Quiz @relation("QuizToQuizQuestions", fields: [quizId], references: [quizId])
 }
 
