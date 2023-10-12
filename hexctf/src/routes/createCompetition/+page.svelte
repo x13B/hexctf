@@ -17,6 +17,7 @@
   const quizID: number = 1;
   let showMadeQuiz: boolean = false;
   let quizName: string = '';
+  let showQuestionsAdded: boolean = true;
 
   onMount(async () => {
     try {
@@ -122,6 +123,7 @@
       console.log("Catgory: ", questions[i].category);
     }
     showMadeQuiz = true;
+    showQuestionsAdded = false;
   }
 </script>
 
@@ -175,6 +177,7 @@
       <br>
       <label for="selected-questions">SELECTED QUESTIONS</label>
       <br>
+      {#if showQuestionsAdded === true}
       <ul>
         {#each questions as question (question.id)}
           <li>
@@ -190,6 +193,7 @@
           </li>
         {/each}
       </ul>
+      {/if}
       <br>
       <label for="questions">ADD A QUESTION </label>
       <br>
