@@ -68,7 +68,7 @@ model Questions {
   categoryId  Int 
   Difficuly   String
   Categories Categories @relation("CategoryToQuestion", fields: [categoryId], references: [CategoryId])
-  anwers     AnswerQuestions[] @relation("QuestionToAnswer")
+  answers     AnswerQuestions[] @relation("QuestionToAnswer")
 }
 
 model AnswerQuestions {
