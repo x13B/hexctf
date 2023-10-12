@@ -32,20 +32,6 @@
     }
 
     // Let's you add new categories without overwriting the old ones.
-    // const createNewCategory = () => {
-    //   const newCategoryObj = {
-    //     CategoryId: categories.length + 1,
-    //     CategoryName: newCategory,
-    //   };
-
-    //   categories.push(newCategoryObj);
-    //   // Trigger a reactivity update by assigning a new array
-    //   categories = [...categories];
-
-    //   // Clear the input field after adding the category
-    //   newCategory = '';
-
-    // };
     const createNewCategory = async () => {
       const newCategoryObj = {
         CategoryId: categories.length + 1,
