@@ -102,24 +102,22 @@
 
   const addQuestion = async () => {
     const newQuestion = {
-      quizId: questionId,
       questionBody: question_body,
       questionAnswer: question_answer,
       categoryName: categorySelected
     };
-
-    let id: number = newQuestion.quizId;
+    
     let body: string = newQuestion.questionBody;
     let answer: string = newQuestion.questionAnswer;
     let cat: string = newQuestion.categoryName;
-
+    
     try {
       const res = await fetch("../api/addQuizQuestions", {
         method: 'POST',
         headers: {
           'Content-Type' : 'applications/json',
         }, 
-        body: JSON.stringify({id, body, answer, cat}),
+        body: JSON.stringify({body, answer, cat}),
       })
       if (res.ok) {
         console.log('Question added successfully to the database');
@@ -129,7 +127,7 @@
     } catch (error) {
       console.error('Error adding question to the database:', error);
     }
-
+    
     questions = [
       ...questions,
       { id: questionId, body: question_body, answer: question_answer, category: categorySelected }
@@ -137,13 +135,12 @@
 
     questions.sort((a, b) => a.category.localeCompare(b.category));
     
-    console.log(questions);
-
     questionId++; // Increment the questionId
     question_body = '';
     question_answer = '';
+    categorySelected = '';
   }
-
+  
   const submitQuiz = async () => {
     console.log("Quiz ID: ", quizID);
     console.log("Quiz Name: ", quizName);
