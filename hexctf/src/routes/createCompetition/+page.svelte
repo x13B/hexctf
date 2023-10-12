@@ -7,8 +7,6 @@
   let catName: string;
   let start: Date;
   let end: Date;
-  let data_loaded: boolean = false;
-  let showQuizForm: boolean = false;
   let questions: any[] = [];
   let question_body: string = '';
   let question_answer: string = '';
@@ -21,12 +19,51 @@
   let showQuizName: boolean = false;
 
   onMount(async () => {
+    console.log("Fetching quiz name");
+    try {
+      const res = await fetch('../api/getQuizName');
+      if (res.ok) {
+        let quizDetails: any[] = [];
+        quizDetails = await res.json();
+
+        quizName = quizDetails[0]["quizName"];  
+        showQuizName = true;  
+        
+      } else {
+        quizName = '';
+        console.error("Failed to get categories", res.status);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  })
+  
+  onMount(async () => {
+    console.log("Fetching quiz questions");
+    try {
+      const res = await fetch('../api/getQuizQuestions');
+      if (res.ok) {
+        let quizQuestionDetails: any[] = [];
+        quizQuestionDetails = await res.json();
+        questions = quizQuestionDetails;
+        
+        console.log("Details fetched=\n", questions);
+        
+      } else {
+        console.error("Failed to get categories", res.status);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  })
+  
+  onMount(async () => {
+    console.log("Fetching categories");
     try {
       const res = await fetch('../api/getCategories');
       if (res.ok) {
         categories = await res.json();      
-        console.log(categories);
-        data_loaded = true;
+        console.log("Categories: ", categories);
 
       } else {
         console.error("Failed to get categories", res.status);
@@ -35,18 +72,17 @@
       console.error("Error fetching data:", error);
     }
   })
-
   const displayForm = () => {
-      showForm = true;
+    showForm = true;
   }
-
+  
   // Let's you add new categories without overwriting the old ones.
   const createNewCategory = async () => {
     const newCategoryObj = {
       CategoryId: categories.length + 1,
       CategoryName: newCategory,
     };
-
+    
     // Add the category to your local array
     categories.push(newCategoryObj);
     // Trigger a reactivity update by assigning a new array
@@ -83,22 +119,6 @@
     console.log("Startime: ", start);
     console.log("End time: ", end);
     console.log(catName, start, end);
-
-    showQuizForm = true;
-      // console.log(selectedCategories);
-      // const res = await fetch('../api/addCategory', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type' : 'application/json'
-      //   },
-      //   body: JSON.stringify({ })
-      // });
-
-      // if (res.ok) {
-      //   console.log("Succesfully added category");
-      // } else {
-      //   console.error("Someting happened: ", res);
-      // }
   }
 
   const addQuestion = async () => {
@@ -160,91 +180,57 @@
 
 <button on:click={displayForm}>New Competiton</button>
 
-{#if showForm == true}
-    <form action="#">
-        <label for="name">Name of Competition</label>
-        <input type="text" name="comp-name" placeholder="Name of competition" bind:value={catName}/><br>
-        
-        <label for="category">Categories:</label><br>
-        {#each categories as category (category.CategoryId)}
-                {category.CategoryName}
-            <br>
-        {/each}
-        
-        <label for="add">Create New Category: </label>
-        <input type="text" name="new-cat" bind:value={newCategory}/>
-        <button type="button" on:click={createNewCategory}>Create New</button><br>
-        
-        <label for="length">Start Date:</label>
-        <input type="datetime-local" bind:value={start}/><br>
-        
-        <label for="length">End Date:</label>
-        <input type="datetime-local" bind:value={end}/><br>
-        
-        <button type="submit" on:click={submitOptions}>Submit</button>
-    </form>
-{/if}
+<form action="#">
+    <label for="name">Name of Competition</label>
+    <input type="text" name="comp-name" placeholder="Name of competition" bind:value={catName}/><br>
+    <label for="add">Create New Category: </label>
+    <input type="text" name="new-cat" bind:value={newCategory}/>
+    <button type="button" on:click={createNewCategory}>Create New</button><br>
+    
+    <label for="length">Start Date:</label>
+    <input type="datetime-local" bind:value={start}/><br>
+    
+    <label for="length">End Date:</label>
+    <input type="datetime-local" bind:value={end}/><br>
+    
+    <button type="submit" on:click={submitOptions}>Submit</button>
+</form>
 
 <br>
-{#if showQuizName === true}
-  <h1>{quizName}</h1>
-{/if}
+<!-- {#each categories as category (category.iter)}
+  <div>
+    <p>Category ID: {category.CategoryId}</p>
+    <p>Category Name: {category.CategoryName}</p>
+  </div>
+{/each} -->
+<!-- ... (other code) ... -->
 
-{#if showMadeQuiz !== false}
-   {#each questions as q (q.id)}
-    <strong>Question: {q.body}</strong>
-    <strong>Answer:   {q.answer}</strong>
-    <strong>Category: {q.category}</strong>
+<form action="#">
+  {#if showQuizName === false}
+    <label for="New-Quiz">CREATE A NEW QUIZ</label>
     <br>
-   {/each}
-{/if}
+    <label for="name">ENTER QUIZ NAME: </label>
+    <input type="text" bind:value={quizName} placeholder="Enter Quiz Name"/>
+  {:else}
+    <h2>{quizName}</h2>
+  {/if}
+  <br>
+  <label for="selected-questions">SELECTED QUESTIONS</label>
+  <br>
 
-{#if showQuizForm !== false}
-    <form action="#">
-      {#if showQuizName === false}
-        <label for="New-Quiz">CREATE A NEW QUIZ</label>
-        <br>
-        <label for="name">ENTER QUIZ NAME: </label>
-        <input type="text" bind:value={quizName}/>
-      {/if}
-      <br>
-      <label for="selected-questions">SELECTED QUESTIONS</label>
-      <br>
-      {#if showQuestionsAdded === true}
-      <ul>
-        {#each questions as question (question.id)}
-          <li>
-            <div>
-              <strong>Question:</strong> {question.body}
-            </div>
-            <div>
-              <strong>Answer:</strong> {question.answer}
-            </div>
-            <div>
-              <strong>Category:</strong> {question.category}
-            </div>
-          </li>
-        {/each}
-      </ul>
-      {/if}
-      <br>
-      <label for="questions">ADD A QUESTION </label>
-      <br>
-      <label for="question">Question: </label>
-      <input type="text" bind:value={question_body}/>
-      <br>
-      <label for="answer">Answer: </label>
-      <input type="text" bind:value={question_answer}/>
-      <br>
-      <label for="category">Category: </label>
-      {#each categories as cat, i}
-        <label>
-          {cat.CategoryName}
-          <input type="radio" bind:group={categorySelected} value={cat.CategoryName} />
-        </label>
-      {/each}
-      <button type="submit" on:click={addQuestion}>Add Question</button>
-      <br>
-      <button type="submit" on:click={submitQuiz}>Submit Quiz</button>
-    </form>
-{/if}
+  <br>
+  <label for="questions">ADD A QUESTION </label>
+  <br>
+  <label for="question">Question: </label>
+  <input type="text" bind:value={question_body}/>
+  <br>
+  <label for="answer">Answer: </label>
+  <input type="text" bind:value={question_answer}/>
+  <br>
+  <label for="category">Category: </label>
+  
+  {categories}
+  <button type="submit" on:click={addQuestion}>Add Question</button>
+  <br>
+  <button type="submit" on:click={submitQuiz}>Submit Quiz</button>
+</form>
