@@ -1,31 +1,31 @@
 <script lang="ts">
-      import { onMount } from 'svelte';
+  import { onMount } from 'svelte';
 
-      let questions: any = [];
-      let categories: any = [];
-      
-      onMount(async () => {
-        try {
-      const response = await fetch('../api/getQuestions'); 
-      if (response.ok) {
-        questions = await response.json();
-        console.log("from function questions", questions);
-      } else {
-        console.error('Failed to fetch data:', response.status);
-      }
+  let questions: any = [];
+  let categories: any = [];
+  
+  onMount(async () => {
+  try {
+    const response = await fetch('../api/getQuestions'); 
+    if (response.ok) {
+      questions = await response.json();
+      //console.log("from function questions", questions);
+    } else {
+      console.error('Failed to fetch data:', response.status);
+    }
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-    try {
-      const response = await fetch('../api/getCategories'); 
-      if (response.ok) {
-        categories = await response.json();
-        console.log("from function categories", categories);
-      } else {
-        console.error('Failed to fetch data:', response.status);
-      }
+  try {
+    const response = await fetch('../api/getCategories'); 
+    if (response.ok) {
+      categories = await response.json();
+      //console.log("from function categories", categories);
+    } else {
+      console.error('Failed to fetch data:', response.status);
+    }
     } catch (error) {
-      console.error('Error fetching data:', error);
+    console.error('Error fetching data:', error);
     }
   });
 </script>
@@ -33,11 +33,12 @@
 <h1>Questions</h1>
 <ul>
   {#each categories as c (c.CategoryId)}
-  <li>{c.CategoryName}</li>
+    <li><h3>{c.CategoryName}</h3></li>
     {#each questions as q (q.QuestionId)}
-    {#if q.categoryId === c.CategoryId}
-      <ul><a href="/questions/{q.QuestionId}">{q.Description}</a> - {q.points} points</ul>
-    {/if}
-      {/each}
+      {#if q.categoryId === c.CategoryId}
+        <ul><a href="/questions/{q.QuestionId}">{q.Description}</a> - {q.points} points</ul>
+      {/if}
     {/each}
+    <br>
+  {/each}
 </ul>

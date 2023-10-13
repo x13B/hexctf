@@ -15,7 +15,6 @@ datasource db {
 model User {
   id       String  @id @unique
   username String  @unique
-  //password String
   isAdmin  Boolean @default(false)
   Results  QuizResults[] @relation("UserToResults")
   auth_session Session[]
