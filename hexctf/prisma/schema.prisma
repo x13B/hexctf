@@ -1,6 +1,8 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// NOTE: USE PascalCase for model name and camelCase for field names!
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -16,7 +18,7 @@ model User {
   id       String  @id @unique
   username String  @unique
   isAdmin  Boolean @default(false)
-  Results  QuizResults[] @relation("UserToResults")
+  results  QuizResults[] @relation("UserToResults")
   auth_session Session[]
   key          Key[]
 }
@@ -42,44 +44,44 @@ model Key {
 }
 
 model Teams {
-  TeamId   Int          @id @default(autoincrement())
-  TeamName String       @unique
-  leader   Leaderboard? @relation("TeamToLeaderboard")
+  teamId   Int          @id @default(autoincrement())
+  teamName String       @unique
   answers  AnswerQuestions[] @relation("TeamToAnswer")
+  teams Leaderboard? @relation("TeamToLeaderboard")
 }
 
 model Leaderboard {
-  TeamId  Int    @id
-  Teams   Teams  @relation("TeamToLeaderboard", fields: [TeamId], references: [TeamId])
+  teamId  Int    @id
+  teams   Teams  @relation("TeamToLeaderboard", fields: [teamId], references: [teamId])
 }
 
 model Categories {
-  CategoryId   Int    @id
-  CategoryName String @unique
-  Questions Questions[] @relation("CategoryToQuestion")
+  categoryId   Int    @id @default(autoincrement())
+  categoryName String @unique
+  questions Questions[] @relation("CategoryToQuestion")
 }
 
 model Questions {
-  QuestionId  Int    @id
-  Description String 
-  Answer      String
+  questionId  Int    @id @default(autoincrement())
+  description String 
+  answer      String
   points      Int
   categoryId  Int 
-  Difficuly   String
-  Categories Categories @relation("CategoryToQuestion", fields: [categoryId], references: [CategoryId])
+  difficuly   String
+  categories  Categories @relation("CategoryToQuestion", fields: [categoryId], references: [categoryId])
   answers     AnswerQuestions[] @relation("QuestionToAnswer")
 }
 
 model AnswerQuestions {
-  AnswerId   Int @id
-  QuestionId Int 
-  TeamId     Int
-  Questions  Questions @relation("QuestionToAnswer", fields: [QuestionId], references: [QuestionId])
-  Teams      Teams     @relation("TeamToAnswer", fields: [TeamId], references: [TeamId])
+  answerId   Int @id @default(autoincrement())
+  questionId Int 
+  teamId     Int
+  questions  Questions @relation("QuestionToAnswer", fields: [questionId], references: [questionId])
+  teams      Teams     @relation("TeamToAnswer", fields: [teamId], references: [teamId])
 }
 
 model Quiz {
-  quizId   Int     @id
+  quizId   Int     @id @default(autoincrement())
   quizName String  @unique
   results  QuizResults[] @relation("QuizToResults")
 }
@@ -88,14 +90,14 @@ model QuizQuestions {
   quizQuestionsId Int @id @default(autoincrement())
   questionBody    String
   questionAnswer  String
-  Category        String
+  category        String
 }
 
 model QuizResults {
   quizId Int 
-  UserId String
+  userId String
   score  Int @default(-1)
-  Quiz   Quiz @relation("QuizToResults", fields: [quizId], references: [quizId])
-  User   User @relation("UserToResults", fields: [UserId], references: [id])
-  @@unique([quizId, UserId])
+  quiz   Quiz @relation("QuizToResults", fields: [quizId], references: [quizId])
+  user   User @relation("UserToResults", fields: [userId], references: [id])
+  @@unique([quizId, userId])
 }
