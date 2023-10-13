@@ -19,6 +19,7 @@ model User {
   username String  @unique
   isAdmin  Boolean @default(false)
   results  QuizResults[] @relation("UserToResults")
+  team TeamMembers? @relation("TeamToUsers")
   auth_session Session[]
   key          Key[]
 }
@@ -46,8 +47,19 @@ model Key {
 model Teams {
   teamId   Int          @id @default(autoincrement())
   teamName String       @unique
+  points Int
   answers  AnswerQuestions[] @relation("TeamToAnswer")
   teams Leaderboard? @relation("TeamToLeaderboard")
+  members TeamMembers[] @relation("TeamToMembers")
+}
+
+model TeamMembers {
+  teamId Int 
+  userId String @unique
+  team Teams @relation("TeamToMembers", fields: [teamId], references: [teamId])
+  user User @relation("TeamToUsers", fields: [userId], references: [id])
+  @@unique([teamId, userId])
+
 }
 
 model Leaderboard {
