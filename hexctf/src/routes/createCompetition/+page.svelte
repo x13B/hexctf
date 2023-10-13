@@ -77,9 +77,6 @@
       console.error("Error fetching data:", error);
     }
   })
-  const displayForm = () => {
-    showForm = true;
-  }
   
   // Let's you add new categories without overwriting the old ones.
   const createNewCategory = async () => {
@@ -181,17 +178,11 @@
   }
 </script>
 
-<h1>This is the create competition page</h1>
-
-<button on:click={displayForm}>New Competiton</button>
+<h1>Create a Competition Page</h1>
 
 <form action="#">
     <label for="name">Name of Competition</label>
     <input type="text" name="comp-name" placeholder="Name of competition" bind:value={catName}/><br>
-    <label for="add">Create New Category: </label>
-    <input type="text" name="new-cat" bind:value={newCategory}/>
-    <button type="button" on:click={createNewCategory}>Create New</button><br>
-    
     <label for="length">Start Date:</label>
     <input type="datetime-local" bind:value={start}/><br>
     
@@ -199,37 +190,40 @@
     <input type="datetime-local" bind:value={end}/><br>
     
     <button type="submit" on:click={submitOptions}>Submit</button>
-</form>
-
-<br>
-
-<form action="#">
-  {#if showQuizName === false}
+  </form>
+  
+  <form action="#">
+    {#if showQuizName === false}
     <label for="New-Quiz">CREATE A NEW QUIZ</label>
     <br>
     <label for="name">ENTER QUIZ NAME: </label>
     <input type="text" bind:value={quizName} placeholder="Enter Quiz Name"/>
-  {:else}
-    <h2>{quizName}</h2>
+    {:else}
+    <br>
+    <label for="name">QUIZ NAME: <strong>{quizName.toUpperCase()}</strong></label>
+    <br>
+    <label for="selected-questions">SELECTED QUESTIONS</label>
+    <br>
     {#if showQuestions == true}
-      <ul>
-        {#each questions as question}
-          <li>Body: {question.questionBody}, Answer: {question.questionAnswer}</li>
-        {/each}
-      </ul>
+    <ul>
+      {#each questions as question}
+      <li>Body: {question.questionBody}, Answer: {question.questionAnswer}</li>
+      {/each}
+    </ul>
     {/if}
-  {/if}
-  <br>
-  <label for="selected-questions">SELECTED QUESTIONS</label>
-  <br>
-
-  <br>
-  <label for="questions">ADD A QUESTION </label>
-  <br>
-  <label for="question">Question: </label>
-  <input type="text" bind:value={question_body}/>
-  <br>
-  <label for="answer">Answer: </label>
+    {/if}
+    <br>
+    <label for="add">Create New Category: </label>
+    <input type="text" name="new-cat" bind:value={newCategory}/>
+    <button type="button" on:click={createNewCategory}>Create New</button><br>
+    
+    <br>
+    <label for="questions">ADD A QUESTION </label>
+    <br>
+    <label for="question">Question: </label>
+    <input type="text" bind:value={question_body}/>
+    <br>
+    <label for="answer">Answer: </label>
   <input type="text" bind:value={question_answer}/>
   <br>
   <label for="category">Category: </label>
