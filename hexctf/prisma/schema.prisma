@@ -113,3 +113,10 @@ model QuizResults {
   user   User @relation("UserToResults", fields: [userId], references: [id])
   @@unique([quizId, userId])
 }
+
+model Competition {
+  competitionId   Int @id @default(1)
+  competitionName String
+  startDate       DateTime
+  endDate         DateTime
+}
