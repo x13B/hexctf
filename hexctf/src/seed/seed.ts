@@ -13,28 +13,28 @@ async function seed() {
         // ========================================================================
 
         // THIS IS FOR CATEGORIES ================================================    
-        const createCategory = await prisma.categories.create({
+        const createcategory = await prisma.categories.create({
             data: {
-                CategoryId: 1,
-                CategoryName: "Math",
+                categoryId: 1,
+                categoryName: "Math",
             }
         });
-        const createCategory2 = await prisma.categories.create({
+        const createcategory2 = await prisma.categories.create({
             data: {
-                CategoryId: 2,
-                CategoryName: "Physics",
+                categoryId: 2,
+                categoryName: "Physics",
             }
         });
-        const createCategory3 = await prisma.categories.create({
+        const createcategory3 = await prisma.categories.create({
             data: {
-                CategoryId: 3,
-                CategoryName: "Networks",
+                categoryId: 3,
+                categoryName: "Networks",
             }
         });
-        const createCategory4 = await prisma.categories.create({
+        const createcategory4 = await prisma.categories.create({
             data: {
-                CategoryId: 4,
-                CategoryName: "Alorithms",
+                categoryId: 4,
+                categoryName: "Alorithms",
             }
         });
         // =================================================================
@@ -54,7 +54,7 @@ async function seed() {
                 quizQuestionsId: 1,
                 questionBody: "What is 2 + 2?",
                 questionAnswer: "4",
-                Category: "Math",
+                category: "Math",
             }
         });
         
@@ -63,7 +63,7 @@ async function seed() {
                 quizQuestionsId: 2,
                 questionBody: "What is 3 * 1?",
                 questionAnswer: "3",
-                Category: "Math",
+                category: "Math",
             }
         });
         
@@ -72,7 +72,7 @@ async function seed() {
                 quizQuestionsId: 3,
                 questionBody: "What is the force that pulls objects towards Earth's center?",
                 questionAnswer: "gravity",
-                Category: "Physics",
+                category: "Physics",
             }
         });
         
@@ -81,7 +81,7 @@ async function seed() {
                 quizQuestionsId: 4,
                 questionBody: "What is the measure of the amount of matter in an object?",
                 questionAnswer: "mass",
-                Category: "Physics",
+                category: "Physics",
             }
         });
         
@@ -90,7 +90,7 @@ async function seed() {
                 quizQuestionsId: 5,
                 questionBody: "What does LAN stand for?",
                 questionAnswer: "local area network",
-                Category: "Networks",
+                category: "Networks",
             }
         });
         
@@ -99,7 +99,7 @@ async function seed() {
                 quizQuestionsId: 6,
                 questionBody: "What is the device to connect multiple computers in a network?",
                 questionAnswer: "router",
-                Category: "Networks",
+                category: "Networks",
             }
         });
         
@@ -108,7 +108,7 @@ async function seed() {
                 quizQuestionsId: 7,
                 questionBody: "What do you call a data structure that stores elements in a linear order?",
                 questionAnswer: "array",
-                Category: "Algorithms",
+                category: "Algorithms",
             }
         });
         
@@ -117,7 +117,7 @@ async function seed() {
                 quizQuestionsId: 8,
                 questionBody: "What data structure organizes elements in a hierarchical way?",
                 questionAnswer: "tree",
-                Category: "Algorithms",
+                category: "Algorithms",
             }
         });
         // =================================================================
