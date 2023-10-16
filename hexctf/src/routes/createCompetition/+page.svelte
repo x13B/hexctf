@@ -17,6 +17,7 @@
   let quizName: string = '';
   let showQuestionsAdded: boolean = true;
   let showQuizName: boolean = false;
+  let competition_name: string = '';
 
   let showQuestions: boolean = false;
   let showCategories: boolean = false;
@@ -118,9 +119,33 @@
   };
 
   async function submitOptions() {
-    console.log("Startime: ", start);
-    console.log("End time: ", end);
-    console.log(catName, start, end);
+    let name = competition_name;
+    let starting_date = start;
+    let ending_date = end;
+    
+    console.log("Startime: ", starting_date);
+    console.log("End time: ", ending_date);
+    console.log(name, start, end);
+
+    try {
+      const res = await fetch("../api/submitCompDetails", {
+        method: 'POST',
+        headers: {
+          'Content-Type' : 'applications/json',
+        },
+        body: JSON.stringify({name, starting_date, ending_date})
+      });
+
+      if (res.ok) {
+          console.log('Competitions successfully created');
+        } else {
+          console.error('Failed to create competition:', res.statusText);
+        }
+    } catch (error) {
+      console.error('Error adding comp details to the database:', error);
+    }
+
+    competition_name = '';
   }
 
   const addQuestion = async () => {
@@ -182,7 +207,7 @@
 
 <form action="#">
     <label for="name">Name of Competition</label>
-    <input type="text" name="comp-name" placeholder="Name of competition" bind:value={catName}/><br>
+    <input type="text" name="comp-name" placeholder="Name of competition" bind:value={competition_name}/><br>
     <label for="length">Start Date:</label>
     <input type="datetime-local" bind:value={start}/><br>
     
@@ -194,23 +219,23 @@
   
   <form action="#">
     {#if showQuizName === false}
-    <label for="New-Quiz">CREATE A NEW QUIZ</label>
-    <br>
-    <label for="name">ENTER QUIZ NAME: </label>
-    <input type="text" bind:value={quizName} placeholder="Enter Quiz Name"/>
+      <label for="New-Quiz">CREATE A NEW QUIZ</label>
+      <br>
+      <label for="name">ENTER QUIZ NAME: </label>
+      <input type="text" bind:value={quizName} placeholder="Enter Quiz Name"/>
     {:else}
-    <br>
-    <label for="name">QUIZ NAME: <strong>{quizName.toUpperCase()}</strong></label>
-    <br>
-    <label for="selected-questions">SELECTED QUESTIONS</label>
-    <br>
-    {#if showQuestions == true}
-    <ul>
-      {#each questions as question}
-      <li>Body: {question.questionBody}, Answer: {question.questionAnswer}</li>
-      {/each}
-    </ul>
-    {/if}
+      <br>
+      <label for="name">QUIZ NAME: <strong>{quizName.toUpperCase()}</strong></label>
+      <br>
+      <label for="selected-questions">SELECTED QUESTIONS</label>
+      <br>
+      {#if showQuestions == true}
+      <ul>
+        {#each questions as question}
+        <li>Body: {question.questionBody}, Answer: {question.questionAnswer}</li>
+        {/each}
+      </ul>
+      {/if}
     {/if}
     <br>
     <label for="add">Create New Category: </label>
