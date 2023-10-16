@@ -103,6 +103,7 @@ model QuizQuestions {
   questionBody    String
   questionAnswer  String
   category        String
+  questionValue   Int @default(0)
 }
 
 model QuizResults {
