@@ -1,25 +1,55 @@
 <script lang="ts">
   import { onMount } from "svelte";
   
-  let showForm = false;
+  // Holds categories from DB
   let categories: any[];
+
+  // Bound variable from form for category name
   let newCategory: string;
-  let catName: string;
+
+  // Bound variable from form for start date of competition
   let start: Date;
+
+  // Bound variable from form for end date of competition
   let end: Date;
+
+  // Holds questions imported from DB
   let questions: any[] = [];
+
+  // Bound variable for question body in form
   let question_body: string = '';
+
+  // Bound varibale for question answer in form
   let question_answer: string = '';
+
+  // Variable to keep track of the questionId from DB
   let questionId: number = 1;
+
+  // Bound variable for category being selected in form
   let categorySelected: string = '';
+
+  // Only one quiz will be made, so default is 1
   const quizID: number = 1;
+
+  // Only shows the quiz when submit has been used
   let showMadeQuiz: boolean = false;
+
+  // Bound name for quiz in form
   let quizName: string = '';
-  let showQuestionsAdded: boolean = true;
+
+  // Only shows questions 
+  // let showQuestionsAdded: boolean = true;
+
+  // Shows quiz name when submit button is hit
   let showQuizName: boolean = false;
+
+  // Bound variable for name of competition
   let competition_name: string = '';
 
+  // Only shows questions when loaded from DB
   let showQuestions: boolean = false;
+
+  // Only shows categories when loaded from DB
   let showCategories: boolean = false;
 
   onMount(async () => {
@@ -198,7 +228,7 @@
       console.log("Catgory: ", questions[i].category);
     }
     showMadeQuiz = true;
-    showQuestionsAdded = false;
+    // showQuestionsAdded = false;
     showQuizName = true;
   }
 </script>
