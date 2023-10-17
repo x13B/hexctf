@@ -324,7 +324,7 @@
       <br>
       {#if showQuestions == true}
       <ul>
-        {#each questions as question}
+        {#each questions as question (question.quizQuestionId)}
         <li>Body: {question.questionBody}, Answer: {question.questionAnswer}</li>
         {/each}
       </ul>
