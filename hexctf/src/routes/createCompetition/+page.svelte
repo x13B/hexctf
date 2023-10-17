@@ -126,8 +126,8 @@
   // Let's you add new categories without overwriting the old ones.
   const createNewCategory = async () => {
     const newCategoryObj = {
-      CategoryId: categories.length + 1,
-      CategoryName: newCategory,
+      categoryId: categories.length + 1,
+      categoryName: newCategory,
     };
     
     // Add the category to your local array
@@ -138,8 +138,8 @@
     // Clear the input field after adding the category
     newCategory = '';
 
-    let id: number = newCategoryObj.CategoryId;
-    let name: string = newCategoryObj.CategoryName;
+    let id: number = newCategoryObj.categoryId;
+    let name: string = newCategoryObj.categoryName;
 
     console.log("New category before uploading: ", id, name);
 
@@ -262,6 +262,34 @@
 
     // Toggle quiz options to show when submitted
     showMadeQuiz = true;
+  }
+  
+  // This function will create a new quiz
+  async function createQuizName() {
+    // console.log("Quiz Name: ", quizName);
+    // console.log("Quiz id: ", quizID);
+
+    let id: number = quizID;
+    let name: string = quizName;
+
+    try {
+      const res = await fetch("../api/createQuiz", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, name })
+      });
+      
+      if (res.ok) {
+        console.log("Able to create quiz");
+      } else {
+        console.log("Something went wrong. Please try again");
+      }
+    } catch (error) {
+      console.error("Error trying to create quiz: ", error);
+    }
+    
     showQuizName = true;
   }
 </script>
@@ -287,6 +315,7 @@
       <br>
       <label for="name">ENTER QUIZ NAME: </label>
       <input type="text" bind:value={quizName} placeholder="Enter Quiz Name"/>
+      <button on:click={createQuizName}>Submit</button>
     {:else}
       <br>
       <label for="name">QUIZ NAME: <strong>{quizName.toUpperCase()}</strong></label>
