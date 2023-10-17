@@ -8,10 +8,10 @@
   let newCategory: string;
 
   // Bound variable from form for start date of competition
-  let start: Date;
+  let start: string;
 
   // Bound variable from form for end date of competition
-  let end: Date;
+  let end: string;
 
   // Holds questions imported from DB
   let questions: any[] = [];
@@ -168,13 +168,17 @@
   async function submitOptions() {
 
     // Assign to new variables to prevent undefined
-    let name = competition_name;
-    let starting_date = start;
-    let ending_date = end;
+    let name: string = competition_name;
+    // let starting_date: string = start.toString();
+    // let ending_date: string = end.toString();
     
-    console.log("Startime: ", starting_date);
-    console.log("End time: ", ending_date);
-    console.log(name, start, end);
+    // console.log(typeof starting_date === 'string');
+
+    // console.log("Startime: ", starting_date);
+    // console.log("End time: ", ending_date);
+
+    start = start.toString();
+    end = end.toString();
 
     // Submit options to server file to upload to DB
     try {
@@ -183,7 +187,7 @@
         headers: {
           'Content-Type' : 'applications/json',
         },
-        body: JSON.stringify({name, starting_date, ending_date})
+        body: JSON.stringify({name, start, end})
       });
 
       if (res.ok) {
@@ -266,9 +270,6 @@
   
   // This function will create a new quiz
   async function createQuizName() {
-    // console.log("Quiz Name: ", quizName);
-    // console.log("Quiz id: ", quizID);
-
     let id: number = quizID;
     let name: string = quizName;
 
