@@ -141,6 +141,8 @@
     let id: number = newCategoryObj.CategoryId;
     let name: string = newCategoryObj.CategoryName;
 
+    console.log("New category before uploading: ", id, name);
+
     try {
       const res = await fetch('/api/addCategory', {
         method: 'POST',
@@ -315,9 +317,9 @@
   <br>
   <label for="category">Category: </label>
   {#if showCategories == true}
-    {#each categories as cat (cat.CategoryId)}
-        {cat.CategoryName}
-        <input type="radio" name="{cat.CategoryName}">
+    {#each categories as cat (cat.categoryId)}
+        {cat.categoryName}
+        <input type="radio" name="{cat.categoryName}">
     {/each}
   {/if}
   <button type="submit" on:click={addQuestion}>Add Question</button>
