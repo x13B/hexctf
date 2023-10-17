@@ -252,22 +252,3 @@
         {/each}
     {/if}
 </div>
-      <!-- This will be removed when login functionality works -->
-      <!-- <ul>
-        {#each users as user (user.id)}
-          {#if adminIDNumber !== user.id}
-            <li>Non-Admin User: {user.username}</li>
-          {/if}
-        {/each}
-      </ul> -->
-      
-      <!-- <div>
-        The admins id number is: {adminIDNumber}<br>
-        The number of groups is: {numGroups}
-      </div> -->
-      <!-- <br>
-      <div>
-          {#each userScores as score (score.UserId)}
-            <li>UserID: {score.UserId} | user score: {score.score}</li>
-          {/each}
-      </div> -->
