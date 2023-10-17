@@ -1,27 +1,26 @@
-import prisma from '../../../lib/index';
+import prisma from "$lib";
 import { json } from "@sveltejs/kit";
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
     try {
         const { id, name } = await request.json();
-        console.log(id, name);
-        
-        const res = await prisma.categories.create({
+
+        const res = await prisma.quiz.create({
             data: {
-                categoryId: id,
-                categoryName: name
+                quizId: id,
+                quizName: name,
             }
         });
     
-        return new Response(JSON.stringify({ message: "Category was added!" }), {
+        return new Response(JSON.stringify({ message: "Quiz was created!" }), {
             status: 200,
             headers: { "Content-Type": "application/json" },
         });
         
         
     } catch (err) {
-        return new Response(JSON.stringify({ message: "Error adding category!" }), {
+        return new Response(JSON.stringify({ message: "Error creating quiz!" }), {
             status: 500,
             headers: { "Content-Type": "application/json" },
         });
