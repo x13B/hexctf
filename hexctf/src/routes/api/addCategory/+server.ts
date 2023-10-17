@@ -1,4 +1,4 @@
-import prisma from "$lib";
+import prisma from '../../../lib/index';
 import { json } from "@sveltejs/kit";
 
 /** @type {import('./$types').RequestHandler} */
@@ -8,8 +8,8 @@ export async function POST({ request }) {
         
         const res = await prisma.categories.create({
             data: {
-                CategoryId: id,
-                CategoryName: name
+                categoryId: id,
+                categoryName: name
             }
         });
     

@@ -13,7 +13,7 @@ export async function POST({ request }) {
             data: {
                 questionBody: body,
                 questionAnswer: answer,
-                Category: cat,
+                category: cat,
             }
         });
     
