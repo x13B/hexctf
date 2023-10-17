@@ -9,8 +9,65 @@ async function seed() {
                 username: 'admin',
                 isAdmin: true,
             }
-        })
+        });
         // ========================================================================
+
+        // THIS IS FOR ADDING NEW USERS ==========================================
+        const createUser1 = await prisma.user.create({
+            data: {
+                id: '2',
+                username: 'Student 1',
+             }
+        });
+        const createUser2 = await prisma.user.create({
+            data: {
+                id: '3',
+                username: 'Student 2',
+             }
+        });
+        const createUser3 = await prisma.user.create({
+            data: {
+                id: '4',
+                username: 'Student 3',
+             }
+        });
+        const createUser4 = await prisma.user.create({
+            data: {
+                id: '5',
+                username: 'Student 4',
+             }
+        });
+        const createUser5 = await prisma.user.create({
+            data: {
+                id: '6',
+                username: 'Student 5',
+             }
+        });
+        const createUser6 = await prisma.user.create({
+            data: {
+                id: '7',
+                username: 'Student 6',
+             }
+        });
+        const createUser7 = await prisma.user.create({
+            data: {
+                id: '8',
+                username: 'Student 7',
+             }
+        });
+        const createUser8 = await prisma.user.create({
+            data: {
+                id: '9',
+                username: 'Student 8',
+             }
+        });
+        const createUser9 = await prisma.user.create({
+            data: {
+                id: '10',
+                username: 'Student 9',
+             }
+        });
+        // =====================================================================
 
         // THIS IS FOR CATEGORIES ================================================    
         const createcategory = await prisma.categories.create({
