@@ -52,6 +52,8 @@
   // Only shows categories when loaded from DB
   let showCategories: boolean = false;
 
+
+  // Load quiz name from DB when one exists
   onMount(async () => {
     console.log("Fetching quiz name");
     try {
@@ -61,6 +63,8 @@
         quizDetails = await res.json();
 
         quizName = quizDetails[0]["quizName"];  
+
+        // Set to true to prevent loading errors
         showQuizName = true;  
         
       } else {
@@ -72,14 +76,21 @@
     }
   })
   
+  // Get quiz questions from DB
   onMount(async () => {
     console.log("Fetching quiz questions");
     try {
       const res = await fetch('../api/getQuizQuestions');
       if (res.ok) {
+
+        // Use a temp array to prevent undefined values
         let quizQuestionDetails: any[] = [];
         quizQuestionDetails = await res.json();
+
+        // Assign to declared array questions
         questions = quizQuestionDetails;
+
+        // Only show questions when questions are loaded from DB
         showQuestions = true;
         
         console.log("Details fetched=\n", questions);
@@ -92,6 +103,7 @@
     }
   })
   
+  // Load categories from DB
   onMount(async () => {
     console.log("Fetching categories");
     try {
@@ -99,6 +111,8 @@
       if (res.ok) {
         categories = await res.json();      
         console.log("Categories: ", categories);
+
+        // Only show when categories have been loaded from DB
         showCategories = true;
 
       } else {
@@ -148,7 +162,10 @@
     }
   };
 
+  // This function will submit user options to the DB
   async function submitOptions() {
+
+    // Assign to new variables to prevent undefined
     let name = competition_name;
     let starting_date = start;
     let ending_date = end;
@@ -157,6 +174,7 @@
     console.log("End time: ", ending_date);
     console.log(name, start, end);
 
+    // Submit options to server file to upload to DB
     try {
       const res = await fetch("../api/submitCompDetails", {
         method: 'POST',
@@ -175,20 +193,26 @@
       console.error('Error adding comp details to the database:', error);
     }
 
+    // Reset competition_name
     competition_name = '';
   }
 
+  // This function will add questions to the DB
   const addQuestion = async () => {
+
+    // Create a new object to prevent undefined values
     const newQuestion = {
       questionBody: question_body,
       questionAnswer: question_answer,
       categoryName: categorySelected
     };
     
+    // Testing, might remove
     let body: string = newQuestion.questionBody;
     let answer: string = newQuestion.questionAnswer;
     let cat: string = newQuestion.categoryName;
 
+    // Submit options to server file to upload to DB
     try {
       const res = await fetch("../api/addQuizQuestions", {
         method: 'POST',
@@ -206,19 +230,25 @@
       console.error('Error adding question to the database:', error);
     }
     
+    // Append to local questions Array
     questions = [
       ...questions,
       { id: questionId, body: question_body, answer: question_answer, category: categorySelected }
     ];
 
+    // Sort the questions by category for displaying together
     questions.sort((a, b) => a.category.localeCompare(b.category));
     
-    questionId++; // Increment the questionId
+    // Increment the questionId
+    questionId++;
+
+    // RESET VALUES
     question_body = '';
     question_answer = '';
     categorySelected = '';
   }
   
+  // This function will submit quiz options to the DB
   const submitQuiz = async () => {
     console.log("Quiz ID: ", quizID);
     console.log("Quiz Name: ", quizName);
@@ -227,13 +257,15 @@
       console.log("Answer: ", questions[i].answer);
       console.log("Catgory: ", questions[i].category);
     }
+
+    // Toggle quiz options to show when submitted
     showMadeQuiz = true;
-    // showQuestionsAdded = false;
     showQuizName = true;
   }
 </script>
 
-<h1>Create a Competition Page</h1>
+<!-- Update to use admin name -->
+<h1>Weclome: User</h1>
 
 <form action="#">
     <label for="name">Name of Competition</label>
