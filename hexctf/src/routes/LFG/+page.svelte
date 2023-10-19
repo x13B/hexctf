@@ -239,10 +239,20 @@
     }
   });
 
+  // Holds the students responses to the quiz
   let student_answers: any[] = [];
+  let quiz_taken: boolean = false;
 
+  // Used to check answered and score the quiz
   const scoreQuiz = () => {
+    // Remove the first element because 0 isn't the first id in the quiz
+    student_answers.shift();
     console.log("The student answered:", student_answers);
+    
+    // Set quiz taken to true so the student cannot submit a second one
+    quiz_taken = true;
+
+    // This function should redirect student to Questions page for Competition
   }
 </script>
 
