@@ -239,9 +239,13 @@
     }
   });
 
+  // Holds the students responses to the quiz
   let student_answers: any[] = [];
 
+  // Used to check answered and score the quiz
   const scoreQuiz = () => {
+    // Remove the first element because 0 isn't the first id in the quiz
+    student_answers.shift();
     console.log("The student answered:", student_answers);
   }
 </script>
