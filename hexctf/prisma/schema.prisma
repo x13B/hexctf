@@ -80,6 +80,7 @@ model Questions {
   points      Int
   categoryId  Int 
   difficuly   String
+  hint        String
   categories  Categories @relation("CategoryToQuestion", fields: [categoryId], references: [categoryId])
   answers     AnswerQuestions[] @relation("QuestionToAnswer")
 }
