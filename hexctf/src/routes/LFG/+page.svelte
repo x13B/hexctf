@@ -197,11 +197,12 @@
   }
 
   // Get username from login form 
-  import { username_when_logged_in, check_if_admin } from "../createCompetition/username";
+  import { username_when_logged_in, check_if_admin, users_id } from "../createCompetition/username";
   import { onDestroy } from "svelte";
 
   let users_name: string;
   let user_is_admin: boolean;
+  let users_id_logged_in: string;
   
   // Set the users name then destroy when not using anymore
   const unsubscribe = username_when_logged_in.subscribe(value => {
@@ -218,6 +219,14 @@
 
     onDestroy(() => {
       admin_unsubscribe();
+    })
+  });
+
+  const user_id_unsubscribe = users_id.subscribe(value => {
+    users_id_logged_in = value;
+
+    onDestroy(() => {
+      user_id_unsubscribe();
     })
   });
 
@@ -268,7 +277,7 @@
     let quizId: number = quiz_questions[0].quizQuestionsId;
 
     // This does not grab the users ID so we have to adjust this value
-    let id: string = users_name;
+    let id: string = users_id_logged_in;
     let score: number = student_score;
     
     try {
