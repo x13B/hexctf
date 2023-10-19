@@ -4,14 +4,33 @@
 <script lang="ts">
 	import { username_when_logged_in, check_if_admin } from "./createCompetition/username";
 	import { enhance } from "$app/forms";
-
+	import { onMount } from "svelte";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
 
 	// Allows this value to be used in other pages
 	username_when_logged_in.set(data.username);
-	check_if_admin.set(data.userId);
+	
+	// This will check if the user is an admin to set the flag true
+	onMount(async () => {
+    try {
+      const response = await fetch('../api/getUsers'); 
+      if (response.ok) {
+        let users = await response.json();
+		console.log(users);
+
+		if (data.username === users.id && users.isAdmin === true) {
+		check_if_admin.set(true);
+		}
+      } else {
+        console.error('Failed to fetch data:', response.status);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  });
+
 </script>
 
 <h1>Welcome</h1>
