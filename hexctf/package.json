@@ -40,6 +40,6 @@
 		"sqlite3": "^5.1.6"
 	},
 	"prisma": {
-		"seed": "vite-node ./prisma/seed.ts"
+		"seed": "vite-node ./prisma/seed.js"
 	}
 }

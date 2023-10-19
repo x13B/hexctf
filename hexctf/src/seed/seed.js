@@ -171,6 +171,72 @@ async function seed() {
       }
     });
     // =================================================================
+    
+    // FOR QUIZ RESULTS ONLY ============================================
+    const createResult = await prisma.quizResults.create({
+      data: {
+        quizId: 1,
+        userId: '2',
+        score: 4
+      }
+    });
+    const createResult2 = await prisma.quizResults.create({
+      data: {
+        quizId: 1,
+        userId: '3',
+        score: 4
+      }
+    });
+    const createResult3 = await prisma.quizResults.create({
+      data: {
+        quizId: 1,
+        userId: '4',
+        score: 4
+      }
+    });
+    const createResult4 = await prisma.quizResults.create({
+      data: {
+        quizId: 1,
+        userId: '5',
+        score: 4
+      }
+    });
+    const createResult5 = await prisma.quizResults.create({
+      data: {
+        quizId: 1,
+        userId: '6',
+        score: 4
+      }
+    });
+    const createResult6 = await prisma.quizResults.create({
+      data: {
+        quizId: 1,
+        userId: '7',
+        score: 4
+      }
+    });
+    const createResult7 = await prisma.quizResults.create({
+      data: {
+        quizId: 1,
+        userId: '8',
+        score: 4
+      }
+    });
+    const createResult8 = await prisma.quizResults.create({
+      data: {
+        quizId: 1,
+        userId: '9',
+        score: 4
+      }
+    });
+    const createResult9 = await prisma.quizResults.create({
+      data: {
+        quizId: 1,
+        userId: '10',
+        score: 4
+      }
+    });
+    // ===========================================================
   } catch (error) {
     console.error(error);
   } finally {
