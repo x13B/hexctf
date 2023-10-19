@@ -4,15 +4,13 @@ import { json } from "@sveltejs/kit";
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
     try {
-        const { name, start, end } = await request.json();
+        const { quizId, id, score } = await request.json();
 
-        console.log(name, start, end);
-
-        const res = await prisma.competition.create({
+        const res = await prisma.quizResults.create({
             data: {
-                competitionName: name,
-                startDate: start,
-                endDate: end,
+                quizId: quizId,
+                userId: id,
+                score: score,
             }
         });
     
@@ -23,7 +21,7 @@ export async function POST({ request }) {
         
         
     } catch (err) {
-        return new Response(JSON.stringify({ message: "Error creating comp!" }), {
+        return new Response(JSON.stringify({ message: "Error creating competition!" }), {
             status: 500,
             headers: { "Content-Type": "application/json" },
         });

@@ -244,7 +244,7 @@
   let quiz_taken: boolean = false;
 
   // Used to check answered and score the quiz
-  const scoreQuiz = () => {
+  async function scoreQuiz() {
     // Remove the first element because 0 isn't the first id in the quiz
     console.log("The student answered:", student_answers);
     
@@ -265,6 +265,29 @@
     }
 
     console.log("The student scored: ", student_score);
+    let quizId: number = quiz_questions[0].quizQuestionsId;
+
+    // This does not grab the users ID so we have to adjust this value
+    let id: string = users_name;
+    let score: number = student_score;
+    
+    try {
+      const res = await fetch("../api/submitQuizScore", {
+        method: 'POST',
+        headers: {
+          'Content-Type' : 'application/json',
+        },
+        body: JSON.stringify({ quizId, id, score }),
+      });
+  
+      if (res.ok) {
+        console.log("User score added to DB");
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.log("An error occured");
+    }
     
     // Set quiz taken to true so the student cannot submit a second one
     quiz_taken = true;
