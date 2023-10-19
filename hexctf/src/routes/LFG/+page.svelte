@@ -10,7 +10,7 @@
   let adminIDNumber: number;
 
   // Holds admin name !!! REMOVE WHEN LOGIN IS COMPLETED !!!
-  let adminName: string;
+  // let adminName: string;
   
   // Holds user scores from the database
   let userScores: any = [];
@@ -40,15 +40,18 @@
       if (response.ok) {
         users = await response.json();
         console.log(users);
+        // =====================================================
+        // THIS CODE IS NO LONGER NEEDED
         // This will get the admin user id from the dataset
-        users.forEach((user:any) => {
-          if (user.isAdmin === true) {
-            adminIDNumber = user.id;
-            adminName = user.username;
-          }
-        });
-
+        // users.forEach((user:any) => {
+          //   if (user.isAdmin === true) {
+            //     adminIDNumber = user.id;
+            //     adminName = user.username;
+            //   }
+        // });
+            
         // console.log("from function user", users);
+        // =====================================================
       } else {
         console.error('Failed to fetch data:', response.status);
       }
@@ -193,12 +196,26 @@
     showSortButtons = true;
   }
 
+  // Get username from login form 
+  import { username_when_logged_in } from "../createCompetition/username";
+  import { onDestroy } from "svelte";
+
+  let users_name: string;
+  
+  // Set the users name then destroy when not using anymore
+  const unsubscribe = username_when_logged_in.subscribe(value => {
+    users_name = value;
+
+    onDestroy(() => {
+      unsubscribe();
+    })
+  });
 </script>
 
 <h1>TEAM BUILDER</h1>
 
 <!-- Iterate through each user and display them -->
-<h1>WELCOME: {adminName}</h1>
+<h1>WELCOME: {users_name}</h1>
 
 <!-- This form wil submit the number of groups -->
 <!-- Once submitted, it will hide the button to prevent resubmitting -->
