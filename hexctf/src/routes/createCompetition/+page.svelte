@@ -293,10 +293,24 @@
     
     showQuizName = true;
   }
+
+  // Get username from login form 
+  import { username_when_logged_in } from "./username";
+  import { onDestroy } from "svelte";
+
+  let users_name: string;
+  
+  // Set the users name then destroy when not using anymore
+  const unsubscribe = username_when_logged_in.subscribe(value => {
+    users_name = value;
+
+    onDestroy(() => {
+      unsubscribe();
+    })
+  });
 </script>
 
-<!-- Update to use admin name -->
-<h1>Welcome: User</h1>
+<h1>Welcome: {users_name}</h1>
 
 <form action="#">
     <label for="name">Name of Competition</label>
@@ -325,8 +339,8 @@
       <br>
       {#if showQuestions == true}
       <ul>
-        {#each questions as question (question.quizQuestionId)}
-        <li>Body: {question.questionBody}, Answer: {question.questionAnswer}</li>
+        {#each questions as question (question.quizQuestionsId)}
+        <li><strong>Body</strong>: {question.questionBody}, <strong>Answer</strong>: {question.questionAnswer}</li>
         {/each}
       </ul>
       {/if}
