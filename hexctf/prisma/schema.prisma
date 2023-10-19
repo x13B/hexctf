@@ -102,6 +102,7 @@ model QuizQuestions {
   quizQuestionsId Int @id @default(autoincrement())
   questionBody    String
   questionAnswer  String
+  hint            String
   category        String
   questionValue   Int @default(0)
 }
