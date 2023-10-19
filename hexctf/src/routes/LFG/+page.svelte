@@ -219,6 +219,8 @@
       admin_unsubscribe();
     })
   });
+
+  user_is_admin = true;
 </script>
 
 
@@ -277,7 +279,7 @@
         <h2>Team: {i + 1}</h2>
         <ul>
           {#each teamArray as player (player.userId)}
-          <li>Team member: {player.userId}</li>
+          <li>Team member: {player.userId}, score: {player.score}</li>
           {/each}
         </ul>
       </div>
