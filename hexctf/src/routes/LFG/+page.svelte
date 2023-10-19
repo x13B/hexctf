@@ -246,8 +246,25 @@
   // Used to check answered and score the quiz
   const scoreQuiz = () => {
     // Remove the first element because 0 isn't the first id in the quiz
-    student_answers.shift();
     console.log("The student answered:", student_answers);
+    
+    // lowercase all answers to properly compare
+    for (let i = 1; i < student_answers.length; i++) {
+      student_answers[i] = student_answers[i].toLowerCase();
+    }
+    console.log("The student answered (lowercased):", student_answers);
+
+    // Holds the student score for the quiz
+    let student_score: number = 0;
+
+    // Checks answers to give score
+    for (let i = 1; i < student_answers.length; i++) {
+      if (student_answers[i] === quiz_questions[i-1].questionAnswer) {
+        student_score++;
+      }
+    }
+
+    console.log("The student scored: ", student_score);
     
     // Set quiz taken to true so the student cannot submit a second one
     quiz_taken = true;
