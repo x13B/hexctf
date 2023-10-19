@@ -111,6 +111,7 @@ async function seed() {
         quizQuestionsId: 1,
         questionBody: "What is 2 + 2?",
         questionAnswer: "4",
+        hint: "You don't need a hint for this one.",
         category: "Math"
       }
     });
@@ -119,6 +120,7 @@ async function seed() {
         quizQuestionsId: 2,
         questionBody: "What is 3 * 1?",
         questionAnswer: "3",
+        hint: "You really don't need a hint for this one.",
         category: "Math"
       }
     });
@@ -127,6 +129,7 @@ async function seed() {
         quizQuestionsId: 3,
         questionBody: "What is the force that pulls objects towards Earth's center?",
         questionAnswer: "gravity",
+        hint: "It's gravity",
         category: "Physics"
       }
     });
@@ -135,6 +138,7 @@ async function seed() {
         quizQuestionsId: 4,
         questionBody: "What is the measure of the amount of matter in an object?",
         questionAnswer: "mass",
+        hint: "You multiply it by gravitational force to get its weight!",
         category: "Physics"
       }
     });
@@ -143,6 +147,7 @@ async function seed() {
         quizQuestionsId: 5,
         questionBody: "What does LAN stand for?",
         questionAnswer: "local area network",
+        hint: "It's in your immediate vicinity.",
         category: "Networks"
       }
     });
@@ -151,6 +156,7 @@ async function seed() {
         quizQuestionsId: 6,
         questionBody: "What is the device to connect multiple computers in a network?",
         questionAnswer: "router",
+        hint: "You could say it provides routes for the network.",
         category: "Networks"
       }
     });
@@ -159,6 +165,7 @@ async function seed() {
         quizQuestionsId: 7,
         questionBody: "What do you call a data structure that stores elements in a linear order?",
         questionAnswer: "array",
+        hint: "It can have rows and columns.",
         category: "Algorithms"
       }
     });
@@ -167,6 +174,7 @@ async function seed() {
         quizQuestionsId: 8,
         questionBody: "What data structure organizes elements in a hierarchical way?",
         questionAnswer: "tree",
+        hint: "It shares a name with a large plant that consists of a trunk and various branches and leaves.",
         category: "Algorithms"
       }
     });
