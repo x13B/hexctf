@@ -9,16 +9,17 @@
 
 <div class="page">
     <main>
-      <h2>{question?.Description}</h2>
+      <h2>{question?.title}</h2>
+      <p>{question?.description}</p>
       <p>{question?.points} Points</p>
       <form method="POST" use:enhance>
       <label for="answer">Answer:
       <input name="answer"/>
       <input type="submit" value="Submit" />
     </label></form>
-    {#if form?.success}
+    {#if form?.response}
     <p>Correct! You earned {question?.points} points!</p>
-    {:else if form?.success === false}
+    {:else if form?.response === false}
     <p>Wrong!</p>
     {/if}
       <a href="./">Return</a>

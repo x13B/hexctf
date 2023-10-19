@@ -4,7 +4,7 @@ import type { PageServerLoad, Actions } from './$types';
 
 export const load = (async ({ params: { slug } }) => {
     const question = await prisma.questions.findUnique({
-        where: { QuestionId: Number(slug) },
+        where: { questionId: Number(slug) },
     });
     return { question };
 }) satisfies PageServerLoad;
@@ -15,16 +15,16 @@ export const actions = {
         let propose = data.get("answer")
 
         const question = await prisma.questions.findUnique({
-            where: { QuestionId: Number(slug) },
+            where: { questionId: Number(slug) },
         });
 
-        if (propose === question?.Answer) {
+        if (propose === question?.answer) {
             //console.log("Answer is correct!")
-            return {success: true}
+            return {response: true}
         }
         else {
             //console.log("Answer is incorrect.")
-            return {success: false}
+            return {response: false}
         }
     }
 }satisfies Actions;
