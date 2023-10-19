@@ -2,7 +2,7 @@
 <p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p> -->
 
 <script lang="ts">
-	import { username_when_logged_in, check_if_admin } from "./createCompetition/username";
+	import { username_when_logged_in, check_if_admin, users_id } from "./createCompetition/username";
 	import { enhance } from "$app/forms";
 	import { onMount } from "svelte";
 	import type { PageData } from "./$types";
@@ -11,6 +11,7 @@
 
 	// Allows this value to be used in other pages
 	username_when_logged_in.set(data.username);
+	users_id.set(data.userId);
 	
 	// This will check if the user is an admin to set the flag true
 	onMount(async () => {
