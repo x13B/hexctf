@@ -212,6 +212,7 @@
     })
   });
 
+  // Checks if the user logged in is the admin
   const admin_unsubscribe = check_if_admin.subscribe(value => {
     user_is_admin = value;
 
@@ -220,7 +221,25 @@
     })
   });
 
-  user_is_admin = true;
+  // Holds student quiz questions
+  let quiz_questions: any[] = [];
+  let questions_loaded: boolean = false;
+  onMount(async () => {
+    try {
+      const res = await fetch("../api/getQuizQuestions");
+      if (res.ok) {
+        console.log("Quiz questions loaded.");
+        quiz_questions = await res.json();
+        questions_loaded = true;
+        console.log(quiz_questions);
+
+      }
+    } catch (error) {
+      console.log("Error occured when loading questions: ", error);
+    }
+
+
+  });
 </script>
 
 
@@ -291,5 +310,11 @@
   <h1>WELCOME: {users_name}</h1>
   <br>
   <h1>YOU HAVE NOT TAKEN THE QUIZ YET!</h1>
+  <div>
+    {#each quiz_questions as question (question.quizQuestionsId)}
+      <p>Question: {question.questionBody}</p>
+      <input type="text">
+    {/each}
+  </div>
 {/if}
 
