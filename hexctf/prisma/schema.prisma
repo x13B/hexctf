@@ -103,6 +103,7 @@ model QuizQuestions {
   questionBody    String
   questionAnswer  String
   category        String
+  questionValue   Int @default(0)
 }
 
 model QuizResults {
@@ -112,4 +113,11 @@ model QuizResults {
   quiz   Quiz @relation("QuizToResults", fields: [quizId], references: [quizId])
   user   User @relation("UserToResults", fields: [userId], references: [id])
   @@unique([quizId, userId])
+}
+
+model Competition {
+  competitionId   Int @id @default(1)
+  competitionName String
+  startDate       String
+  endDate         String
 }

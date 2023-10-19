@@ -1,26 +1,59 @@
 <script lang="ts">
   import { onMount } from "svelte";
   
-  let showForm = false;
+  // Holds categories from DB
   let categories: any[];
+
+  // Bound variable from form for category name
   let newCategory: string;
-  let catName: string;
-  let start: Date;
-  let end: Date;
+
+  // Bound variable from form for start date of competition
+  let start: string;
+
+  // Bound variable from form for end date of competition
+  let end: string;
+
+  // Holds questions imported from DB
   let questions: any[] = [];
+
+  // Bound variable for question body in form
   let question_body: string = '';
+
+  // Bound varibale for question answer in form
   let question_answer: string = '';
+
+  // Variable to keep track of the questionId from DB
   let questionId: number = 1;
+
+  // Bound variable for category being selected in form
   let categorySelected: string = '';
+
+  // Only one quiz will be made, so default is 1
   const quizID: number = 1;
+
+  // Only shows the quiz when submit has been used
   let showMadeQuiz: boolean = false;
+
+  // Bound name for quiz in form
   let quizName: string = '';
-  let showQuestionsAdded: boolean = true;
+
+  // Only shows questions 
+  // let showQuestionsAdded: boolean = true;
+
+  // Shows quiz name when submit button is hit
   let showQuizName: boolean = false;
 
+  // Bound variable for name of competition
+  let competition_name: string = '';
+
+  // Only shows questions when loaded from DB
   let showQuestions: boolean = false;
+
+  // Only shows categories when loaded from DB
   let showCategories: boolean = false;
 
+
+  // Load quiz name from DB when one exists
   onMount(async () => {
     console.log("Fetching quiz name");
     try {
@@ -30,6 +63,8 @@
         quizDetails = await res.json();
 
         quizName = quizDetails[0]["quizName"];  
+
+        // Set to true to prevent loading errors
         showQuizName = true;  
         
       } else {
@@ -41,14 +76,21 @@
     }
   })
   
+  // Get quiz questions from DB
   onMount(async () => {
     console.log("Fetching quiz questions");
     try {
       const res = await fetch('../api/getQuizQuestions');
       if (res.ok) {
+
+        // Use a temp array to prevent undefined values
         let quizQuestionDetails: any[] = [];
         quizQuestionDetails = await res.json();
+
+        // Assign to declared array questions
         questions = quizQuestionDetails;
+
+        // Only show questions when questions are loaded from DB
         showQuestions = true;
         
         console.log("Details fetched=\n", questions);
@@ -61,6 +103,7 @@
     }
   })
   
+  // Load categories from DB
   onMount(async () => {
     console.log("Fetching categories");
     try {
@@ -68,6 +111,8 @@
       if (res.ok) {
         categories = await res.json();      
         console.log("Categories: ", categories);
+
+        // Only show when categories have been loaded from DB
         showCategories = true;
 
       } else {
@@ -81,8 +126,8 @@
   // Let's you add new categories without overwriting the old ones.
   const createNewCategory = async () => {
     const newCategoryObj = {
-      CategoryId: categories.length + 1,
-      CategoryName: newCategory,
+      categoryId: categories.length + 1,
+      categoryName: newCategory,
     };
     
     // Add the category to your local array
@@ -93,8 +138,10 @@
     // Clear the input field after adding the category
     newCategory = '';
 
-    let id: number = newCategoryObj.CategoryId;
-    let name: string = newCategoryObj.CategoryName;
+    let id: number = newCategoryObj.categoryId;
+    let name: string = newCategoryObj.categoryName;
+
+    console.log("New category before uploading: ", id, name);
 
     try {
       const res = await fetch('/api/addCategory', {
@@ -117,23 +164,61 @@
     }
   };
 
+  // This function will submit user options to the DB
   async function submitOptions() {
-    console.log("Startime: ", start);
-    console.log("End time: ", end);
-    console.log(catName, start, end);
+
+    // Assign to new variables to prevent undefined
+    let name: string = competition_name;
+    // let starting_date: string = start.toString();
+    // let ending_date: string = end.toString();
+    
+    // console.log(typeof starting_date === 'string');
+
+    // console.log("Startime: ", starting_date);
+    // console.log("End time: ", ending_date);
+
+    start = start.toString();
+    end = end.toString();
+
+    // Submit options to server file to upload to DB
+    try {
+      const res = await fetch("../api/submitCompDetails", {
+        method: 'POST',
+        headers: {
+          'Content-Type' : 'applications/json',
+        },
+        body: JSON.stringify({name, start, end})
+      });
+
+      if (res.ok) {
+          console.log('Competitions successfully created');
+        } else {
+          console.error('Failed to create competition:', res.statusText);
+        }
+    } catch (error) {
+      console.error('Error adding comp details to the database:', error);
+    }
+
+    // Reset competition_name
+    competition_name = '';
   }
 
+  // This function will add questions to the DB
   const addQuestion = async () => {
+
+    // Create a new object to prevent undefined values
     const newQuestion = {
       questionBody: question_body,
       questionAnswer: question_answer,
       categoryName: categorySelected
     };
     
+    // Testing, might remove
     let body: string = newQuestion.questionBody;
     let answer: string = newQuestion.questionAnswer;
     let cat: string = newQuestion.categoryName;
 
+    // Submit options to server file to upload to DB
     try {
       const res = await fetch("../api/addQuizQuestions", {
         method: 'POST',
@@ -151,19 +236,25 @@
       console.error('Error adding question to the database:', error);
     }
     
+    // Append to local questions Array
     questions = [
       ...questions,
       { id: questionId, body: question_body, answer: question_answer, category: categorySelected }
     ];
 
+    // Sort the questions by category for displaying together
     questions.sort((a, b) => a.category.localeCompare(b.category));
     
-    questionId++; // Increment the questionId
+    // Increment the questionId
+    questionId++;
+
+    // RESET VALUES
     question_body = '';
     question_answer = '';
     categorySelected = '';
   }
   
+  // This function will submit quiz options to the DB
   const submitQuiz = async () => {
     console.log("Quiz ID: ", quizID);
     console.log("Quiz Name: ", quizName);
@@ -172,17 +263,58 @@
       console.log("Answer: ", questions[i].answer);
       console.log("Catgory: ", questions[i].category);
     }
+
+    // Toggle quiz options to show when submitted
     showMadeQuiz = true;
-    showQuestionsAdded = false;
+  }
+  
+  // This function will create a new quiz
+  async function createQuizName() {
+    let id: number = quizID;
+    let name: string = quizName;
+
+    try {
+      const res = await fetch("../api/createQuiz", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, name })
+      });
+      
+      if (res.ok) {
+        console.log("Able to create quiz");
+      } else {
+        console.log("Something went wrong. Please try again");
+      }
+    } catch (error) {
+      console.error("Error trying to create quiz: ", error);
+    }
+    
     showQuizName = true;
   }
+
+  // Get username from login form 
+  import { username_when_logged_in } from "./username";
+  import { onDestroy } from "svelte";
+
+  let users_name: string;
+  
+  // Set the users name then destroy when not using anymore
+  const unsubscribe = username_when_logged_in.subscribe(value => {
+    users_name = value;
+
+    onDestroy(() => {
+      unsubscribe();
+    })
+  });
 </script>
 
-<h1>Create a Competition Page</h1>
+<h1>Welcome: {users_name}</h1>
 
 <form action="#">
     <label for="name">Name of Competition</label>
-    <input type="text" name="comp-name" placeholder="Name of competition" bind:value={catName}/><br>
+    <input type="text" name="comp-name" placeholder="Name of competition" bind:value={competition_name}/><br>
     <label for="length">Start Date:</label>
     <input type="datetime-local" bind:value={start}/><br>
     
@@ -194,23 +326,24 @@
   
   <form action="#">
     {#if showQuizName === false}
-    <label for="New-Quiz">CREATE A NEW QUIZ</label>
-    <br>
-    <label for="name">ENTER QUIZ NAME: </label>
-    <input type="text" bind:value={quizName} placeholder="Enter Quiz Name"/>
+      <label for="New-Quiz">CREATE A NEW QUIZ</label>
+      <br>
+      <label for="name">ENTER QUIZ NAME: </label>
+      <input type="text" bind:value={quizName} placeholder="Enter Quiz Name"/>
+      <button on:click={createQuizName}>Submit</button>
     {:else}
-    <br>
-    <label for="name">QUIZ NAME: <strong>{quizName.toUpperCase()}</strong></label>
-    <br>
-    <label for="selected-questions">SELECTED QUESTIONS</label>
-    <br>
-    {#if showQuestions == true}
-    <ul>
-      {#each questions as question}
-      <li>Body: {question.questionBody}, Answer: {question.questionAnswer}</li>
-      {/each}
-    </ul>
-    {/if}
+      <br>
+      <label for="name">QUIZ NAME: <strong>{quizName.toUpperCase()}</strong></label>
+      <br>
+      <label for="selected-questions">SELECTED QUESTIONS</label>
+      <br>
+      {#if showQuestions == true}
+      <ul>
+        {#each questions as question (question.quizQuestionsId)}
+        <li><strong>Body</strong>: {question.questionBody}, <strong>Answer</strong>: {question.questionAnswer}</li>
+        {/each}
+      </ul>
+      {/if}
     {/if}
     <br>
     <label for="add">Create New Category: </label>
@@ -228,9 +361,9 @@
   <br>
   <label for="category">Category: </label>
   {#if showCategories == true}
-    {#each categories as cat (cat.CategoryId)}
-        {cat.CategoryName}
-        <input type="radio" name="{cat.CategoryName}">
+    {#each categories as cat (cat.categoryId)}
+        {cat.categoryName}
+        <input type="radio" name="{cat.categoryName}">
     {/each}
   {/if}
   <button type="submit" on:click={addQuestion}>Add Question</button>

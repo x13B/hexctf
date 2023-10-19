@@ -108,6 +108,11 @@
       leftPtr++;
     }
 
+    for (let i = 0; i < teamsMadeBySort.length; i++) {
+        for (let j = 0; j < teamsMadeBySort[i].length; j++) {
+            console.log(teamsMadeBySort[i][j]);
+        }
+    }
   }
 
   // Using Fisher-Yates algorithm to randomly sort
@@ -244,30 +249,11 @@
     <div>
       <h2>Team: {i + 1}</h2>
           <ul>
-            {#each teamArray as player (player.UserId)}
-            <li>Team member: {player.UserId}</li>
+            {#each teamArray as player (player.userId)}
+            <li>Team member: {player.userId}</li>
             {/each}
           </ul>
         </div>
         {/each}
     {/if}
 </div>
-      <!-- This will be removed when login functionality works -->
-      <!-- <ul>
-        {#each users as user (user.id)}
-          {#if adminIDNumber !== user.id}
-            <li>Non-Admin User: {user.username}</li>
-          {/if}
-        {/each}
-      </ul> -->
-      
-      <!-- <div>
-        The admins id number is: {adminIDNumber}<br>
-        The number of groups is: {numGroups}
-      </div> -->
-      <!-- <br>
-      <div>
-          {#each userScores as score (score.UserId)}
-            <li>UserID: {score.UserId} | user score: {score.score}</li>
-          {/each}
-      </div> -->
