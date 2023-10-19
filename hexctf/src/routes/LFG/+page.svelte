@@ -10,7 +10,7 @@
   let adminIDNumber: number;
 
   // Holds admin name !!! REMOVE WHEN LOGIN IS COMPLETED !!!
-  let adminName: string;
+  // let adminName: string;
   
   // Holds user scores from the database
   let userScores: any = [];
@@ -40,15 +40,18 @@
       if (response.ok) {
         users = await response.json();
         console.log(users);
+        // =====================================================
+        // THIS CODE IS NO LONGER NEEDED
         // This will get the admin user id from the dataset
-        users.forEach((user:any) => {
-          if (user.isAdmin === true) {
-            adminIDNumber = user.id;
-            adminName = user.username;
-          }
-        });
-
+        // users.forEach((user:any) => {
+          //   if (user.isAdmin === true) {
+            //     adminIDNumber = user.id;
+            //     adminName = user.username;
+            //   }
+        // });
+            
         // console.log("from function user", users);
+        // =====================================================
       } else {
         console.error('Failed to fetch data:', response.status);
       }
@@ -108,6 +111,11 @@
       leftPtr++;
     }
 
+    for (let i = 0; i < teamsMadeBySort.length; i++) {
+        for (let j = 0; j < teamsMadeBySort[i].length; j++) {
+            console.log(teamsMadeBySort[i][j]);
+        }
+    }
   }
 
   // Using Fisher-Yates algorithm to randomly sort
@@ -188,67 +196,100 @@
     showSortButtons = true;
   }
 
+  // Get username from login form 
+  import { username_when_logged_in, check_if_admin } from "../createCompetition/username";
+  import { onDestroy } from "svelte";
+
+  let users_name: string;
+  let user_is_admin: boolean;
+  
+  // Set the users name then destroy when not using anymore
+  const unsubscribe = username_when_logged_in.subscribe(value => {
+    users_name = value;
+
+    onDestroy(() => {
+      unsubscribe();
+    })
+  });
+
+  const admin_unsubscribe = check_if_admin.subscribe(value => {
+    user_is_admin = value;
+
+    onDestroy(() => {
+      admin_unsubscribe();
+    })
+  });
+
+  user_is_admin = true;
 </script>
 
-<h1>TEAM BUILDER</h1>
 
 <!-- Iterate through each user and display them -->
-<h1>WELCOME: {adminName}</h1>
+
+{#if user_is_admin === true}
+<h1>TEAM BUILDER (ADMIN)</h1>
+<h1>WELCOME: {users_name}</h1>
 
 <!-- This form wil submit the number of groups -->
 <!-- Once submitted, it will hide the button to prevent resubmitting -->
 <!-- The button is disabled until a postive value in entered -->
 <form on:submit|preventDefault>
   {#if groupsButtonVisible === true && inputVisible === true} 
-    Select the number of groups per team:
-    <input type="number" bind:value={numGroups}>
-    <button on:click={hideButton} class="group-button" disabled={numGroups <= 1}>Submit</button>
+  Select the number of groups per team:
+  <input type="number" bind:value={numGroups}>
+  <button on:click={hideButton} class="group-button" disabled={numGroups <= 1}>Submit</button>
   {/if}
 </form>
-
 <br>
 
 <!-- Check to see if the number of groups is valid before sorting teams -->
 <div>
   {#if showSortButtons === true}
-    <strong>Select a sorting method:</strong>
-    <button on:click={easySort}>Easy Sort</button>
-    <button on:click={randomSort}>Random Sort</button>
-    <button on:click={complexFairSort}>Complex Fair Sort</button>
-  {/if}
-</div>
-
-<br>
-<div>
-    Show Student Roster:
-    <button on:click={showStudentRoster}>Submit</button>
+  <strong>Select a sorting method:</strong>
+  <button on:click={easySort}>Easy Sort</button>
+  <button on:click={randomSort}>Random Sort</button>
+  <button on:click={complexFairSort}>Complex Fair Sort</button>
+      {/if}
+    </div>
+    
     <br>
-    {#if showRoster === true}
+    <div>
+      Show Student Roster:
+      <button on:click={showStudentRoster}>Submit</button>
+      <br>
+      {#if showRoster === true}
       <h3>Student Name</h3>
       ================
       {#each users as student (student.id)}
-        {#if student.isAdmin !== true}
-          <li><strong>{student.username}</strong></li>
-        {/if}
+      {#if student.isAdmin !== true}
+      <li><strong>{student.username}</strong></li>
+      {/if}
       {/each}
-    {/if}
-</div>
-
-<div>
-  {#if showTeamsButton === false}
-  <h3>Currently no teams are formed</h3>
-  {:else}
-  <h2>Teams for the Competition</h2>
-  <h3>Current Teams using {sortUsed}</h3>
-    {#each teamsMadeBySort as teamArray, i}
+      {/if}
+    </div>
+    
     <div>
-      <h2>Team: {i + 1}</h2>
-          <ul>
-            {#each teamArray as player (player.UserId)}
-            <li>Team member: {player.UserId}</li>
-            {/each}
-          </ul>
-        </div>
-        {/each}
-    {/if}
-</div>
+      {#if showTeamsButton === false}
+      <h3>Currently no teams are formed</h3>
+      {:else}
+      <h2>Teams for the Competition</h2>
+      <h3>Current Teams using {sortUsed}</h3>
+      {#each teamsMadeBySort as teamArray, i}
+      <div>
+        <h2>Team: {i + 1}</h2>
+        <ul>
+          {#each teamArray as player (player.userId)}
+          <li>Team member: {player.userId}, score: {player.score}</li>
+          {/each}
+        </ul>
+      </div>
+      {/each}
+      {/if}
+    </div>
+{:else}
+  <h1>TEAM BUILDER (STUDENT)</h1>
+  <h1>WELCOME: {users_name}</h1>
+  <br>
+  <h1>YOU HAVE NOT TAKEN THE QUIZ YET!</h1>
+{/if}
+
