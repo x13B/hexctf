@@ -237,9 +237,13 @@
     } catch (error) {
       console.log("Error occured when loading questions: ", error);
     }
-
-
   });
+
+  let student_answers: any[] = [];
+
+  const scoreQuiz = () => {
+    console.log("The student answered:", student_answers);
+  }
 </script>
 
 
@@ -313,8 +317,10 @@
   <div>
     {#each quiz_questions as question (question.quizQuestionsId)}
       <p>Question: {question.questionBody}</p>
-      <input type="text">
+      <input type="text" bind:value={student_answers[question.quizQuestionsId]}>
     {/each}
+    <br>
+    <button on:click={scoreQuiz}>Submit Quiz</button>
   </div>
 {/if}
 

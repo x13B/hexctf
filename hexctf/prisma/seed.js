@@ -113,7 +113,7 @@ async function seed() {
         questionAnswer: "4",
         hint: "You don't need a hint for this one.",
         category: "Math",
-        pointsValue: 3,
+        questionValue: 3,
       }
     });
     const createQuizQuestion2 = await prisma.quizQuestions.create({
@@ -123,7 +123,7 @@ async function seed() {
         questionAnswer: "3",
         hint: "You really don't need a hint for this one.",
         category: "Math",
-        pointsValue: 3,
+        questionValue: 3,
       }
     });
     const createQuizQuestion3 = await prisma.quizQuestions.create({
@@ -133,7 +133,7 @@ async function seed() {
         questionAnswer: "gravity",
         hint: "It's gravity",
         category: "Physics",
-        pointsValue: 3,
+        questionValue: 3,
       }
     });
     const createQuizQuestion4 = await prisma.quizQuestions.create({
@@ -143,7 +143,7 @@ async function seed() {
         questionAnswer: "mass",
         hint: "You multiply it by gravitational force to get its weight!",
         category: "Physics",
-        pointsValue: 3,
+        questionValue: 3,
       }
     });
     const createQuizQuestion5 = await prisma.quizQuestions.create({
@@ -153,7 +153,7 @@ async function seed() {
         questionAnswer: "local area network",
         hint: "It's in your immediate vicinity.",
         category: "Networks", 
-        pointsValue: 3,
+        questionValue: 3,
       }
     });
     const createQuizQuestion6 = await prisma.quizQuestions.create({
@@ -163,7 +163,7 @@ async function seed() {
         questionAnswer: "router",
         hint: "You could say it provides routes for the network.",
         category: "Networks",
-        pointsValue: 3,
+        questionValue: 3,
       }
     });
     const createQuizQuestion7 = await prisma.quizQuestions.create({
@@ -173,7 +173,7 @@ async function seed() {
         questionAnswer: "array",
         hint: "It can have rows and columns.",
         category: "Algorithms",
-        pointsValue: 3,
+        questionValue: 3,
       }
     });
     const createQuizQuestion8 = await prisma.quizQuestions.create({
@@ -183,7 +183,7 @@ async function seed() {
         questionAnswer: "tree",
         hint: "It shares a name with a large plant that consists of a trunk and various branches and leaves.",
         category: "Algorithms",
-        pointsValue: 3,
+        questionValue: 3,
       }
     });
     // =================================================================
