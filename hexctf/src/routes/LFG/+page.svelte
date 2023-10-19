@@ -108,6 +108,11 @@
       leftPtr++;
     }
 
+    for (let i = 0; i < teamsMadeBySort.length; i++) {
+        for (let j = 0; j < teamsMadeBySort[i].length; j++) {
+            console.log(teamsMadeBySort[i][j]);
+        }
+    }
   }
 
   // Using Fisher-Yates algorithm to randomly sort
@@ -244,8 +249,8 @@
     <div>
       <h2>Team: {i + 1}</h2>
           <ul>
-            {#each teamArray as player (player.UserId)}
-            <li>Team member: {player.UserId}</li>
+            {#each teamArray as player (player.userId)}
+            <li>Team member: {player.userId}</li>
             {/each}
           </ul>
         </div>

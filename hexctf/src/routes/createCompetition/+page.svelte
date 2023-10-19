@@ -296,7 +296,7 @@
 </script>
 
 <!-- Update to use admin name -->
-<h1>Weclome: User</h1>
+<h1>Welcome: User</h1>
 
 <form action="#">
     <label for="name">Name of Competition</label>
