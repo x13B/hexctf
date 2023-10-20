@@ -317,7 +317,7 @@
 <!-- The button is disabled until a postive value in entered -->
 <form on:submit|preventDefault>
   {#if groupsButtonVisible === true && inputVisible === true} 
-  Select the number of groups per team:
+  Select the number of teams:
   <input type="number" bind:value={numGroups}>
   <button on:click={hideButton} class="group-button" disabled={numGroups <= 1}>Submit</button>
   {/if}
