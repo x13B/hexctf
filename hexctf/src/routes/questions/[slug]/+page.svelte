@@ -9,7 +9,8 @@
 
 <div class="page">
     <main>
-      <h2>{question?.Description}</h2>
+      <h2>{question?.description}</h2>
+      <h2>{question?.hint}</h2>
       <p>{question?.points} Points</p>
       <form method="POST" use:enhance>
       <label for="answer">Answer:

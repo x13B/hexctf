@@ -376,6 +376,7 @@
   <div>
     {#each quiz_questions as question (question.quizQuestionsId)}
       <p>Question: {question.questionBody}</p>
+      <p>Hint: {question.hint}</p>
       <input type="text" bind:value={student_answers[question.quizQuestionsId]}>
     {/each}
     <br>
