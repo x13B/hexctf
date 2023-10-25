@@ -8,9 +8,6 @@
 
   // Holds admin ID
   let adminIDNumber: number;
-
-  // Holds admin name !!! REMOVE WHEN LOGIN IS COMPLETED !!!
-  // let adminName: string;
   
   // Holds user scores from the database
   let userScores: any = [];
@@ -32,7 +29,7 @@
   
   // Hides sort buttons until number of groups if defined
   let showSortButtons: boolean = false;
-
+  
   // This gets all users in the database
   onMount(async () => {
     try {
@@ -40,18 +37,7 @@
       if (response.ok) {
         users = await response.json();
         console.log(users);
-        // =====================================================
-        // THIS CODE IS NO LONGER NEEDED
-        // This will get the admin user id from the dataset
-        // users.forEach((user:any) => {
-          //   if (user.isAdmin === true) {
-            //     adminIDNumber = user.id;
-            //     adminName = user.username;
-            //   }
-        // });
-            
-        // console.log("from function user", users);
-        // =====================================================
+
       } else {
         console.error('Failed to fetch data:', response.status);
       }
@@ -60,7 +46,25 @@
     }
   });
 
+  // Holds student quiz questions
+  let quiz_questions: any[] = [];
+  let questions_loaded: boolean = false;
 
+  onMount(async () => {
+    try {
+      const res = await fetch("../api/getQuizQuestions");
+      if (res.ok) {
+        console.log("Quiz questions loaded.");
+        quiz_questions = await res.json();
+        questions_loaded = true;
+        console.log(quiz_questions);
+
+      }
+    } catch (error) {
+      console.log("Error occured when loading questions: ", error);
+    }
+  });
+ 
   // This gets all the scores from the database
   onMount(async () => {
     try {
@@ -72,14 +76,21 @@
         const filteredScores = userScores.filter((user:any) => user.score >= 0);
         userScores = filteredScores;
         
-        console.log(userScores);
+        for (let i = 0; i < userScores.length; i++) {
+          if (userScores[i]['userId'] == users_id_logged_in) {
+            console.log("Student has taken quiz, setting flag.");
+            quiz_taken = true;
+          } 
+        }
+
+        console.log("scores = ", userScores);
       } else {
         console.error("Failed to get users", res.status);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  })
+  });
   
   // This function will sort members in alternating order from high to low
   const easySort = () => {
@@ -195,14 +206,13 @@
     inputVisible = false;
     showSortButtons = true;
   }
-
   // Get username from login form 
   import { username_when_logged_in, check_if_admin, users_id } from "../createCompetition/username";
   import { onDestroy } from "svelte";
 
-  let users_name: string;
+  let users_name: string = "";
   let user_is_admin: boolean;
-  let users_id_logged_in: string;
+  let users_id_logged_in: string = "";
   
   // Set the users name then destroy when not using anymore
   const unsubscribe = username_when_logged_in.subscribe(value => {
@@ -228,24 +238,6 @@
     onDestroy(() => {
       user_id_unsubscribe();
     })
-  });
-
-  // Holds student quiz questions
-  let quiz_questions: any[] = [];
-  let questions_loaded: boolean = false;
-  onMount(async () => {
-    try {
-      const res = await fetch("../api/getQuizQuestions");
-      if (res.ok) {
-        console.log("Quiz questions loaded.");
-        quiz_questions = await res.json();
-        questions_loaded = true;
-        console.log(quiz_questions);
-
-      }
-    } catch (error) {
-      console.log("Error occured when loading questions: ", error);
-    }
   });
 
   // Holds the students responses to the quiz
@@ -303,6 +295,8 @@
 
     // This function should redirect student to Questions page for Competition
   }
+
+  // user_is_admin = true;
 </script>
 
 
@@ -372,14 +366,20 @@
   <h1>TEAM BUILDER (STUDENT)</h1>
   <h1>WELCOME: {users_name}</h1>
   <br>
-  <h1>YOU HAVE NOT TAKEN THE QUIZ YET!</h1>
-  <div>
-    {#each quiz_questions as question (question.quizQuestionsId)}
-      <p>Question: {question.questionBody}</p>
-      <input type="text" bind:value={student_answers[question.quizQuestionsId]}>
-    {/each}
-    <br>
-    <button on:click={scoreQuiz}>Submit Quiz</button>
-  </div>
+  {#if quiz_taken === false}
+    <h1>YOU HAVE NOT TAKEN THE QUIZ YET!</h1>
+    <div>
+      {#each quiz_questions as question (question.quizQuestionsId)}
+        <p>Question: {question.questionBody}</p>
+        <input type="text" bind:value={student_answers[question.quizQuestionsId]}>
+      {/each}
+      <br>
+      <button on:click={scoreQuiz}>Submit Quiz</button>
+    </div>
+  {:else}
+    <div>
+      <h1>Quiz Taken!</h1>
+    </div>
+  {/if}
 {/if}
 
