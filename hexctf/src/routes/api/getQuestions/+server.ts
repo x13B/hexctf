@@ -1,11 +1,9 @@
-import { PrismaClient } from '@prisma/client';
+import  prisma  from "$lib/prisma";
 import { json } from '@sveltejs/kit';
 
 // This function gets data from the database
 // and can be used to display data for all users
 export async function GET() {
-  const prisma = new PrismaClient();
-
   try {
     const data = await prisma.questions.findMany();
      // Return a 200 OK response with the data

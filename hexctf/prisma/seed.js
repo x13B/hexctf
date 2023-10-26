@@ -1,5 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import prisma from "$lib/prisma";
 async function seed() {
   try {
     // THIS IS FOR THE ADMIN USER ============================================
