@@ -300,6 +300,12 @@
     // This function should redirect student to Questions page for Competition
   }
 
+  // This function will reset all the teams
+  const clearTeams = () => {
+    // reset teams
+    teamsMadeBySort = [];
+  }
+
   user_is_admin = true;
 </script>
 
@@ -381,6 +387,7 @@
     {/each}
     {/if}
   </div>
+  <button on:click={clearTeams}>Clear Teams</button>
 {:else}
   <h1>TEAM BUILDER (STUDENT)</h1>
   <h1>WELCOME: {users_name}</h1>
