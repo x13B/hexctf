@@ -1,5 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import prisma from "$lib/prisma";
 async function seed() {
   try {
     // THIS IS FOR THE ADMIN USER ============================================
@@ -253,6 +252,52 @@ async function seed() {
       }
     });
     // ===========================================================
+
+    // FOR QUESTIONS ONLY ========================================
+    const createQuestion1 = await prisma.questions.create({
+      data: {
+        questionId: 1,
+        title: 'Easy math',
+        description: 'What is 2 + 2?',
+        answer: '4',
+        points: 10,
+        categoryId: 1,
+        difficulty: 'Easy'
+      }
+    });
+    const createQuestion2 = await prisma.questions.create({
+      data: {
+        questionId: 2,
+        title: "Earth's gravity",
+        description: "What is the acceleration in m/s squared of the Earth's gravity?",
+        answer: '9.8',
+        points: 30,
+        categoryId: 2,
+        difficulty: 'Medium'
+      }
+    });
+    const createQuestion3 = await prisma.questions.create({
+      data: {
+        questionId: 3,
+        title: 'OSI Model Layer 2',
+        description: 'What is the second layer of the OSI Model?',
+        answer: 'Data link layer',
+        points: 50,
+        categoryId: 3,
+        difficulty: 'Medium'
+      }
+    });
+    const createQuestion4 = await prisma.questions.create({
+      data: {
+        questionId: 4,
+        title: 'OSI Model Layer 7',
+        description: 'What is the seventh layer of the OSI Model?',
+        answer: 'Application layer',
+        points: 50,
+        categoryId: 3,
+        difficulty: 'Medium'
+      }
+    });
   } catch (error) {
     console.error(error);
   } finally {

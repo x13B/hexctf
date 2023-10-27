@@ -1,14 +1,17 @@
 <script lang="ts">   
     import { enhance } from "$app/forms";
+    export let form;
 </script>
-
-<h1>This is the login page</h1>
 
 <main>
     <h1>Login</h1>
-    <form method="POST">
+    <form method="POST" use:enhance>
+    {#if form?.message}
+        <p>{form.message}</p>
+    {/if}
         <label for="username">Username:</label>
         <input type="text" name="username" id="username" /><br />
+        <br />
         <label for="password">Password:</label>
         <input type="password" name="password" id="password" /><br />
         <button type="submit">Login</button>

@@ -1,4 +1,4 @@
-import prisma from '../../../lib/index';
+import prisma from '$lib/prisma';
 import { json } from "@sveltejs/kit";
 
 /** @type {import('./$types').RequestHandler} */
