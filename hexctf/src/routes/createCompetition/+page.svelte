@@ -308,6 +308,14 @@
       unsubscribe();
     })
   });
+
+  let comp_question_body: string = "";
+  let comp_question_answer: string = "";
+  let comp_question_category: number;
+
+  const addCompQuestion = () => {
+    console.log("Adding: ", );
+  }
 </script>
 
 <h1>Welcome: {users_name}</h1>
@@ -369,4 +377,28 @@
   <button type="submit" on:click={addQuestion}>Add Question</button>
   <br>
   <button type="submit" on:click={submitQuiz}>Submit Quiz</button>
+</form>
+<br>
+<form action="#">
+  <h3>Add Questions Form</h3>
+  <label for="question-body">Question:</label>
+  <input type="text">
+  <br>
+  <label for="answer">Answer:</label>
+  <input type="text">
+  <br>
+  <label for="points">Points:</label>
+  <input type="number">
+  <br>
+  <label for="difficulty">Difficulty:</label>
+  <input type="text">
+  <br>
+  {#if showCategories == true}
+    {#each categories as cat (cat.categoryId)}
+        {cat.categoryName}
+        <input type="radio" name="{cat.categoryName}">
+    {/each}
+  {/if}
+  <br>
+  <button on:click={addCompQuestion}>Add</button>
 </form>
