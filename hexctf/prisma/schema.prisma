@@ -75,11 +75,12 @@ model Categories {
 
 model Questions {
   questionId  Int    @id @default(autoincrement())
-  description String 
+  title       String
+  description String
   answer      String
   points      Int
   categoryId  Int 
-  difficuly   String
+  difficulty  String
   categories  Categories @relation("CategoryToQuestion", fields: [categoryId], references: [categoryId])
   answers     AnswerQuestions[] @relation("QuestionToAnswer")
 }

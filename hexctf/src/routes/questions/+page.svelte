@@ -32,11 +32,11 @@
 
 <h1>Questions</h1>
 <ul>
-  {#each categories as c (c.CategoryId)}
-    <li><h3>{c.CategoryName}</h3></li>
-    {#each questions as q (q.QuestionId)}
-      {#if q.categoryId === c.CategoryId}
-        <ul><a href="/questions/{q.QuestionId}">{q.Description}</a> - {q.points} points</ul>
+  {#each categories as c (c.categoryId)}
+    <li><h3>{c.categoryName}</h3></li>
+    {#each questions as q (q.questionId)}
+      {#if q.categoryId === c.categoryId}
+        <ul><a href="/questions/{q.questionId}">{q.title}</a> - {q.points} points</ul>
       {/if}
     {/each}
     <br>
