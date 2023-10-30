@@ -315,15 +315,23 @@
 
   let team_number: number = 0;
   let student_id: string = "";
-  const addStudentToTeam = () => {
-    console.log(team_number);
-    console.log(student_id);
 
-    teamsMadeBySort[team_number-1].push({"quizId": 1, "userId":student_id});
-    
-    team_number = 0;
-    student_id = "";  
-  }
+  // const addStudentToTeam = () => {
+  //   teamsMadeBySort[team_number-1].push({"userId":student_id});
+  //   console.log("Teams: ", teamsMadeBySort);
+  //   team_number = 0;
+  //   student_id = "";  
+  // }
+  const addStudentToTeam = () => {
+  teamsMadeBySort[team_number - 1].push({ "userId": student_id });
+  console.log("Teams: ", teamsMadeBySort);
+  team_number = 0;
+  student_id = "";
+
+  // Manually trigger an update of the UI
+  teamsMadeBySort = [...teamsMadeBySort];
+}
+
 
   user_is_admin = true;
 </script>
@@ -374,7 +382,7 @@
   </div>
 
   {#if show_manual_teams_form === true}
-    <form on:submit|preventDefault>
+    <div>
       <h2>This form will let the admin create teams manually!</h2>
       {#each userScores as score (score.userId)}
         Student ID: <strong>{score.userId}</strong> Score: <strong>{score.score}</strong>
@@ -386,7 +394,7 @@
       <label for="student-name">Enter Student ID:</label>
       <input type="text" bind:value={student_id}>
       <button on:click={addStudentToTeam}>Add Student</button>
-    </form>
+    </div>
   {/if}
   
   <div>
