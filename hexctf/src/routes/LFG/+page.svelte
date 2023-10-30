@@ -196,6 +196,13 @@
     console.log("This creates the teams manually");
     show_manual_teams_form = !show_manual_teams_form;
     sortUsed = "Manual Option";
+
+    teamsMadeBySort = [];
+    for (let i = 0; i < numGroups; i++) {
+      teamsMadeBySort.push([]);
+    }
+
+    showTeamsButton = true;
   }
 
   let showRoster: boolean = false;
@@ -306,6 +313,18 @@
     teamsMadeBySort = [];
   }
 
+  let team_number: number = 0;
+  let student_id: string = "";
+  const addStudentToTeam = () => {
+    console.log(team_number);
+    console.log(student_id);
+
+    teamsMadeBySort[team_number-1].push({"quizId": 1, "userId":student_id});
+    
+    team_number = 0;
+    student_id = "";  
+  }
+
   user_is_admin = true;
 </script>
 
@@ -362,10 +381,11 @@
         <br>
       {/each}
       <label for="team#">Enter Team #:</label>
-      <input type="number">
+      <input type="number" bind:value={team_number}>
       <br>
       <label for="student-name">Enter Student ID:</label>
-      <input type="text">
+      <input type="text" bind:value={student_id}>
+      <button on:click={addStudentToTeam}>Add Student</button>
     </form>
   {/if}
   
