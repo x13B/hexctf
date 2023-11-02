@@ -1,18 +1,41 @@
 import prisma from "$lib/prisma";
+import { auth } from "$lib/server/lucia";
 async function seed() {
   try {
     // THIS IS FOR THE ADMIN USER ============================================
-    const createAdmin = await prisma.user.create({
-      data: {
-        id: '1',
-        username: 'admin',
+      let usernameAdmin = "admin";
+      const createAdmin = await auth.createUser({
+      key: {
+        providerId: "username", // auth method
+				providerUserId: usernameAdmin.toLowerCase(), // unique id when using "username" auth method
+        password: "admin"
+      },
+      attributes: {
+        username: usernameAdmin,
         isAdmin: true
-      }
+      } // expects `Lucia.DatabaseUserAttributes`
     });
     // ========================================================================
 
     // THIS IS FOR ADDING NEW USERS ==========================================
-    const createUser1 = await prisma.user.create({
+    let userList = ["Student 1","Student 2","Student 3","Student 4","Student 5","Student 6","Student 7","Student 8","Student 9"];
+    let num = 1;
+    for (let nameuser of userList) {
+      //console.log(nameuser)
+      const createUser = await auth.createUser({
+        userId: String(num),
+        key: {
+          providerId: "username",
+          providerUserId: nameuser.toLowerCase(),
+          password: nameuser.toLowerCase(),
+        },
+        attributes: {
+          username: nameuser
+        }
+      });
+      num += 1;
+    }
+    /*const createUser1 = await prisma.user.create({
       data: {
         id: '2',
         username: 'Student 1'
@@ -67,6 +90,7 @@ async function seed() {
       }
     });
     // =====================================================================
+    */
 
     // THIS IS FOR CATEGORIES ================================================    
     const createcategory = await prisma.categories.create({
@@ -90,7 +114,7 @@ async function seed() {
     const createcategory4 = await prisma.categories.create({
       data: {
         categoryId: 4,
-        categoryName: "Alorithms"
+        categoryName: "Algorithms"
       }
     });
     // =================================================================
@@ -191,63 +215,63 @@ async function seed() {
     const createResult = await prisma.quizResults.create({
       data: {
         quizId: 1,
-        userId: '2',
+        userId: '1',
         score: 4
       }
     });
     const createResult2 = await prisma.quizResults.create({
       data: {
         quizId: 1,
-        userId: '3',
+        userId: '2',
         score: 1
       }
     });
     const createResult3 = await prisma.quizResults.create({
       data: {
         quizId: 1,
-        userId: '4',
+        userId: '3',
         score: 7
       }
     });
     const createResult4 = await prisma.quizResults.create({
       data: {
         quizId: 1,
-        userId: '5',
+        userId: '4',
         score: 10
       }
     });
     const createResult5 = await prisma.quizResults.create({
       data: {
         quizId: 1,
-        userId: '6',
+        userId: '5',
         score: 8
       }
     });
     const createResult6 = await prisma.quizResults.create({
       data: {
         quizId: 1,
-        userId: '7',
+        userId: '6',
         score: 2
       }
     });
     const createResult7 = await prisma.quizResults.create({
       data: {
         quizId: 1,
-        userId: '8',
+        userId: '7',
         score: 0
       }
     });
     const createResult8 = await prisma.quizResults.create({
       data: {
         quizId: 1,
-        userId: '9',
+        userId: '8',
         score: 11
       }
     });
     const createResult9 = await prisma.quizResults.create({
       data: {
         quizId: 1,
-        userId: '10',
+        userId: '9',
         score: 5
       }
     });
@@ -296,6 +320,25 @@ async function seed() {
         points: 50,
         categoryId: 3,
         difficulty: 'Medium'
+      }
+    });
+    // ===========================================================
+
+    // FOR TEAMS ONLY ========================================
+    const createTeam1 = await prisma.teams.create({
+      data: {
+        teamName: 'The A Team',
+      }
+    });
+    const createTeam2 = await prisma.teams.create({
+      data: {
+        teamName: 'The B Team',
+      }
+    });
+    const createTeam3 = await prisma.teams.create({
+      data: {
+        teamName: 'l33t hax0rs',
+        points: 99999,
       }
     });
   } catch (error) {

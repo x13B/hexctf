@@ -4,8 +4,9 @@
   
     export let data: PageData;
     const  question  = data.question;
-    export let form: ActionData;
     const  check  = data.check;
+    export let form: ActionData;
+   
 
   </script>
 

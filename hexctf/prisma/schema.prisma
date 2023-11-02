@@ -47,7 +47,7 @@ model Key {
 model Teams {
   teamId   Int          @id @default(autoincrement())
   teamName String       @unique
-  points Int
+  points Int            @default(0)
   answers  AnswerQuestions[] @relation("TeamToAnswer")
   teams Leaderboard? @relation("TeamToLeaderboard")
   members TeamMembers[] @relation("TeamToMembers")

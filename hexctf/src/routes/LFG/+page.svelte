@@ -196,6 +196,13 @@
     console.log("This creates the teams manually");
     show_manual_teams_form = !show_manual_teams_form;
     sortUsed = "Manual Option";
+
+    teamsMadeBySort = [];
+    for (let i = 0; i < numGroups; i++) {
+      teamsMadeBySort.push([]);
+    }
+
+    showTeamsButton = true;
   }
 
   let showRoster: boolean = false;
@@ -300,6 +307,41 @@
     // This function should redirect student to Questions page for Competition
   }
 
+  // This function will reset all the teams
+  const clearTeams = () => {
+    // reset teams
+    teamsMadeBySort = [];
+  }
+
+  let team_number: number = 0;
+  let student_id: string = "";
+
+  // THIS FUNCTION NEEDS TO HANDLE EMPTY TEAMS TO AVOID ERROR
+  // NEEDS TO ADD MEMBERS TO TEAMS WITHOUT DUPLICATES
+  // CAN USE SOME TYPE OF QUEUE TO REMOVE STUDENTS BEING ADDED TO PREVENT DUPS
+  const addStudentToTeam = () => {
+    teamsMadeBySort[team_number - 1].push({ "userId": student_id });
+    console.log("Teams: ", teamsMadeBySort);
+    team_number = 0;
+    student_id = "";
+    let legal_add: boolean = true;
+    for (let i = 0; i < teamsMadeBySort[team_number-1].length; i++) {
+      if (teamsMadeBySort[team_number-1][i]["userId"] == student_id) {
+        legal_add = false;
+        console.log("Cannot add this student!!! Already in team");
+      }
+    }
+
+    if (legal_add) {
+      // Manually trigger an update of the UI
+      teamsMadeBySort = [...teamsMadeBySort];
+    }
+  }
+
+  const generateTeamsManually = async () => {
+    console.log("Added teams to DB (remove once it actually works!)");
+  }
+
   user_is_admin = true;
 </script>
 
@@ -349,18 +391,20 @@
   </div>
 
   {#if show_manual_teams_form === true}
-    <form on:submit|preventDefault>
+    <div>
       <h2>This form will let the admin create teams manually!</h2>
       {#each userScores as score (score.userId)}
         Student ID: <strong>{score.userId}</strong> Score: <strong>{score.score}</strong>
         <br>
       {/each}
       <label for="team#">Enter Team #:</label>
-      <input type="number">
+      <input type="number" bind:value={team_number}>
       <br>
       <label for="student-name">Enter Student ID:</label>
-      <input type="text">
-    </form>
+      <input type="text" bind:value={student_id}>
+      <button on:click={addStudentToTeam}>Add Student</button>
+    </div>
+    <button on:click={generateTeamsManually}>Submit Teams</button>
   {/if}
   
   <div>
@@ -381,6 +425,7 @@
     {/each}
     {/if}
   </div>
+  <button on:click={clearTeams}>Clear Teams</button>
 {:else}
   <h1>TEAM BUILDER (STUDENT)</h1>
   <h1>WELCOME: {users_name}</h1>
