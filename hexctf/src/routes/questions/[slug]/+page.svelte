@@ -16,7 +16,7 @@
     <main>
       <h2>{question?.title}</h2>
       <p>{question?.description}</p>
-      <button on:click|once={() => hintClicked === true}>
+      <button on:click|once={() => hintClicked = true}>
         Need a hint?
       </button>
       {#if hintClicked}
