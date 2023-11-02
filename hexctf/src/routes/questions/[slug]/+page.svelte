@@ -1,12 +1,14 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import type { PageData, ActionData } from "./$types";
-  
+
     export let data: PageData;
     const  question  = data.question;
     const  check  = data.check;
     export let form: ActionData;
+    let hintClicked:boolean = false
    
+
 
   </script>
 
@@ -14,6 +16,12 @@
     <main>
       <h2>{question?.title}</h2>
       <p>{question?.description}</p>
+      <button on:click|once={() => hintClicked = true}>
+        Need a hint?
+      </button>
+      {#if hintClicked}
+        <p>{question?.hint}</p>
+      {/if}
       <p>{question?.points} Points</p>
       {#if check.resp}
         <p><b>Your team has already answered this question!</b></p>
