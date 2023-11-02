@@ -114,7 +114,7 @@ async function seed() {
     const createcategory4 = await prisma.categories.create({
       data: {
         categoryId: 4,
-        categoryName: "Alorithms"
+        categoryName: "Algorithms"
       }
     });
     // =================================================================
