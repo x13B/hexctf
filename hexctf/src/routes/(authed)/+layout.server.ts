@@ -1,6 +1,8 @@
 import { redirect } from "@sveltejs/kit";
 import prisma from "$lib/prisma";
 
+// Used to redirect non-admins away from the admin dashboard
+
 export async function load({ locals, url }) {
     const session = await locals.auth.validate();
     if (session) {

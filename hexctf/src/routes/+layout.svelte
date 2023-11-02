@@ -36,7 +36,6 @@
     }
 </style>
 
-<header class="header">
 <nav class="nav">
     <div class="nav-left">
         <ul>
@@ -61,6 +60,5 @@
         </ul>
     </div>
 </nav>
-</header>
 
 <slot />
