@@ -1,10 +1,12 @@
 import prisma from "$lib/prisma";
+import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from "./$types";
 
 export const load = (async ({ params: { slug }}) => {
     const teamInfo = await prisma.teams.findUnique({
         where: { teamId: Number(slug) },
     });
+    if (!teamInfo) throw error(404, 'Team not found');
     const teamMembers = await prisma.teamMembers.findMany({
         where: { teamId: Number(slug) },
     });

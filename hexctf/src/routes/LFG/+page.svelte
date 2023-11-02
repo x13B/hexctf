@@ -211,14 +211,14 @@
     showRoster = !showRoster;
   }
     
-  // This function toggles buttons to prevent resubmission of data
+  // This function toggles buttons to prevent resubmission of data../admin/createCompetition/username
   function hideButton() {
     groupsButtonVisible = false;
     inputVisible = false;
     showSortButtons = true;
   }
   // Get username from login form 
-  import { username_when_logged_in, check_if_admin, users_id } from "../createCompetition/username";
+  import { username_when_logged_in, check_if_admin, users_id } from "../(authed)/admin/createCompetition/username";
   import { onDestroy } from "svelte";
 
   let users_name: string = "";

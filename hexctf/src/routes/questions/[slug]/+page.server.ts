@@ -1,5 +1,5 @@
 import prisma from "$lib/prisma";
-import { fail, redirect } from "@sveltejs/kit";
+import { fail, redirect, error } from "@sveltejs/kit";
 import type { PageServerLoad, Actions } from './$types';
 
 
@@ -18,6 +18,7 @@ export const load = (async ({ locals, params: { slug } }) => {
     const question = await prisma.questions.findUnique({
         where: { questionId: Number(slug) },
     });
+    if (!question) throw error(404, "Question not found");
     const check = {resp: false}
     if (qAnswered !== null) {check.resp = true}
     return { question, check }
