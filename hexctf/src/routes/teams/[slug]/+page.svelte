@@ -7,13 +7,13 @@
     const answers = data.answersList;
 </script>
 <main>
-    <h1>{team.teamName}</h1>
-    <p>Points: {team.points}</p>
+    <h1>{team?.teamName}</h1>
+    <p>Points: {team?.points}</p>
     { #if members.length !== 0}
     <p>Members:</p>
     <ul>
         { #each members as member }
-        <li>{member.username}</li>
+        <li>{member?.username}</li>
         {/each}
     </ul>
     {:else}
@@ -23,7 +23,7 @@
     <p>Questions Answered:</p>
     <ul>
         { #each answers as answer }
-        <li><a href="/questions/{answer.questionId}">{answer.title}</a></li>
+        <li><a href="/questions/{answer?.questionId}">{answer?.title}</a></li>
         {/each}
     </ul>
     {:else}

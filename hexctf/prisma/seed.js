@@ -298,6 +298,25 @@ async function seed() {
         difficulty: 'Medium'
       }
     });
+    // ===========================================================
+
+    // FOR TEAMS ONLY ========================================
+    const createTeam1 = await prisma.teams.create({
+      data: {
+        teamName: 'The A Team',
+      }
+    });
+    const createTeam2 = await prisma.teams.create({
+      data: {
+        teamName: 'The B Team',
+      }
+    });
+    const createTeam3 = await prisma.teams.create({
+      data: {
+        teamName: 'l33t hax0rs',
+        points: 99999,
+      }
+    });
   } catch (error) {
     console.error(error);
   } finally {
