@@ -6,9 +6,6 @@
   // Holds all users in the competition
   let users: any = [];
 
-  // Holds admin ID
-  let adminIDNumber: number;
-  
   // Holds user scores from the database
   let userScores: any = [];
 
@@ -191,7 +188,7 @@
   
   let show_manual_teams_form = false;
 
-  // This function will sort players based on weighted score using edit distance algorithm
+  // This function will be used to insert students into teams manually
   function createTeamsManually() {
     console.log("This creates the teams manually");
     show_manual_teams_form = !show_manual_teams_form;
@@ -333,8 +330,25 @@
     }
   }
 
-  const generateTeamsManually = async () => {
+  const submitTeamsToDB = async () => {
     console.log("Added teams to DB (remove once it actually works!)");
+    
+    try {
+      const res = await fetch("...", {
+        method: "POST",
+        headers:  {"Content-Type": "application/json"},
+        body: JSON.stringify(teamsMadeBySort),
+      });
+  
+      if (res.ok) {
+        console.log("Teams added to DB");
+      } else {
+        console.log("Teams not added to DB");
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  
   }
 
   user_is_admin = true;
@@ -399,48 +413,48 @@
       <input type="text" bind:value={student_id}>
       <button on:click={addStudentToTeam}>Add Student</button>
     </div>
-    <button on:click={generateTeamsManually}>Submit Teams</button>
-  {/if}
-  
-  <div>
-    {#if showTeamsButton === false}
-    <h3>Currently no teams are formed</h3>
-    {:else}
-    <h2>Teams for the Competition</h2>
-    <h3>Current Teams using {sortUsed}</h3>
-    {#each teamsMadeBySort as teamArray, i}
-    <div>
-      <h2>Team: {i + 1}</h2>
-      <ul>
-        {#each teamArray as player (player.userId)}
-        <li>Team member: {player.userId}, score: {player.score}</li>
-        {/each}
-      </ul>
-    </div>
-    {/each}
     {/if}
-  </div>
-  <button on:click={clearTeams}>Clear Teams</button>
-{:else}
-  <h1>TEAM BUILDER (STUDENT)</h1>
-  <h1>WELCOME: {users_name}</h1>
-  <br>
-  {#if quiz_taken === false}
+    
+    <div>
+      {#if showTeamsButton === false}
+      <h3>Currently no teams are formed</h3>
+      {:else}
+      <h2>Teams for the Competition</h2>
+      <h3>Current Teams using {sortUsed}</h3>
+      {#each teamsMadeBySort as teamArray, i}
+      <div>
+        <h2>Team: {i + 1}</h2>
+        <ul>
+          {#each teamArray as player (player.userId)}
+          <li>Team member: {player.userId}, score: {player.score}</li>
+          {/each}
+        </ul>
+      </div>
+      {/each}
+      {/if}
+    </div>
+    <button on:click={submitTeamsToDB}>Submit Teams</button>
+    <button on:click={clearTeams}>Clear Teams</button>
+    {:else}
+    <h1>TEAM BUILDER (STUDENT)</h1>
+    <h1>WELCOME: {users_name}</h1>
+    <br>
+    {#if quiz_taken === false}
     <h1>YOU HAVE NOT TAKEN THE QUIZ YET!</h1>
     <div>
       <form on:submit|preventDefault>
         {#each quiz_questions as question (question.quizQuestionsId)}
-          <p>Question: {question.questionBody}</p>
-          <input type="text" bind:value={student_answers[question.quizQuestionsId]}>
+        <p>Question: {question.questionBody}</p>
+        <input type="text" bind:value={student_answers[question.quizQuestionsId]}>
         {/each}
         <br>
         <button on:click={scoreQuiz}>Submit Quiz</button>
       </form>
     </div>
-  {:else}
+    {:else}
     <div>
       <h1>Quiz Taken!</h1>
     </div>
-  {/if}
+    {/if}
 {/if}
 
