@@ -334,10 +334,11 @@
     console.log("Added teams to DB (remove once it actually works!)");
     
     try {
-      const res = await fetch("...", {
+      let num_teams: number = numGroups;
+      const res = await fetch("../api/createTeams", {
         method: "POST",
         headers:  {"Content-Type": "application/json"},
-        body: JSON.stringify(teamsMadeBySort),
+        body: JSON.stringify({teamsMadeBySort, num_teams}),
       });
   
       if (res.ok) {
