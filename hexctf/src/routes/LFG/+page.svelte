@@ -352,6 +352,31 @@
   
   }
 
+  let team_names: string[] = [];
+  let new_name: string = "";
+  let number: number = 0;
+
+  // This function will update the team names before adding to DB
+  function updateTeamName() {
+    console.log(new_name);
+    console.log(number);
+    console.log(team_names);
+
+    // Check if the arrays is empty and update the first team and default the rest
+    if (numGroups > 1 && team_names.length === 0) {
+      for (let i = 0; i < numGroups; i++) {
+        if (i + 1 === number) {
+          team_names.push(new_name);
+        } else {
+          team_names.push("Team " + (i + 1));
+        }
+      }
+    }
+    // update the teams to print on the page
+    team_names = [...team_names];
+  }
+
+
   user_is_admin = true;
 </script>
 
@@ -424,7 +449,8 @@
       <h3>Current Teams using {sortUsed}</h3>
       {#each teamsMadeBySort as teamArray, i}
       <div>
-        <h2>Team: {i + 1}</h2>
+        <!-- <h2>Team: {i + 1}</h2> -->
+        <h2>{ team_names[i] }</h2>
         <ul>
           {#each teamArray as player (player.userId)}
           <li>Team member: {player.userId}, score: {player.score}</li>
@@ -432,6 +458,13 @@
         </ul>
       </div>
       {/each}
+      <div>
+        <label for="team-names">Enter a Team Name:</label>
+        <input type="text" bind:value={new_name}><br>
+        <label for="team-number">Team #:</label>
+        <input type="number" bind:value={number}><br>
+        <button on:click={updateTeamName}>Update Name</button>
+      </div>
       {/if}
     </div>
     <button on:click={submitTeamsToDB}>Submit Teams</button>
