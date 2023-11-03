@@ -13,7 +13,7 @@
 
 <nav>
     <ul>
-        <li><a href="admin/createCompetition">Create Competition</a></li>
+        <li><a href="./admin/createCompetition">Create Competition</a></li>
     </ul>
 </nav>
 
