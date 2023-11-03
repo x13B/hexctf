@@ -320,21 +320,16 @@
   // NEEDS TO ADD MEMBERS TO TEAMS WITHOUT DUPLICATES
   // CAN USE SOME TYPE OF QUEUE TO REMOVE STUDENTS BEING ADDED TO PREVENT DUPS
   const addStudentToTeam = () => {
-    teamsMadeBySort[team_number - 1].push({ "userId": student_id });
-    console.log("Teams: ", teamsMadeBySort);
-    team_number = 0;
-    student_id = "";
-    let legal_add: boolean = true;
-    for (let i = 0; i < teamsMadeBySort[team_number-1].length; i++) {
-      if (teamsMadeBySort[team_number-1][i]["userId"] == student_id) {
-        legal_add = false;
-        console.log("Cannot add this student!!! Already in team");
-      }
-    }
-
-    if (legal_add) {
-      // Manually trigger an update of the UI
+    //console.log("Teams: ", teamsMadeBySort);
+    const team_check = teamsMadeBySort[team_number-1];
+    
+    if (!(team_check && team_check.some((member: { userId: string; }) => member.userId == student_id))) {
+      teamsMadeBySort[team_number-1].push({ "userId": student_id });
       teamsMadeBySort = [...teamsMadeBySort];
+      team_number = 0;
+      student_id = "";
+    } else {
+      console.log("Cannot add student to team!");
     }
   }
 
@@ -391,7 +386,7 @@
   </div>
 
   {#if show_manual_teams_form === true}
-    <div>
+    <div id="manual-teams">
       <h2>This form will let the admin create teams manually!</h2>
       {#each userScores as score (score.userId)}
         Student ID: <strong>{score.userId}</strong> Score: <strong>{score.score}</strong>
