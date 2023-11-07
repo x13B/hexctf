@@ -308,6 +308,7 @@
   const clearTeams = () => {
     // reset teams
     teamsMadeBySort = [];
+    team_names = [];
   }
 
   let team_number: number = 0;
