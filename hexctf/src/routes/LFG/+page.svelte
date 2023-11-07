@@ -414,7 +414,7 @@
   <br>
   <div>
     Show Student Roster:
-    <button on:click={showStudentRoster}>Submit</button>
+    <button on:click={showStudentRoster} class="student-roster-button">Submit</button>
     <br>
     {#if showRoster === true}
     <h3>Student Name</h3>
@@ -439,7 +439,7 @@
       <br>
       <label for="student-name">Enter Student ID:</label>
       <input type="text" bind:value={student_id}>
-      <button on:click={addStudentToTeam}>Add Student</button>
+      <button on:click={addStudentToTeam} class="add-to-team-button">Add Student</button>
     </div>
     {/if}
     
@@ -465,12 +465,12 @@
         <input type="text" bind:value={new_name}><br>
         <label for="team-number">Team #:</label>
         <input type="number" bind:value={number}><br>
-        <button on:click={updateTeamName}>Update Name</button>
+        <button on:click={updateTeamName} class="update-name-button">Update Name</button>
       </div>
       {/if}
     </div>
-    <button on:click={submitTeamsToDB}>Submit Teams</button>
-    <button on:click={clearTeams}>Clear Teams</button>
+    <button on:click={submitTeamsToDB} class="submit-teams-button">Submit Teams</button>
+    <button on:click={clearTeams} class="clear-teams-button">Clear Teams</button>
     {:else}
     <h1>TEAM BUILDER (STUDENT)</h1>
     <h1>WELCOME: {users_name}</h1>
@@ -478,13 +478,13 @@
     {#if quiz_taken === false}
     <h1>YOU HAVE NOT TAKEN THE QUIZ YET!</h1>
     <div>
-      <form on:submit|preventDefault>
+      <form on:submit|preventDefault class="student-quiz-form">
         {#each quiz_questions as question (question.quizQuestionsId)}
         <p>Question: {question.questionBody}</p>
         <input type="text" bind:value={student_answers[question.quizQuestionsId]}>
         {/each}
         <br>
-        <button on:click={scoreQuiz}>Submit Quiz</button>
+        <button on:click={scoreQuiz} class="submit-quiz-button">Submit Quiz</button>
       </form>
     </div>
     {:else}
@@ -493,4 +493,3 @@
     </div>
     {/if}
 {/if}
-
