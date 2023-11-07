@@ -4,14 +4,7 @@ import { json } from "@sveltejs/kit";
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
     try {
-        const {teamsMadeBySort, num_teams } = await request.json();
-        
-        // used to generate team names
-        // Will change when we add dynamic team names
-        let team_names:any = []
-        for (let i = 0; i < num_teams; i++) {
-            team_names.push("Team " + (i+1));
-        }
+        const {teamsMadeBySort, num_teams, team_names } = await request.json();
 
         // Add team names before to DB before adding members
         for (let i = 0; i < num_teams; i++) {
