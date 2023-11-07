@@ -371,11 +371,12 @@
           team_names.push("Team " + (i + 1));
         }
       }
+    } else {
+      team_names[number - 1] = new_name;
     }
     // update the teams to print on the page
     team_names = [...team_names];
   }
-
 
   user_is_admin = true;
 </script>
