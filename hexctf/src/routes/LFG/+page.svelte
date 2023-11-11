@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import type { PageData } from "./$types";
 
   /** @type {import('./$types').PageData} */
@@ -7,14 +6,23 @@
   const usersid: string = data.userId;
   const users_name: string = data.username;
   const user_is_admin: boolean = data.isAdmin;
+  let users: any[] = (data.users) ? data.users : [];
 
   let sortUsed: string = '';
 
-  // Holds all users in the competition
-  let users: any = [];
-
   // Holds user scores from the database
-  let userScores: any = [];
+  let userScores: any = (data.quizRes) ? data.quizRes : [];
+  let quiz_taken: boolean = false;
+
+  const filteredScores = userScores.filter((user:any) => user.score >= 0);
+  userScores = filteredScores;
+  
+  // Checks if user (student) has taken quiz already
+  for (let i = 0; i < userScores.length; i++) {
+    if (userScores[i]['userId'] == usersid) {
+      quiz_taken = true;
+    }
+  }
 
   // Holds the number of teams for the competition 
   let numGroups: number = -1;
@@ -33,71 +41,9 @@
   
   // Hides sort buttons until number of groups if defined
   let showSortButtons: boolean = false;
-  
-  // This gets all users in the database
-  onMount(async () => {
-    try {
-      const response = await fetch('../api/getUsers'); 
-      if (response.ok) {
-        users = await response.json();
-        console.log(users);
-
-      } else {
-        console.error('Failed to fetch data:', response.status);
-      }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  });
 
   // Holds student quiz questions
-  let quiz_questions: any[] = [];
-  let questions_loaded: boolean = false;
-
-  onMount(async () => {
-    try {
-      const res = await fetch("../api/getQuizQuestions");
-      if (res.ok) {
-        console.log("Quiz questions loaded.");
-        quiz_questions = await res.json();
-        questions_loaded = true;
-        console.log(quiz_questions);
-
-      }
-    } catch (error) {
-      console.log("Error occured when loading questions: ", error);
-    }
-  });
- 
-  // This gets all the scores from the database
-  onMount(async () => {
-    try {
-      const res = await fetch('../api/getQuizScores');
-      if (res.ok) {
-        userScores = await res.json();
-        
-        // Filters out the scores that are less than 0
-        const filteredScores = userScores.filter((user:any) => user.score >= 0);
-        userScores = filteredScores;
-        
-        for (let i = 0; i < userScores.length; i++) {
-          // if (userScores[i]['userId'] == users_id_logged_in) {
-          if (usersid !== undefined) {
-            if (userScores[i]['userId'] == usersid) {
-              console.log("Student has taken quiz, setting flag.");
-              quiz_taken = true;
-            } 
-          }
-        }
-
-        console.log("scores = ", userScores);
-      } else {
-        console.error("Failed to get users", res.status);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  });
+  let quiz_questions: any[] = (data.quizQuestions) ? data.quizQuestions : [];
   
   // This function will sort members in alternating order from high to low
   const easySort = () => {
@@ -200,7 +146,6 @@
 
   // This function will be used to insert students into teams manually
   function createTeamsManually() {
-    console.log("This creates the teams manually");
     show_manual_teams_form = !show_manual_teams_form;
     sortUsed = "Manual Option";
 
@@ -227,7 +172,7 @@
 
   // Holds the students responses to the quiz
   let student_answers: any[] = [];
-  let quiz_taken: boolean = false;
+
 
   // Used to check answered and score the quiz
   async function scoreQuiz() {
@@ -307,9 +252,7 @@
     }
   }
 
-  const submitTeamsToDB = async () => {
-    console.log("Added teams to DB (remove once it actually works!)");
-    
+  const submitTeamsToDB = async () => {    
     try {
       let num_teams: number = numGroups;
       const res = await fetch("../api/createTeams", {
@@ -335,10 +278,6 @@
 
   // This function will update the team names before adding to DB
   function updateTeamName() {
-    console.log(new_name);
-    console.log(number);
-    console.log(team_names);
-
     // Check if the arrays is empty and update the first team and default the rest
     if (numGroups > 1 && team_names.length === 0) {
       for (let i = 0; i < numGroups; i++) {

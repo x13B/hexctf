@@ -3,7 +3,6 @@
 
     export let data: PageData;
     
-    
     // Holds categories from DB
     let categories: any[] = data.categories;
     let newCategory: string = "";
@@ -59,9 +58,7 @@
       original_questions[index] = {...questions[index]};
     };
 
-    // This function does not work yet!!!
     const saveChanges = async (index: number) => {
-    // const saveChanges = async () => {
       try {
           let id = questions[index].questionId;
           let title = questions[index].title;
@@ -99,7 +96,6 @@
     };
   </script>
 
-<br>
 <form action="#">
   <h3>Add Questions Form</h3>
   <label for="question-body">Question:</label>
