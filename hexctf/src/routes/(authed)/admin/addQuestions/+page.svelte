@@ -12,7 +12,7 @@
     let newCategory: string = "";
     let questions: any[] = data.questions;
     let questions_not_empty: boolean = (questions.length > 0) ? true : false;
-    console.log(questions)
+    let category_id: number = categories[categories.length - 1].categoryId + 1;
 
     // Load categories from DB
     onMount(async () => {
@@ -34,48 +34,41 @@
   
  
     const addCompQuestion = () => {
-        console.log("Adding: ", );
+
     }
 
-        // Let's you add new categories without overwriting the old ones.
-        const createNewCategory = async () => {
-        const newCategoryObj = {
-        categoryId: categories.length + 1,
-        categoryName: newCategory,
-        };
-        
-        // Add the category to your local array
-        categories.push(newCategoryObj);
-        // Trigger a reactivity update by assigning a new array
-        categories = [...categories];
-
-        // Clear the input field after adding the category
-        newCategory = '';
-
-        let id: number = newCategoryObj.categoryId;
-        let name: string = newCategoryObj.categoryName;
-
-        try {
+    // Let's you add new categories without overwriting the old ones.
+    const createNewCategory = async () => {
+      let id: number = category_id;
+      let name: string = newCategory;
+      
+      try {
         const res = await fetch('/api/addCategory', {
-            method: 'POST',
-            headers: {
+          method: 'POST',
+          headers: {
             'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({id, name}),
+          },
+          body: JSON.stringify({ id, name }),
         });
-
+        
         if (res.ok) {
-            console.log('Category added successfully to the database');
-            // You can optionally fetch the updated list of categories from the server
-            // and update your local categories array here.
+          console.log('Category added successfully to the database');
+          // Fetch the updated list of categories from the server
+          const updatedRes = await fetch('/api/getCategories');
+          if (updatedRes.ok) {
+            categories = await updatedRes.json();
+          }
         } else {
-            console.error('Failed to add category to the database:', res.statusText);
+          console.error('Failed to add category to the database:', res.statusText);
         }
-        } catch (error) {
+      } catch (error) {
         console.error('Error adding category to the database:', error);
-        }
+      }
+      
+      // Clear the input field after adding the category
+      newCategory = '';
     };
-</script>
+  </script>
 
 <br>
 <form action="#">
