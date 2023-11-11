@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import type { PageData } from "./$types";
 
     export let data: PageData;
@@ -14,6 +13,8 @@
     
     // Only shows categories when loaded from DB
     let showCategories: boolean = (categories.length > 0) ? true : false;
+
+    let original_questions: any[] = [];
 
     const addCompQuestion = () => {
 
@@ -54,23 +55,29 @@
     let editingRow: number | null = null;
 
     const startEditing = (index: number) => {
-        editingRow = index;
+      editingRow = index;
+      original_questions[index] = {...questions[index]};
     };
 
     // This function does not work yet!!!
     const saveChanges = async (index: number) => {
+    // const saveChanges = async () => {
       try {
           let id = questions[index].questionId;
-          let name = questions[index].questionName;
-          let answer = questions[index].questionAnswer;
+          let title = questions[index].title;
+          let description = questions[index].description;
+          let answer = questions[index].answer;
           let difficulty = questions[index].difficulty;
+          let points = questions[index].points;
+
+          console.log(id, title, description, answer, difficulty, points);
 
           const res = await fetch('/api/updateQuestion', {
               method: 'PUT',
               headers: {
                   'Content-Type': 'application/json',
               },
-              body: JSON.stringify({id, name, answer, difficulty}),
+              body: JSON.stringify({id, title, description, answer, difficulty, points}),
           });
 
           if (res.ok) {
@@ -84,6 +91,11 @@
           console.error('Error updating question in the database:', error);
           // Handle error or display a message
       }
+    };
+
+    const cancelUpdates = (index: number) => {
+      questions[index] = { ...original_questions[index] };
+      editingRow = null; // Exit edit mode
     };
   </script>
 
@@ -129,6 +141,7 @@
           <tr>
             <th>Title</th>
             <th>Description</th>
+            <th>Answer</th>
             <th>Difficulty</th>
             <th>Points</th>
           </tr>
@@ -139,14 +152,17 @@
                   {#if editingRow === index}
                       <td><input type="text" bind:value={questions[index].title} /></td>
                       <td><input type="text" bind:value={questions[index].description} /></td>
+                      <td><input type="text" bind:value={questions[index].answer}></td>
                       <td><input type="text" bind:value={questions[index].difficulty} /></td>
                       <td><input type="number" bind:value={questions[index].points} /></td>
                       <td>
                           <button on:click={() => saveChanges(index)}>Save</button>
+                          <button on:click={() => cancelUpdates(index)}>Cancel</button>
                       </td>
                   {:else}
                       <td>{question.title}</td>
                       <td>{question.description}</td>
+                      <td>{question.answer}</td>
                       <td>{question.difficulty}</td>
                       <td>{question.points}</td>
                       <td>
