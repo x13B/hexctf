@@ -4,35 +4,17 @@
 
     export let data: PageData;
     
-    // Only shows categories when loaded from DB
-    let showCategories: boolean = false;
-
+    
     // Holds categories from DB
     let categories: any[] = data.categories;
     let newCategory: string = "";
     let questions: any[] = data.questions;
     let questions_not_empty: boolean = (questions.length > 0) ? true : false;
     let category_id: number = categories[categories.length - 1].categoryId + 1;
+    
+    // Only shows categories when loaded from DB
+    let showCategories: boolean = (categories.length > 0) ? true : false;
 
-    // Load categories from DB
-    onMount(async () => {
-        try {
-            const res = await fetch('../api/getCategories');
-            if (res.ok) {
-            categories = await res.json();      
-
-            // Only show when categories have been loaded from DB
-            showCategories = true;
-
-            } else {
-            console.error("Failed to get categories", res.status);
-            }
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-    })
-  
- 
     const addCompQuestion = () => {
 
     }
@@ -125,6 +107,8 @@
         {cat.categoryName}
         <input type="radio" name="{cat.categoryName}">
     {/each}
+  {:else}
+    <h4>No Categories Available</h4>
   {/if}
   <br>
   <button on:click={addCompQuestion}>Add</button>
