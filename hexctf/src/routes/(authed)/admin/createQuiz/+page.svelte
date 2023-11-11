@@ -125,29 +125,6 @@
 
 <h1>CREATE A QUIZ PAGE</h1>
 <form action="#">
-    {#if showQuizName === false}
-      <label for="New-Quiz">CREATE A NEW QUIZ</label>
-      <br>
-      <label for="name">ENTER QUIZ NAME: </label>
-      <input type="text" bind:value={quizName} placeholder="Enter Quiz Name"/>
-      <button on:click={createQuizName}>Submit</button>
-    {:else}
-      <br>
-      <label for="name">QUIZ NAME: <strong>{quizName.toUpperCase()}</strong></label>
-      <br>
-      <label for="selected-questions">SELECTED QUESTIONS</label>
-      <br>
-      {#if showQuestions == true}
-      <ul>
-        {#each questions as question (question.quizQuestionsId)}
-        <li><strong>Body</strong>: {question.questionBody}, <strong>Answer</strong>: {question.questionAnswer}</li>
-        {/each}
-      </ul>
-      {/if}
-    {/if}
-
-    
-    <br>
     <label for="questions">ADD A QUESTION </label>
     <br>
     <label for="question">Question: </label>
@@ -167,3 +144,36 @@
   <br>
   <button type="submit" on:click={submitQuiz}>Submit Quiz</button>
 </form>
+
+{#if showQuizName === false}
+    <label for="New-Quiz">CREATE A NEW QUIZ</label>
+    <br>
+    <label for="name">ENTER QUIZ NAME: </label>
+    <input type="text" bind:value={quizName} placeholder="Enter Quiz Name"/>
+    <button on:click={createQuizName}>Submit</button>
+{:else}
+    <br>
+    <label for="name">QUIZ NAME: <strong>{quizName.toUpperCase()}</strong></label>
+    <br>
+    <label for="selected-questions">SELECTED QUESTIONS</label>
+    <br>
+    {#if showQuestions == true}
+    <table>
+        <thead>
+        <tr>
+            <th>Question</th>
+            <th>Answer</th>
+        </tr>
+        </thead>
+        <tbody>
+        {#each questions as question (question.quizQuestionsId)}
+            <tr>
+            <td>{question.questionBody}</td>
+            <td>{question.questionAnswer}</td>
+            <td>Edit</td>
+            </tr>
+        {/each}
+        </tbody>
+    </table>
+    {/if}
+{/if}
