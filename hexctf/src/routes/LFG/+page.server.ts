@@ -13,13 +13,11 @@ export const load: PageServerLoad = async ({ locals }) => {
 	});
   
 	if (!user) {
-	  // Handle the case where the user is not found
-	  // Perhaps set a default value for isAdmin or handle the error accordingly
 	  throw new Error("User not found");
 	}
   
 	const isAdmin = user.isAdmin || false;
-  
+
 	return {
 	  userId: session.user.userId,
 	  username: session.user.username,
