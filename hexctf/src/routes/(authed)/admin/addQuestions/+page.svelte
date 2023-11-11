@@ -10,15 +10,16 @@
     // Holds categories from DB
     let categories: any[] = data.categories;
     let newCategory: string = "";
+    let questions: any[] = data.questions;
+    let questions_not_empty: boolean = (questions.length > 0) ? true : false;
+    console.log(questions)
 
     // Load categories from DB
     onMount(async () => {
-        console.log("Fetching categories");
         try {
             const res = await fetch('../api/getCategories');
             if (res.ok) {
             categories = await res.json();      
-            console.log("Categories: ", categories);
 
             // Only show when categories have been loaded from DB
             showCategories = true;
@@ -53,8 +54,6 @@
 
         let id: number = newCategoryObj.categoryId;
         let name: string = newCategoryObj.categoryName;
-
-        console.log("New category before uploading: ", id, name);
 
         try {
         const res = await fetch('/api/addCategory', {
@@ -108,6 +107,30 @@
 <input type="text" name="new-cat" bind:value={newCategory}/>
 <button type="button" on:click={createNewCategory}>Create New</button><br>
 
+<h3>QUESTIONS</h3>
 <h3>Search</h3>
-
-<h3>Questions Available</h3>
+{#if questions_not_empty == false}
+    <h4>Questions Not Available</h4>
+{:else}
+    <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Difficulty</th>
+            <th>Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          {#each questions as question (question.questionId)}
+            <tr>
+              <td>{question.title}</td>
+              <td>{question.description}</td>
+              <td>{question.difficulty}</td>
+              <td>{question.points}</td>
+              <td>Edit</td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>      
+{/if}
