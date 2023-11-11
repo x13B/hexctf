@@ -10,11 +10,11 @@
     
     let showQuestions: boolean = (questions.length > 0) ? true : false;
     let showQuizName: boolean = (questions.length > 0) ? true : false;
-    let newCategory: string = "";
+
     let question_body: string = "";
     let question_answer: string = "";
     let showCategories: boolean = (categories.length > 0) ? true : false;
-    let categoryId: number = 0;
+
 
 
     onMount(async () => {
@@ -38,46 +38,6 @@
         console.error("Error fetching data:", error);
         }
     })
-    // Let's you add new categories without overwriting the old ones.
-    const createNewCategory = async () => {
-        const newCategoryObj = {
-        categoryId: categories.length + 1,
-        categoryName: newCategory,
-        };
-        
-        // Add the category to your local array
-        categories.push(newCategoryObj);
-        // Trigger a reactivity update by assigning a new array
-        categories = [...categories];
-
-        // Clear the input field after adding the category
-        newCategory = '';
-
-        let id: number = newCategoryObj.categoryId;
-        let name: string = newCategoryObj.categoryName;
-
-        console.log("New category before uploading: ", id, name);
-
-        try {
-        const res = await fetch('/api/addCategory', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({id, name}),
-        });
-
-        if (res.ok) {
-            console.log('Category added successfully to the database');
-            // You can optionally fetch the updated list of categories from the server
-            // and update your local categories array here.
-        } else {
-            console.error('Failed to add category to the database:', res.statusText);
-        }
-        } catch (error) {
-        console.error('Error adding category to the database:', error);
-        }
-    };
 
     async function createQuizName() {
         let id: number = 1;
@@ -163,7 +123,7 @@
 
 </script>
 
-<h1>ADD QUESTIONS PAGE</h1>
+<h1>CREATE A QUIZ PAGE</h1>
 <form action="#">
     {#if showQuizName === false}
       <label for="New-Quiz">CREATE A NEW QUIZ</label>
@@ -185,10 +145,7 @@
       </ul>
       {/if}
     {/if}
-    <br>
-    <label for="add">Create New Category: </label>
-    <input type="text" name="new-cat" bind:value={newCategory}/>
-    <button type="button" on:click={createNewCategory}>Create New</button><br>
+
     
     <br>
     <label for="questions">ADD A QUESTION </label>
