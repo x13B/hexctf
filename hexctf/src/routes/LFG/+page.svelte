@@ -1,5 +1,12 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import type { PageData } from "./$types";
+
+  /** @type {import('./$types').PageData} */
+  export let data: PageData; 
+  const usersid: string = data.userId;
+  const users_name: string = data.username;
+  const user_is_admin: boolean = data.isAdmin;
 
   let sortUsed: string = '';
 
@@ -74,10 +81,13 @@
         userScores = filteredScores;
         
         for (let i = 0; i < userScores.length; i++) {
-          if (userScores[i]['userId'] == users_id_logged_in) {
-            console.log("Student has taken quiz, setting flag.");
-            quiz_taken = true;
-          } 
+          // if (userScores[i]['userId'] == users_id_logged_in) {
+          if (usersid !== undefined) {
+            if (userScores[i]['userId'] == usersid) {
+              console.log("Student has taken quiz, setting flag.");
+              quiz_taken = true;
+            } 
+          }
         }
 
         console.log("scores = ", userScores);
@@ -214,39 +224,6 @@
     inputVisible = false;
     showSortButtons = true;
   }
-  // Get username from login form 
-  import { username_when_logged_in, check_if_admin, users_id } from "../(authed)/admin/createCompetition/username";
-  import { onDestroy } from "svelte";
-
-  let users_name: string = "";
-  let user_is_admin: boolean;
-  let users_id_logged_in: string = "";
-  
-  // Set the users name then destroy when not using anymore
-  const unsubscribe = username_when_logged_in.subscribe(value => {
-    users_name = value;
-
-    onDestroy(() => {
-      unsubscribe();
-    })
-  });
-
-  // Checks if the user logged in is the admin
-  const admin_unsubscribe = check_if_admin.subscribe(value => {
-    user_is_admin = value;
-
-    onDestroy(() => {
-      admin_unsubscribe();
-    })
-  });
-
-  const user_id_unsubscribe = users_id.subscribe(value => {
-    users_id_logged_in = value;
-
-    onDestroy(() => {
-      user_id_unsubscribe();
-    })
-  });
 
   // Holds the students responses to the quiz
   let student_answers: any[] = [];
@@ -277,7 +254,7 @@
     let quizId: number = quiz_questions[0].quizQuestionsId;
 
     // This does not grab the users ID so we have to adjust this value
-    let id: string = users_id_logged_in;
+    let id: string = data.userId;
     let score: number = student_score;
     
     try {
@@ -318,7 +295,6 @@
   // NEEDS TO ADD MEMBERS TO TEAMS WITHOUT DUPLICATES
   // CAN USE SOME TYPE OF QUEUE TO REMOVE STUDENTS BEING ADDED TO PREVENT DUPS
   const addStudentToTeam = () => {
-    //console.log("Teams: ", teamsMadeBySort);
     const team_check = teamsMadeBySort[team_number-1];
     
     if (!(team_check && team_check.some((member: { userId: string; }) => member.userId == student_id))) {
@@ -378,13 +354,12 @@
     // update the teams to print on the page
     team_names = [...team_names];
   }
-
-  user_is_admin = true;
 </script>
 
 
 <!-- Iterate through each user and display them -->
 
+{#if user_is_admin !== undefined}
 {#if user_is_admin === true}
   <h1>TEAM BUILDER (ADMIN)</h1>
   <h1>WELCOME: {users_name}</h1>
@@ -492,4 +467,5 @@
       <h1>Quiz Taken!</h1>
     </div>
     {/if}
+{/if}
 {/if}
