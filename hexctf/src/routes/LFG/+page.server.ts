@@ -18,10 +18,17 @@ export const load: PageServerLoad = async ({ locals }) => {
   
 	const isAdmin = user.isAdmin || false;
 
+	const users = await prisma.user.findMany();
+	const quiz_questions = await prisma.quizQuestions.findMany();
+	const quiz_results = await prisma.quizResults.findMany();
+
 	return {
 	  userId: session.user.userId,
 	  username: session.user.username,
 	  isAdmin: isAdmin,
+	  users: users,
+	  quizQuestions: quiz_questions,
+	  quizRes: quiz_results
 	};
   };
   
