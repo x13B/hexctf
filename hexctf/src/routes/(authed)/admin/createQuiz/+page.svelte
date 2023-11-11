@@ -14,8 +14,8 @@
     let question_body: string = "";
     let question_answer: string = "";
     let showCategories: boolean = (categories.length > 0) ? true : false;
-
-
+    let questionId: number = questions.length;
+    let categorySelected: string = "";
 
     onMount(async () => {
         console.log("Fetching quiz name");
@@ -70,53 +70,52 @@
 
     // This function will add questions to the DB
     const addQuestion = async () => {
+        // Create a new object to prevent undefined values
+        const newQuestion = {
+            questionBody: question_body,
+            questionAnswer: question_answer,
+            categoryName: categorySelected
+        };
 
-        // // Create a new object to prevent undefined values
-        // const newQuestion = {
-        //     questionBody: question_body,
-        //     questionAnswer: question_answer,
-        //     categoryName: categorySelected
-        // };
+        // Testing, might remove
+        let body: string = newQuestion.questionBody;
+        let answer: string = newQuestion.questionAnswer;
+        let cat: string = newQuestion.categoryName;
 
-        // // Testing, might remove
-        // let body: string = newQuestion.questionBody;
-        // let answer: string = newQuestion.questionAnswer;
-        // let cat: string = newQuestion.categoryName;
+        // Submit options to server file to upload to DB
+        try {
+        const res = await fetch("../api/addQuizQuestions", {
+            method: 'POST',
+            headers: {
+            'Content-Type' : 'applications/json',
+            }, 
+            body: JSON.stringify({body, answer, cat}),
+        })
+        if (res.ok) {
+            console.log('Question added successfully to the database');
+        } else {
+            console.error('Failed to add question to the database:', res.statusText);
+        }
+        } catch (error) {
+        console.error('Error adding question to the database:', error);
+        }
 
-        // // Submit options to server file to upload to DB
-        // try {
-        // const res = await fetch("../api/addQuizQuestions", {
-        //     method: 'POST',
-        //     headers: {
-        //     'Content-Type' : 'applications/json',
-        //     }, 
-        //     body: JSON.stringify({body, answer, cat}),
-        // })
-        // if (res.ok) {
-        //     console.log('Question added successfully to the database');
-        // } else {
-        //     console.error('Failed to add question to the database:', res.statusText);
-        // }
-        // } catch (error) {
-        // console.error('Error adding question to the database:', error);
-        // }
+        // Append to local questions Array
+        questions = [
+            ...questions,
+            { id: questionId, body: question_body, answer: question_answer, category: categorySelected }
+        ];
 
-        // // Append to local questions Array
-        // questions = [
-        //     ...questions,
-        //     { id: questionId, body: question_body, answer: question_answer, category: categorySelected }
-        // ];
+        // Sort the questions by category for displaying together
+        questions.sort((a, b) => a.category.localeCompare(b.category));
 
-        // // Sort the questions by category for displaying together
-        // questions.sort((a, b) => a.category.localeCompare(b.category));
+        // Increment the questionId
+        questionId++;
 
-        // // Increment the questionId
-        // questionId++;
-
-        // // RESET VALUES
-        // question_body = '';
-        // question_answer = '';
-        // categorySelected = '';
+        // RESET VALUES
+        question_body = '';
+        question_answer = '';
+        categorySelected = '';
     }
 
 
