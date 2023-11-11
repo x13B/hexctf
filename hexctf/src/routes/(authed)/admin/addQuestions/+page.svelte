@@ -68,6 +68,41 @@
       // Clear the input field after adding the category
       newCategory = '';
     };
+
+    let editingRow: number | null = null;
+
+    const startEditing = (index: number) => {
+        editingRow = index;
+    };
+
+    // This function does not work yet!!!
+    const saveChanges = async (index: number) => {
+      try {
+          let id = questions[index].questionId;
+          let name = questions[index].questionName;
+          let answer = questions[index].questionAnswer;
+          let difficulty = questions[index].difficulty;
+
+          const res = await fetch('/api/updateQuestion', {
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({id, name, answer, difficulty}),
+          });
+
+          if (res.ok) {
+              console.log('Question updated successfully in the database');
+              editingRow = null; // Exit edit mode
+          } else {
+              console.error('Failed to update question in the database:', res.statusText);
+              // Handle error or display a message
+          }
+      } catch (error) {
+          console.error('Error updating question in the database:', error);
+          // Handle error or display a message
+      }
+    };
   </script>
 
 <br>
@@ -115,14 +150,26 @@
           </tr>
         </thead>
         <tbody>
-          {#each questions as question (question.questionId)}
-            <tr>
-              <td>{question.title}</td>
-              <td>{question.description}</td>
-              <td>{question.difficulty}</td>
-              <td>{question.points}</td>
-              <td>Edit</td>
-            </tr>
+          {#each questions as question, index (question.questionId)}
+              <tr>
+                  {#if editingRow === index}
+                      <td><input type="text" bind:value={questions[index].title} /></td>
+                      <td><input type="text" bind:value={questions[index].description} /></td>
+                      <td><input type="text" bind:value={questions[index].difficulty} /></td>
+                      <td><input type="number" bind:value={questions[index].points} /></td>
+                      <td>
+                          <button on:click={() => saveChanges(index)}>Save</button>
+                      </td>
+                  {:else}
+                      <td>{question.title}</td>
+                      <td>{question.description}</td>
+                      <td>{question.difficulty}</td>
+                      <td>{question.points}</td>
+                      <td>
+                          <button on:click={() => startEditing(index)}>Edit</button>
+                      </td>
+                  {/if}
+              </tr>
           {/each}
         </tbody>
       </table>      
