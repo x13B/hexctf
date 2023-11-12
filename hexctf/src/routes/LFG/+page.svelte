@@ -3,7 +3,7 @@
 
   /** @type {import('./$types').PageData} */
   export let data: PageData; 
-  const usersid: string = data.userId;
+  // const usersid: string = data.userId;
   const users_name: string = data.username;
   const user_is_admin: boolean = data.isAdmin;
 
@@ -32,9 +32,6 @@
   
   // Hides sort buttons until number of groups if defined
   let showSortButtons: boolean = false;
-
-  // Holds student quiz questions
-  let quiz_questions: any[] = (data.quizQuestions) ? data.quizQuestions : [];
   
   // This function will sort members in alternating order from high to low
   const easySort = () => {
