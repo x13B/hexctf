@@ -12,9 +12,9 @@
 </style>
 
 <nav>
-    <ul>
-        <li><a href="./admin/createCompetition">Create Competition</a></li>
-    </ul>
+    <a href="/admin/createCompetition">Create Competition</a>
+    <a href="/admin/students">Student Roster</a>
+    <a href="/admin/addQuestions">Add Questions</a>
 </nav>
 
 <slot />

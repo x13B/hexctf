@@ -15,8 +15,6 @@ export const load: PageServerLoad = async ({ locals }) => {
 	if (!user) {
 	  throw new Error("User not found");
 	}
-
-    if(!user.isAdmin) throw redirect(302, "/LFG");
   
 	const isAdmin = user.isAdmin || false;
 
