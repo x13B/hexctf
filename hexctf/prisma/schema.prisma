@@ -51,6 +51,8 @@ model Teams {
   answers  AnswerQuestions[] @relation("TeamToAnswer")
   teams Leaderboard? @relation("TeamToLeaderboard")
   members TeamMembers[] @relation("TeamToMembers")
+  assigned AssignedQuestions[] @relation("TeamToQuestion")
+
 }
 
 model TeamMembers {
@@ -84,6 +86,7 @@ model Questions {
   difficulty  String
   categories  Categories @relation("CategoryToQuestion", fields: [categoryId], references: [categoryId])
   answers     AnswerQuestions[] @relation("QuestionToAnswer")
+  assigned    AssignedQuestions[] @relation("QuestionToTeam")
 }
 
 model AnswerQuestions {
@@ -92,6 +95,14 @@ model AnswerQuestions {
   teamId     Int
   questions  Questions @relation("QuestionToAnswer", fields: [questionId], references: [questionId])
   teams      Teams     @relation("TeamToAnswer", fields: [teamId], references: [teamId])
+}
+
+model AssignedQuestions {
+  questionId Int
+  teamId     Int
+  question Questions @relation("QuestionToTeam", fields: [questionId], references: [questionId])
+  team Teams @relation("TeamToQuestion", fields: [teamId], references: [teamId])
+  @@unique([teamId, questionId])
 }
 
 model Quiz {
