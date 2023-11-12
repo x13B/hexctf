@@ -1,4 +1,4 @@
-<style>
+<!-- <style>
     li {
         padding-right: 5px;
         padding-left: 5px;
@@ -9,7 +9,7 @@
     padding: 0;
     overflow: hidden;
     }
-</style>
+</style> -->
 
 <nav>
     <a href="/admin/createCompetition">Create Competition</a>
