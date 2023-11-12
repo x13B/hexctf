@@ -1,9 +1,9 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
-    import type { PageData } from "./$types";
+    import type { ActionData, PageData } from "./$types";
 
     export let data: PageData;
-    //const isAdmin = data.isAdmin;
+  //  export let action: ActionData;
     
 </script>
 <style>
@@ -55,7 +55,7 @@
             <li><a href="/login">Login</a></li>
             <li><a href="/register">Register</a></li>
             {:else}
-            <li><form method="post" action="?/logout" use:enhance><input type="submit" value="Sign out" /></form></li>
+            <li><form method="post" action="/api/logout?/logout" use:enhance><input type="submit" value="Sign out" /></form></li>
             <li>Welcome, {data.name}</li>
             {/if}
         </ul>
