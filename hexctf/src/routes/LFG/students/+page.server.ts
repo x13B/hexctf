@@ -1,6 +1,6 @@
-import { fail, redirect } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 import prisma from "$lib/prisma";
-import type { PageServerLoad, Actions } from "./$types";
+import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const session = await locals.auth.validate();
@@ -16,18 +16,11 @@ export const load: PageServerLoad = async ({ locals }) => {
 	  throw new Error("User not found");
 	}
 
-	const user_res = await prisma.quizResults.findFirst({
-		where: {
-			userId: session.user.userId,
-		}
-	});
-
-	if (!user_res) throw redirect(302, "/LFG/studentQuiz");
+    if(!user.isAdmin) throw redirect(302, "/LFG");
   
 	const isAdmin = user.isAdmin || false;
 
 	const users = await prisma.user.findMany();
-	const quiz_questions = await prisma.quizQuestions.findMany();
 	const quiz_results = await prisma.quizResults.findMany();
 
 	return {
@@ -35,9 +28,6 @@ export const load: PageServerLoad = async ({ locals }) => {
 	  username: session.user.username,
 	  isAdmin: isAdmin,
 	  users: users,
-	  quizQuestions: quiz_questions,
 	  quizRes: quiz_results
 	};
-  };
-  
-  
+};

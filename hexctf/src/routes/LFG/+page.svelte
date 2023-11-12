@@ -6,23 +6,14 @@
   const usersid: string = data.userId;
   const users_name: string = data.username;
   const user_is_admin: boolean = data.isAdmin;
-  let users: any[] = (data.users) ? data.users : [];
 
   let sortUsed: string = '';
 
   // Holds user scores from the database
   let userScores: any = (data.quizRes) ? data.quizRes : [];
-  let quiz_taken: boolean = false;
 
   const filteredScores = userScores.filter((user:any) => user.score >= 0);
   userScores = filteredScores;
-  
-  // Checks if user (student) has taken quiz already
-  for (let i = 0; i < userScores.length; i++) {
-    if (userScores[i]['userId'] == usersid) {
-      quiz_taken = true;
-    }
-  }
 
   // Holds the number of teams for the competition 
   let numGroups: number = -1;
@@ -156,74 +147,12 @@
 
     showTeamsButton = true;
   }
-
-  let showRoster: boolean = false;
-
-  function showStudentRoster() {
-    showRoster = !showRoster;
-  }
     
   // This function toggles buttons to prevent resubmission of data../admin/createCompetition/username
   function hideButton() {
     groupsButtonVisible = false;
     inputVisible = false;
     showSortButtons = true;
-  }
-
-  // Holds the students responses to the quiz
-  let student_answers: any[] = [];
-
-
-  // Used to check answered and score the quiz
-  async function scoreQuiz() {
-    // Remove the first element because 0 isn't the first id in the quiz
-    console.log("The student answered:", student_answers);
-    
-    // lowercase all answers to properly compare
-    for (let i = 1; i < student_answers.length; i++) {
-      student_answers[i] = student_answers[i].toLowerCase();
-    }
-    console.log("The student answered (lowercased):", student_answers);
-
-    // Holds the student score for the quiz
-    let student_score: number = 0;
-
-    // Checks answers to give score
-    for (let i = 1; i < student_answers.length; i++) {
-      if (student_answers[i] === quiz_questions[i-1].questionAnswer) {
-        student_score++;
-      }
-    }
-
-    console.log("The student scored: ", student_score);
-    let quizId: number = quiz_questions[0].quizQuestionsId;
-
-    // This does not grab the users ID so we have to adjust this value
-    let id: string = data.userId;
-    let score: number = student_score;
-    
-    try {
-      const res = await fetch("../api/submitQuizScore", {
-        method: 'POST',
-        headers: {
-          'Content-Type' : 'application/json',
-        },
-        body: JSON.stringify({ quizId, id, score }),
-      });
-  
-      if (res.ok) {
-        console.log("User score added to DB");
-      } else {
-        console.log("Something went wrong");
-      }
-    } catch (error) {
-      console.log("An error occured");
-    }
-    
-    // Set quiz taken to true so the student cannot submit a second one
-    quiz_taken = true;
-
-    // This function should redirect student to Questions page for Competition
   }
 
   // This function will reset all the teams
@@ -269,7 +198,6 @@
     } catch (error) {
       console.log("Error: ", error);
     }
-  
   }
 
   let team_names: string[] = [];
@@ -295,10 +223,6 @@
   }
 </script>
 
-
-<!-- Iterate through each user and display them -->
-
-{#if user_is_admin !== undefined}
 {#if user_is_admin === true}
   <h1>TEAM BUILDER (ADMIN)</h1>
   <h1>WELCOME: {users_name}</h1>
@@ -322,22 +246,6 @@
       <button on:click={easySort}>Easy Sort</button>
       <button on:click={randomSort}>Random Sort</button>
       <button on:click={createTeamsManually}>Create Teams (Manually)</button>
-    {/if}
-  </div>
-    
-  <br>
-  <div>
-    Show Student Roster:
-    <button on:click={showStudentRoster} class="student-roster-button">Submit</button>
-    <br>
-    {#if showRoster === true}
-    <h3>Student Name</h3>
-    ================
-    {#each users as student (student.id)}
-    {#if student.isAdmin !== true}
-    <li><strong>{student.username}</strong></li>
-    {/if}
-    {/each}
     {/if}
   </div>
 
@@ -365,7 +273,6 @@
       <h3>Current Teams using {sortUsed}</h3>
       {#each teamsMadeBySort as teamArray, i}
       <div>
-        <!-- <h2>Team: {i + 1}</h2> -->
         <h2>{ team_names[i] }</h2>
         <ul>
           {#each teamArray as player (player.userId)}
@@ -385,26 +292,4 @@
     </div>
     <button on:click={submitTeamsToDB} class="submit-teams-button">Submit Teams</button>
     <button on:click={clearTeams} class="clear-teams-button">Clear Teams</button>
-    {:else}
-    <h1>TEAM BUILDER (STUDENT)</h1>
-    <h1>WELCOME: {users_name}</h1>
-    <br>
-    {#if quiz_taken === false}
-    <h1>YOU HAVE NOT TAKEN THE QUIZ YET!</h1>
-    <div>
-      <form on:submit|preventDefault class="student-quiz-form">
-        {#each quiz_questions as question (question.quizQuestionsId)}
-        <p>Question: {question.questionBody}</p>
-        <input type="text" bind:value={student_answers[question.quizQuestionsId]}>
-        {/each}
-        <br>
-        <button on:click={scoreQuiz} class="submit-quiz-button">Submit Quiz</button>
-      </form>
-    </div>
-    {:else}
-    <div>
-      <h1>Quiz Taken!</h1>
-    </div>
-    {/if}
-{/if}
 {/if}
