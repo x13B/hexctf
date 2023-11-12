@@ -2,7 +2,7 @@
     import type { PageData } from "../$types";
     export let data: PageData;
     let users_name: string = (data.username) ? data.username : "";
-    let quiz_taken: boolean = false;
+    let quiz_taken: boolean = (data.taken === null) ? false : true;
     let quiz_questions: any[] = (data.quizQuestions) ? data.quizQuestions : [];
     let student_answers: any[] = [];
 

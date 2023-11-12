@@ -22,9 +22,13 @@ export const load: PageServerLoad = async ({ locals }) => {
 		}
 	});
 
-	if (!user_res) throw redirect(302, "/LFG/studentQuiz");
-  
 	const isAdmin = user.isAdmin || false;
+	console.log(user_res);
+	if (!user_res && !isAdmin) {
+		throw redirect(302, "/LFG/studentQuiz")
+	} else if (user_res && !isAdmin) {
+		throw redirect(302, "../questions")
+	}
 
 	const users = await prisma.user.findMany();
 	const quiz_questions = await prisma.quizQuestions.findMany();
@@ -36,7 +40,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 	  isAdmin: isAdmin,
 	  users: users,
 	  quizQuestions: quiz_questions,
-	  quizRes: quiz_results
+	  quizRes: quiz_results,
+	  taken: user_res,
 	};
   };
   
