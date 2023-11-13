@@ -95,6 +95,19 @@
         question_answer = '';
         categorySelected = '';
     }
+
+    let editingRow: number | null = null;
+    let original_questions: any[] = [];
+
+    const startEditing = (index: number) => {
+        editingRow = index;
+        original_questions[index] = {...questions[index]};
+    };
+
+    const cancelUpdates = (index: number) => {
+        questions[index] = { ...original_questions[index] };
+        editingRow = null; // Exit edit mode
+    };
 </script>
 
 <h1>CREATE A QUIZ PAGE</h1>
@@ -137,12 +150,24 @@
     </tr>
     </thead>
     <tbody>
-    {#each questions as question (question.quizQuestionsId)}
-        <tr>
-        <td>{question.questionBody}</td>
-        <td>{question.questionAnswer}</td>
-        <td>Edit</td>
-        </tr>
+    {#each questions as question, index (question.quizQuestionsId)}
+        {#if editingRow === index}
+            <tr>
+                <td><input type="text" bind:value={questions[index].questionBody}></td>
+                <td><input type="text" bind:value={questions[index].questionAnswer}></td>
+                <td>
+                    <button on:click={() => cancelUpdates(index)}>Cancel</button>
+                </td>
+            </tr>
+        {:else}
+            <tr>
+                <td>{question.questionBody}</td>
+                <td>{question.questionAnswer}</td>
+                <td>
+                    <button on:click={() => startEditing(index)}>Edit</button>
+                </td>
+            </tr>
+        {/if}
     {/each}
     </tbody>
 </table>
