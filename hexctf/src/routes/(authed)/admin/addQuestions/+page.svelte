@@ -1,145 +1,191 @@
 <script lang="ts">
-    import type { PageData } from "./$types";
+  import type { PageData } from "./$types";
 
-    export let data: PageData;
-    
-    // Holds categories from DB
-    let categories: any[] = data.categories;
-    let newCategory: string = "";
-    let questions: any[] = data.questions;
-    let questions_not_empty: boolean = (questions.length > 0) ? true : false;
-    let category_id: number = categories[categories.length - 1].categoryId + 1;
-    
-    // Only shows categories when loaded from DB
-    let showCategories: boolean = (categories.length > 0) ? true : false;
-
-    let original_questions: any[] = [];
-
-    const addCompQuestion = () => {
-
-    }
-
-    // Let's you add new categories without overwriting the old ones.
-    const createNewCategory = async () => {
-      let id: number = category_id;
-      let name: string = newCategory;
-      
-      try {
-        const res = await fetch('/api/addCategory', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ id, name }),
-        });
-        
-        if (res.ok) {
-          console.log('Category added successfully to the database');
-          // Fetch the updated list of categories from the server
-          const updatedRes = await fetch('/api/getCategories');
-          if (updatedRes.ok) {
-            categories = await updatedRes.json();
-          }
-        } else {
-          console.error('Failed to add category to the database:', res.statusText);
-        }
-      } catch (error) {
-        console.error('Error adding category to the database:', error);
-      }
-      
-      // Clear the input field after adding the category
-      newCategory = '';
-    };
-
-    let editingRow: number | null = null;
-
-    const startEditing = (index: number) => {
-      editingRow = index;
-      original_questions[index] = {...questions[index]};
-    };
-
-    const saveChanges = async (index: number) => {
-      try {
-          let id = questions[index].questionId;
-          let title = questions[index].title;
-          let description = questions[index].description;
-          let answer = questions[index].answer;
-          let difficulty = questions[index].difficulty;
-          let points = questions[index].points;
-
-          console.log(id, title, description, answer, difficulty, points);
-
-          const res = await fetch('/api/updateQuestion', {
-              method: 'PUT',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({id, title, description, answer, difficulty, points}),
-          });
-
-          if (res.ok) {
-              console.log('Question updated successfully in the database');
-              editingRow = null; // Exit edit mode
-          } else {
-              console.error('Failed to update question in the database:', res.statusText);
-              // Handle error or display a message
-          }
-      } catch (error) {
-          console.error('Error updating question in the database:', error);
-          // Handle error or display a message
-      }
-    };
-
-    const cancelUpdates = (index: number) => {
-      questions[index] = { ...original_questions[index] };
-      editingRow = null; // Exit edit mode
-    };
-
-    const deleteQuestion = async (index: number) => {
-      let id = questions[index].questionId;
-
-      try {
-        const res = await fetch("/api/deleteQuestion", {
-          method: 'DELETE',
-          headers: {
-            'Content-Type' : 'application/json',
-          },
-          body: JSON.stringify({id}),
-        });
+  export let data: PageData;
   
-        if (res.ok) {
-          console.log("The question has been deleted!");
-        }
-      } catch (error) {
-        console.log("Error occured trying to delete question: ", error);
-      }
+  // Holds categories from DB
+  let categories: any[] = data.categories;
+  let newCategory: string = "";
+  let questions: any[] = data.questions;
+  let questions_not_empty: boolean = (questions.length > 0) ? true : false;
+  let category_id: number = categories[categories.length - 1].categoryId + 1;
+  
+  // Only shows categories when loaded from DB
+  let showCategories: boolean = (categories.length > 0) ? true : false;
+
+  let original_questions: any[] = [];
+
+  // Let's you add new categories without overwriting the old ones.
+  const createNewCategory = async () => {
+    let id: number = category_id;
+    let name: string = newCategory;
     
-      questions.splice(index, 1);
-      questions = [...questions];
-      console.log(questions);
+    try {
+      const res = await fetch('/api/addCategory', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, name }),
+      });
+      
+      if (res.ok) {
+        console.log('Category added successfully to the database');
+        // Fetch the updated list of categories from the server
+        const updatedRes = await fetch('/api/getCategories');
+        if (updatedRes.ok) {
+          categories = await updatedRes.json();
+        }
+      } else {
+        console.error('Failed to add category to the database:', res.statusText);
+      }
+    } catch (error) {
+      console.error('Error adding category to the database:', error);
     }
-  </script>
+    
+    // Clear the input field after adding the category
+    newCategory = '';
+  };
+
+  let editingRow: number | null = null;
+
+  const startEditing = (index: number) => {
+    editingRow = index;
+    original_questions[index] = {...questions[index]};
+  };
+
+  const saveChanges = async (index: number) => {
+    try {
+        let id = questions[index].questionId;
+        let title = questions[index].title;
+        let description = questions[index].description;
+        let answer = questions[index].answer;
+        let difficulty = questions[index].difficulty;
+        let points = questions[index].points;
+
+        console.log(id, title, description, answer, difficulty, points);
+
+        const res = await fetch('/api/updateQuestion', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id, title, description, answer, difficulty, points}),
+        });
+
+        if (res.ok) {
+            console.log('Question updated successfully in the database');
+            editingRow = null; // Exit edit mode
+        } else {
+            console.error('Failed to update question in the database:', res.statusText);
+            // Handle error or display a message
+        }
+    } catch (error) {
+        console.error('Error updating question in the database:', error);
+        // Handle error or display a message
+    }
+  };
+
+  const cancelUpdates = (index: number) => {
+    questions[index] = { ...original_questions[index] };
+    editingRow = null; // Exit edit mode
+  };
+
+  const deleteQuestion = async (index: number) => {
+    let id = questions[index].questionId;
+
+    try {
+      const res = await fetch("/api/deleteQuestion", {
+        method: 'DELETE',
+        headers: {
+          'Content-Type' : 'application/json',
+        },
+        body: JSON.stringify({id}),
+      });
+
+      if (res.ok) {
+        console.log("The question has been deleted!");
+      }
+    } catch (error) {
+      console.log("Error occured trying to delete question: ", error);
+    }
+  
+    questions.splice(index, 1);
+    questions = [...questions];
+    console.log(questions);
+  }
+
+  let title: string = "";
+  let question: string = "";
+  let answer: string = "";
+  let points: number = 0;
+  let difficulty: string = "";
+  let category: number = 0;
+
+  const addCompQuestion = async () => {
+    console.log(title, question, answer, points, difficulty, category-1);
+    // let cat: string = categories[category-1].categoryName;
+    let cat = category-1;
+    let hint = "";
+
+    const res = await fetch("/api/addQuestion", {
+      method: 'POST',
+      headers: {
+        'Content-Type' : 'application/json',
+      },
+      body: JSON.stringify({title, question, answer, points, difficulty, cat, hint }),
+    })
+
+    let qID = questions[questions.length-1].questionId + 1;
+
+    let new_question = {
+      answer: answer, 
+      categoryId: cat, 
+      description: question, 
+      difficulty: difficulty, 
+      hint: hint, 
+      points: points,  
+      title: title,
+      questionId: qID
+    }
+
+    questions.push(new_question);
+    questions = [...questions];
+
+    title = "";
+    question = "";
+    answer = "";
+    points = 0;
+    difficulty = "";
+    category = 0;
+  }
+
+  console.log(questions);
+</script>
 
 <form action="#">
   <h3>Add Questions Form</h3>
+  <label for="title">Title:</label>
+  <input type="text" bind:value={title}>
+  <br>
   <label for="question-body">Question:</label>
-  <input type="text">
+  <input type="text" bind:value={question}>
   <br>
   <label for="answer">Answer:</label>
-  <input type="text">
+  <input type="text" bind:value={answer}>
   <br>
   <label for="points">Points:</label>
-  <input type="number">
+  <input type="number" bind:value={points}>
   <br>
   <label for="difficulty">Difficulty:</label>
-  <select name="difficulty">
+  <select name="difficulty" bind:value={difficulty}>
     <option value="Easy">Easy</option>
     <option value="Medium">Medium</option>
     <option value="Hard">Hard</option>
   </select>
   <br>
   <label for="category">Category:</label>
-  <select name="category">
+  <select name="category" bind:value={category}>
     {#if showCategories == true}
       {#each categories as cat (cat.categoryId)}
         <option value={cat.categoryId}>{cat.categoryName}</option>
