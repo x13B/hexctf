@@ -94,6 +94,30 @@
       questions[index] = { ...original_questions[index] };
       editingRow = null; // Exit edit mode
     };
+
+    const deleteQuestion = async (index: number) => {
+      let id = questions[index].questionId;
+
+      try {
+        const res = await fetch("/api/deleteQuestion", {
+          method: 'DELETE',
+          headers: {
+            'Content-Type' : 'application/json',
+          },
+          body: JSON.stringify({id}),
+        });
+  
+        if (res.ok) {
+          console.log("The question has been deleted!");
+        }
+      } catch (error) {
+        console.log("Error occured trying to delete question: ", error);
+      }
+    
+      questions.splice(index, 1);
+      questions = [...questions];
+      console.log(questions);
+    }
   </script>
 
 <form action="#">
@@ -163,6 +187,9 @@
                       <td>{question.points}</td>
                       <td>
                           <button on:click={() => startEditing(index)}>Edit</button>
+                      </td>
+                      <td>
+                        <button on:click={() => deleteQuestion(index)}>Delete</button>
                       </td>
                   {/if}
               </tr>
