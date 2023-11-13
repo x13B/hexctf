@@ -270,7 +270,11 @@
       <h3>Current Teams using {sortUsed}</h3>
       {#each teamsMadeBySort as teamArray, i}
       <div>
-        <h2>{ team_names[i] }</h2>
+        {#if team_names[i] === undefined}
+          <h2>{i+1}: Team {i+1}</h2>
+        {:else}
+          <h2>{i+1}: { team_names[i] }</h2>
+        {/if}
         <ul>
           {#each teamArray as player (player.userId)}
           <li>Team member: {player.userId}, score: {player.score}</li>
