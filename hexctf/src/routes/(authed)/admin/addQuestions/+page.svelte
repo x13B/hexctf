@@ -132,16 +132,22 @@
   <input type="number">
   <br>
   <label for="difficulty">Difficulty:</label>
-  <input type="text">
+  <select name="difficulty">
+    <option value="Easy">Easy</option>
+    <option value="Medium">Medium</option>
+    <option value="Hard">Hard</option>
+  </select>
   <br>
-  {#if showCategories == true}
-    {#each categories as cat (cat.categoryId)}
-        {cat.categoryName}
-        <input type="radio" name="{cat.categoryName}">
-    {/each}
-  {:else}
-    <h4>No Categories Available</h4>
-  {/if}
+  <label for="category">Category:</label>
+  <select name="category">
+    {#if showCategories == true}
+      {#each categories as cat (cat.categoryId)}
+        <option value={cat.categoryId}>{cat.categoryName}</option>
+      {/each}
+    {:else}
+      <option value="">No Categories Available</option>
+    {/if}
+  </select>
   <br>
   <button on:click={addCompQuestion}>Add</button>
 </form>
