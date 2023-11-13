@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import type { PageData } from "./$types";
 
     export let data: PageData;
@@ -16,6 +15,7 @@
     let showCategories: boolean = (categories.length > 0) ? true : false;
     let questionId: number = questions.length;
     let categorySelected: string = "";
+    // let quiz_id: number =
 
     async function createQuizName() {
         let id: number = 1;
@@ -48,17 +48,10 @@
 
     // This function will add questions to the DB
     const addQuestion = async () => {
-        // Create a new object to prevent undefined values
-        const newQuestion = {
-            questionBody: question_body,
-            questionAnswer: question_answer,
-            categoryName: categorySelected
-        };
-
         // Testing, might remove
-        let body: string = newQuestion.questionBody;
-        let answer: string = newQuestion.questionAnswer;
-        let cat: string = newQuestion.categoryName;
+        let body: string = question_body;
+        let answer: string = question_answer;
+        let cat: string = categorySelected; // Need to capture correct category
 
         // Submit options to server file to upload to DB
         try {
@@ -124,19 +117,21 @@
     <input type="text" bind:value={question_body}/>
     <br>
     <label for="answer">Answer: </label>
-  <input type="text" bind:value={question_answer}/>
-  <br>
-  <label for="category">Category: </label>
-  {#if showCategories == true}
-    {#each categories as cat (cat.categoryId)}
-        {cat.categoryName}
-        <input type="radio" name="{cat.categoryName}">
-    {/each}
-  {/if}
-  <button type="submit" on:click={addQuestion}>Add Question</button>
-  <br>
-  <button type="submit" on:click={submitQuiz}>Submit Quiz</button>
+    <input type="text" bind:value={question_answer}/>
+    <br>
+    <label for="category">Category: </label>
+    {#if showCategories == true}
+        <select bind:value={categorySelected}>
+            {#each categories as cat (cat.categoryId)}
+                <option value={cat.categoryName}>{cat.categoryName}</option>
+            {/each}
+        </select>
+    {/if}
+    <button type="submit" on:click={addQuestion}>Add Question</button>
+    <br>
+    <button type="submit" on:click={submitQuiz}>Submit Quiz</button>
 </form>
+
 <br>
 {#if showQuestions == true}
 <label for="name">QUIZ NAME: <strong>{quizName.toUpperCase()}</strong></label>
