@@ -6,7 +6,7 @@
 
     let questions: any[] = data.quiz_questions;
     let categories: any[] = data.categories;
-    let quizName: string = "";
+    let quizName: string = (data.quiz_name !== null) ? data.quiz_name.quizName : "";
     
     let showQuestions: boolean = (questions.length > 0) ? true : false;
     let showQuizName: boolean = (questions.length > 0) ? true : false;
@@ -16,28 +16,6 @@
     let showCategories: boolean = (categories.length > 0) ? true : false;
     let questionId: number = questions.length;
     let categorySelected: string = "";
-
-    onMount(async () => {
-        console.log("Fetching quiz name");
-        try {
-        const res = await fetch('../api/getQuizName');
-        if (res.ok) {
-            let quizDetails: any[] = [];
-            quizDetails = await res.json();
-
-            quizName = quizDetails[0]["quizName"];  
-
-            // Set to true to prevent loading errors
-            showQuizName = true;  
-            
-        } else {
-            quizName = '';
-            console.error("Failed to get categories", res.status);
-        }
-        } catch (error) {
-        console.error("Error fetching data:", error);
-        }
-    })
 
     async function createQuizName() {
         let id: number = 1;
@@ -117,12 +95,15 @@
         question_answer = '';
         categorySelected = '';
     }
-
-
-
 </script>
 
 <h1>CREATE A QUIZ PAGE</h1>
+<form action="#">
+    <label for="name">ENTER QUIZ NAME: </label>
+    <input type="text" bind:value={quizName} placeholder="Enter Quiz Name"/>
+    <button on:click={createQuizName}>Submit</button>
+</form>
+<br>
 <form action="#">
     <label for="questions">ADD A QUESTION </label>
     <br>
@@ -143,36 +124,26 @@
   <br>
   <button type="submit" on:click={submitQuiz}>Submit Quiz</button>
 </form>
-
-{#if showQuizName === false}
-    <label for="New-Quiz">CREATE A NEW QUIZ</label>
-    <br>
-    <label for="name">ENTER QUIZ NAME: </label>
-    <input type="text" bind:value={quizName} placeholder="Enter Quiz Name"/>
-    <button on:click={createQuizName}>Submit</button>
-{:else}
-    <br>
-    <label for="name">QUIZ NAME: <strong>{quizName.toUpperCase()}</strong></label>
-    <br>
-    <label for="selected-questions">SELECTED QUESTIONS</label>
-    <br>
-    {#if showQuestions == true}
-    <table>
-        <thead>
+<br>
+{#if showQuestions == true}
+<label for="name">QUIZ NAME: <strong>{quizName.toUpperCase()}</strong></label>
+<br>
+<label for="selected-questions">SELECTED QUESTIONS</label>
+<table>
+    <thead>
+    <tr>
+        <th>Question</th>
+        <th>Answer</th>
+    </tr>
+    </thead>
+    <tbody>
+    {#each questions as question (question.quizQuestionsId)}
         <tr>
-            <th>Question</th>
-            <th>Answer</th>
+        <td>{question.questionBody}</td>
+        <td>{question.questionAnswer}</td>
+        <td>Edit</td>
         </tr>
-        </thead>
-        <tbody>
-        {#each questions as question (question.quizQuestionsId)}
-            <tr>
-            <td>{question.questionBody}</td>
-            <td>{question.questionAnswer}</td>
-            <td>Edit</td>
-            </tr>
-        {/each}
-        </tbody>
-    </table>
-    {/if}
+    {/each}
+    </tbody>
+</table>
 {/if}
