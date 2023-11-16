@@ -78,6 +78,8 @@ model Questions {
   title       String
   description String
   hint        String
+  hint2       String @default("no hint")
+  hint3       String @default("no hint")
   answer      String
   points      Int
   categoryId  Int 
