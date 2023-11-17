@@ -218,6 +218,16 @@
     {/if}
   </select>
   <br>
+ <label for="docker">Docker:</label>
+  <select name="docker">
+    <!--   {#each dockers as docker}
+        <option value={cat.categoryId}>{cat.categoryName}</option>
+      {/each}
+    {:else}
+      <option value="">No Categories Available</option>
+     -->
+  </select>
+  <br>
   <button on:click={addCompQuestion}>Add</button>
 </form>
 
