@@ -34,13 +34,17 @@
       const res = await fetch("../api/submitCompDetails", {
         method: 'POST',
         headers: {
-          'Content-Type' : 'applications/json',
+          'Content-Type' : 'application/json',
         },
         body: JSON.stringify({name, start, end})
       });
 
       if (res.ok) {
           console.log('Competitions successfully created');
+          comp_name = name;
+          start_date = start;
+          end_date = end;
+          show_timer = true;
         } else {
           console.error('Failed to create competition:', res.statusText);
         }
