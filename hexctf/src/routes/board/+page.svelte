@@ -23,6 +23,8 @@
           <th>{t.points}</th>
           <th>{t.count}</th>
       </tr>
+  {:else}
+    <p>No teams formed</p>
   {/each}
   </table>
 </main>
