@@ -90,11 +90,11 @@ model Questions {
 }
 
 model AnswerQuestions {
-  answerId   Int @id @default(autoincrement())
   questionId Int 
   teamId     Int
   questions  Questions @relation("QuestionToAnswer", fields: [questionId], references: [questionId])
   teams      Teams     @relation("TeamToAnswer", fields: [teamId], references: [teamId])
+  @@unique([questionId, teamId])
 }
 
 model AssignedQuestions {

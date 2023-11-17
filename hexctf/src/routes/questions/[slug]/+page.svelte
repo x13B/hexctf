@@ -9,7 +9,6 @@
     let hintClicked:boolean = false
    
 
-
   </script>
 
 <div class="page">
@@ -26,17 +25,21 @@
       {#if check.resp}
         <p><b>Your team has already answered this question!</b></p>
       {:else}
-        <form method="POST" use:enhance>
+        {#if form?.response}
+          <p><b>Correct! You earned {question?.points} points!</b></p>
+        {:else if form?.response === false}
+          <p><b>Wrong!</b></p>
+        {/if}
+
+        <form method="POST" action="?/answerQues" use:enhance>
         <label for="answer">Answer:
         <input name="answer"/>
         <input type="submit" value="Submit" />
         </label></form>
-        {#if form?.response}
-          <p>Correct! You earned {question?.points} points!</p>
-        {:else if form?.response === false}
-          <p>Wrong!</p>
-        {/if}
-    {/if}
-    <a href="./">Return</a>
+        <form method="POST" action="?/forfeit" use:enhance>
+        <input type="submit" value="Forfeit"/></form>
+        
+     {/if}
+     <a href="./">Return</a>
     </main>
   </div>
