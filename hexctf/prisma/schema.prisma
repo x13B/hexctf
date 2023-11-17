@@ -80,6 +80,8 @@ model Questions {
   title       String
   description String
   hint        String
+  hint2       String @default("")
+  hint3       String @default("")
   answer      String
   points      Int
   categoryId  Int 
