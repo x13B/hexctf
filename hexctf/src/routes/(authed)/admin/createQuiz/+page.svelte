@@ -109,6 +109,10 @@
         questions[index] = { ...original_questions[index] };
         editingRow = null; // Exit edit mode
     };
+
+    const deleteQuestion = (index: number) => {
+        
+    };
 </script>
 
 <h1>CREATE A QUIZ PAGE</h1>
@@ -172,6 +176,9 @@
                 <td>{question.category}</td>
                 <td>
                     <button on:click={() => startEditing(index)}>Edit</button>
+                </td>
+                <td>
+                    <button on:click={() => deleteQuestion(index)}>Delete</button>
                 </td>
             </tr>
         {/if}
