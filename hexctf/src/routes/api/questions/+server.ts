@@ -3,22 +3,21 @@ import prisma from '$lib/prisma';
 
 export const GET: RequestHandler = async ({ url }) => {
   try {
-       //console.log(url.searchParams);
-       const data = await prisma.questions.findMany();
+        const questions = await prisma.questions.findMany();
        
-       const json_response = {
-        status: 'success',
-        data
-      };
+        const json_response = {
+          status: 'success',
+          questions
+  };
       return json(json_response);
    
-   } catch (error: any) {
-     const error_response = {
-       status: 'error',
-       message: error.message
-     };
-     return json(error_response, { status: 500 });
-   }
+  } catch (error: any) {
+    const error_response = {
+      status: 'error',
+      message: error.message
+    };
+    return json(error_response, { status: 500 });
+  }
 }
 
 export const POST: RequestHandler = async ({ request }) => {

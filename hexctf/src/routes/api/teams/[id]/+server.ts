@@ -3,15 +3,15 @@ import prisma from '$lib/prisma';
 
 export const GET: RequestHandler = async ({ url, params: { id } }) => {
     try {
-         const question = await prisma.questions.findUnique({
+         const team = await prisma.teams.findUnique({
             where: {
-                questionId: Number(id)
+                teamId: Number(id)
             },
          });
          
          const json_response = {
           status: 'success',
-          question
+          team
         };
         return json(json_response);
      
@@ -28,9 +28,9 @@ export const PATCH: RequestHandler = async ({ request, params: { id } }) => {
     try {
       const requestData = await request.json();
         
-        const updated_question = await prisma.questions.update({
+        const updated_team= await prisma.teams.update({
           where: {
-            questionId: Number(id)
+            teamId: Number(id)
           },
             data: requestData
         });
@@ -38,14 +38,14 @@ export const PATCH: RequestHandler = async ({ request, params: { id } }) => {
         const json_response = {
 			status: 'success',
 			data: {
-				question: updated_question
+				question: updated_team
 			}
 		};
 		return json(json_response);
   
     } catch (error: any) {
       if (error.code === 'P2025') {
-              const message = 'No Question with the Provided ID Found';
+              const message = 'No Team with the Provided ID Found';
               return json({ message},{ status: 404 });
           }
   
@@ -56,16 +56,16 @@ export const PATCH: RequestHandler = async ({ request, params: { id } }) => {
   export const DELETE: RequestHandler = async ({ params: { id } }) => {
     try {
         
-        await prisma.questions.delete({
+        await prisma.teams.delete({
           where: {
-            questionId: Number(id)
+            teamId: Number(id)
           },
         });
   
         return new Response(null, { status: 204 });
     } catch (error: any) {
       if (error.code === 'P2025') {
-              const message = 'No Question with the Provided ID Found';
+              const message = 'No Team with the Provided ID Found';
               return json({ message},{ status: 404 });
           }
   
