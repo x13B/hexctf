@@ -3,18 +3,24 @@ import prisma from '$lib/prisma';
 
 export const GET: RequestHandler = async ({ url, params: { id } }) => {
     try {
-         const teamMembers = await prisma.teamMembers.findMany({
+         const questionsAnswered = await prisma.answerQuestions.findMany({
             where: {
                 teamId: Number(id)
             },
             select: {
-                user: true
+                questions: true
             }
          });
+        //  const questionsAnsweredCount = await prisma.answerQuestions.count({
+        //   where: {
+        //       teamId: Number(id)
+        //   }
+      //  });
          
          const json_response = {
           status: 'success',
-          teamMembers
+          // questionsAnsweredCount,
+          questionsAnswered
         };
         return json(json_response);
      

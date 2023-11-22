@@ -2,18 +2,19 @@
     import type { PageData } from "./$types";
 
     export let data: PageData;
-    const team = data.teamInfo;
-    const members = data.membersList;
-    const answers = data.answersList;
+    const team = data.team;
+    const members = data.teamMembers;
+    const answers = data.teamAnswers;
+    
 </script>
 <main>
-    <h1>{team?.teamName}</h1>
-    <p>Points: {team?.points}</p>
+    <h1>{team.teamName}</h1>
+    <p>Points: {team.points}</p>
     { #if members.length !== 0}
     <p>Members:</p>
     <ul>
-        { #each members as member }
-        <li>{member?.username}</li>
+        {#each members as member}
+        <li>{member.user.username}</li>
         {/each}
     </ul>
     {:else}
@@ -23,7 +24,7 @@
     <p>Questions Answered:</p>
     <ul>
         { #each answers as answer }
-        <li><a href="/questions/{answer?.questionId}">{answer?.title}</a></li>
+        <li><a href="/questions/{answer.questions.questionId}">{answer.questions.title}</a></li>
         {/each}
     </ul>
     {:else}

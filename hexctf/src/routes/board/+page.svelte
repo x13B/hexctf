@@ -3,10 +3,7 @@
   import type { PageData } from "./$types";
 
   export let data: PageData;
-  const teams = data.teams;
-  const qAns = data.qAnswer;
-  const qCount = qAns.length;
-  //console.log("qcount " + qCount);
+  const teams = data.teamQuesAnsCount;
 </script>
 
 <main>
@@ -21,7 +18,7 @@
       <tr>
           <th><a href="/teams/{t.teamId}">{t.teamName}</a></th>
           <th>{t.points}</th>
-          <th>{t.count}</th>
+          <th>{t._count.answers}</th>
       </tr>
   {:else}
     <p>No teams formed</p>

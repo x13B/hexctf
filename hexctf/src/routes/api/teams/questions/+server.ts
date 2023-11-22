@@ -1,20 +1,17 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 import prisma from '$lib/prisma';
 
-export const GET: RequestHandler = async ({ url, params: { id } }) => {
+export const GET: RequestHandler = async ({ url }) => {
     try {
-         const teamMembers = await prisma.teamMembers.findMany({
-            where: {
-                teamId: Number(id)
-            },
+         const team = await prisma.assignedQuestions.findMany({
             select: {
-                user: true
+                question: true
             }
          });
          
          const json_response = {
           status: 'success',
-          teamMembers
+          team
         };
         return json(json_response);
      
