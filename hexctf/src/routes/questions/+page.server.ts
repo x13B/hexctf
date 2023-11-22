@@ -3,34 +3,34 @@ import prisma from "$lib/prisma";
 
 import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ locals }) => {
-	const session = await locals.auth.validate();
-	if (!session) throw redirect(302, "/login");
-	const teamOfUser = await prisma.teamMembers.findUnique({
-        where: { userId: session.user.userId }
-    });
-    if (teamOfUser === null) throw error(404, "User is not in a team");
-	const assignedQuestions = await prisma.assignedQuestions.findMany({
-		where: {
-			teamId: teamOfUser.teamId,
-		},
-		select: {
-			questionId: true,
-		}
-	});
-	let asnQuesArr: number[] = [];
-	for (let obj of assignedQuestions) {
-		asnQuesArr.push(obj.questionId);
+export const load: PageServerLoad = async ({ fetch }) => {
+	async function fetchSession() {
+		const response = await fetch('/api/users/id', { method: 'GET' });
+        const data = await response.json();
+
+        return data.session;
 	}
-	const assignedCategoriesQuestions = await prisma.categories.findMany({
-		include: {
-			questions: {
-				where: {
-					questionId: {in: asnQuesArr}
-			}
-		}
+
+	async function fetchTeam() {
+		const session = await fetchSession();
+		const userId = session.userId;
+		
+		const response = await fetch('/api/users/' + userId + '/team', { method: 'GET' });
+        const data = await response.json();
+
+        return data.team;
 	}
-	})
-	return {assignedCategoriesQuestions};
+
+	async function fetchAssignedQuestions() {
+		const team = await fetchTeam()
+		const teamId = team.teamId;
+		const response = await fetch('/api/teams/' + teamId + '/questions', { method: 'GET' });
+        const data = await response.json();
+
+        return data.assignedCategoriesQuestions;
+	}
+	return {
+        assignedQuestions: fetchAssignedQuestions()
+	};
 };
 

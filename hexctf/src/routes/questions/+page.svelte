@@ -2,15 +2,12 @@
   import type { PageData } from "./$types";
 
   export let data: PageData;
-  let questions = data.assignedCategoriesQuestions;
+  let questions = data.assignedQuestions;
   
 </script>
 
 <h1>Questions</h1>
 <ul>
-  {#if questions === undefined}
-      <p>undefined</p>
-  {:else}
     {#each questions as q (q.categoryId)}
       <li><h3>{q.categoryName}</h3></li>
       {#each q.questions as ques}
@@ -20,5 +17,4 @@
       {/each}
       <br>
     {/each}
-  {/if}
 </ul>

@@ -3,18 +3,36 @@ import prisma from '$lib/prisma';
 
 export const GET: RequestHandler = async ({ url, params: { id } }) => {
     try {
-         const team = await prisma.assignedQuestions.findMany({
+        const assignedQuestions = await prisma.assignedQuestions.findMany({
             where: {
-                teamId: Number(id)
+              teamId: Number(id),
             },
             select: {
-                question: true
+              questionId: true,
             }
-         });
+          });
+          let asnQuesArr: number[] = [];
+          for (let obj of assignedQuestions) {
+            asnQuesArr.push(obj.questionId);
+          }
+          const assignedCategoriesQuestions = await prisma.categories.findMany({
+            include: {
+              questions: {
+                where: {
+                  questionId: {in: asnQuesArr}
+              },
+              select: {
+                questionId: true,
+                title: true,
+                points: true
+              }
+            }
+          }
+          })
          
          const json_response = {
           status: 'success',
-          team
+          assignedCategoriesQuestions
         };
         return json(json_response);
      
