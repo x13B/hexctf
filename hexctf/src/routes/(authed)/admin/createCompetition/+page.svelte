@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { PageData } from "./$types";
-  import { onMount } from "svelte";
 
   export let data: PageData;
   let users_name: string = data.username;
@@ -15,9 +14,9 @@
   // Bound variable for name of competition
   let competition_name: string = '';
 
-  let countdown: string = '';
-  let show_timer: boolean = (data.comp != null) ? true : false;
-  console.log(show_timer)
+  // let countdown: string = '';
+  let show_comp_details: boolean = (data.comp != null) ? true : false;
+
   let comp_name: string = (data.comp?.competitionName) ? data.comp.competitionName : "";
 
   // This function will submit user options to the DB
@@ -44,7 +43,7 @@
           comp_name = name;
           start_date = start;
           end_date = end;
-          show_timer = true;
+          show_comp_details = true;
         } else {
           console.error('Failed to create competition:', res.statusText);
         }
@@ -55,33 +54,8 @@
     // Reset competition_name
     competition_name = '';
 
-    show_timer = true;
+    show_comp_details = true;
   }
-
-  function startCountdown() {
-    const startTime = new Date(start_date).getTime();
-    const now = new Date().getTime();
-    const timeDifference = startTime - now;
-
-    if (timeDifference > 0) {
-      const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-
-      countdown = `Starts in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-    } 
-  }
-
-  let countdown_interval: NodeJS.Timeout;
-
-  function startCountdownInterval() {
-    startCountdown();
-    // update every second
-    countdown_interval = setInterval(startCountdown, 1000); 
-  }
-
-  onMount(startCountdownInterval);
 </script>
 
 <h1>Welcome: {users_name}</h1>
@@ -98,8 +72,7 @@
   <button type="submit" on:click={submitOptions}>Submit</button>
 </form>
 
-{#if show_timer === true}
-  <p>{countdown}</p>
+{#if show_comp_details === true}
   <h2>Competition Details</h2>
   <table>
     <tr>
