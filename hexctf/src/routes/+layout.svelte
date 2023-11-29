@@ -25,7 +25,9 @@
             const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
             countdown = `${name} starts in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-        } 
+        } else {
+            countdown = `${name} has started!`
+        }
     }
 
     setInterval(() => {
