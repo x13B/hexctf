@@ -3,6 +3,7 @@ import prisma from '$lib/prisma';
 
 export const GET: RequestHandler = async ({ url }) => {
     try {
+        
          const teamQuesAnsCount = await prisma.teams.findMany({
             include: {
               _count: {
@@ -11,6 +12,9 @@ export const GET: RequestHandler = async ({ url }) => {
                     
                   }
                 }
+              },
+              orderBy: {
+                points: 'desc'
               }
             },
          );

@@ -8,8 +8,14 @@ export async function POST({ request }) {
 
         console.log(name, start, end);
 
-        const res = await prisma.competition.create({
-            data: {
+        const res = await prisma.competition.upsert({
+            where: {competitionId: 1},
+            update: {
+                competitionName: name,
+                startDate: start,
+                endDate: end,
+            },
+            create: {
                 competitionName: name,
                 startDate: start,
                 endDate: end,
