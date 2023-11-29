@@ -3,10 +3,12 @@
 
     export let data: PageData;
 
-    let questions: any[] = data.quiz_questions;
+    let questions: any[] = (data.quiz_questions.length > 1) ? data.quiz_questions : [];
     let categories: any[] = data.categories;
     let quizName: string = (data.quiz_name !== null) ? data.quiz_name.quizName : "";
-    
+    let quiz_id: number = (data.quiz_name?.quizId) ? data.quiz_name.quizId : 0;
+    let quiz_name: string = "";
+
     let showQuestions: boolean = (questions.length > 0) ? true : false;
     let showQuizName: boolean = (questions.length > 0) ? true : false;
 
@@ -15,11 +17,10 @@
     let showCategories: boolean = (categories.length > 0) ? true : false;
     let questionId: number = questions.length;
     let categorySelected: string = "";
-    // let quiz_id: number =
 
     async function createQuizName() {
-        let id: number = 1;
-        let name: string = quizName;
+        let id: number = quiz_id;
+        let name: string = quiz_name;
 
         try {
         const res = await fetch("../api/createQuiz", {
@@ -32,6 +33,7 @@
         
         if (res.ok) {
             console.log("Able to create quiz");
+            quizName = name;
         } else {
             console.log("Something went wrong. Please try again");
         }
@@ -40,6 +42,7 @@
         }
         
         showQuizName = true;
+        quiz_name = "";
     }
     
     // This function will submit quiz options to the DB
@@ -51,43 +54,48 @@
         // Testing, might remove
         let body: string = question_body;
         let answer: string = question_answer;
-        let cat: string = categorySelected; // Need to capture correct category
+        let cat: string = categorySelected; 
+        console.log(body, answer, cat);
 
         // Submit options to server file to upload to DB
         try {
-        const res = await fetch("../api/addQuizQuestions", {
-            method: 'POST',
-            headers: {
-            'Content-Type' : 'applications/json',
-            }, 
-            body: JSON.stringify({body, answer, cat}),
-        })
-        if (res.ok) {
-            console.log('Question added successfully to the database');
-        } else {
-            console.error('Failed to add question to the database:', res.statusText);
-        }
+            const res = await fetch("../api/addQuizQuestions", {
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json',
+                }, 
+                body: JSON.stringify({ body, answer, cat }),
+            });
+
+            if (res.ok) {
+                console.log('Question added successfully to the database');
+                
+                // Update questions array using reactive assignment
+                questions = [
+                    ...questions,
+                    { id: questionId, body: body, answer: answer, category: cat }
+                ];
+
+                // Sort the questions by category for displaying together
+                questions.sort((a, b) => a.category.localeCompare(b.category));
+
+                // Increment the questionId
+                questionId++;
+
+                // Update showQuestions to trigger UI update
+                showQuestions = true;
+            } else {
+                console.error('Failed to add question to the database:', res.statusText);
+            }
         } catch (error) {
-        console.error('Error adding question to the database:', error);
+            console.error('Error adding question to the database:', error);
         }
-
-        // Append to local questions Array
-        questions = [
-            ...questions,
-            { id: questionId, body: question_body, answer: question_answer, category: categorySelected }
-        ];
-
-        // Sort the questions by category for displaying together
-        questions.sort((a, b) => a.category.localeCompare(b.category));
-
-        // Increment the questionId
-        questionId++;
 
         // RESET VALUES
         question_body = '';
         question_answer = '';
         categorySelected = '';
-    }
+    };
 
     let editingRow: number | null = null;
     let original_questions: any[] = [];
@@ -101,12 +109,16 @@
         questions[index] = { ...original_questions[index] };
         editingRow = null; // Exit edit mode
     };
+
+    const deleteQuestion = (index: number) => {
+        
+    };
 </script>
 
 <h1>CREATE A QUIZ PAGE</h1>
 <form action="#">
     <label for="name">ENTER QUIZ NAME: </label>
-    <input type="text" bind:value={quizName} placeholder="Enter Quiz Name"/>
+    <input type="text" bind:value={quiz_name} placeholder="Enter Quiz Name"/>
     <button on:click={createQuizName}>Submit</button>
 </form>
 <br>
@@ -132,9 +144,11 @@
     <button type="submit" on:click={submitQuiz}>Submit Quiz</button>
 </form>
 
+{#if quizName}
 <br>
-{#if showQuestions == true}
 <label for="name">QUIZ NAME: <strong>{quizName.toUpperCase()}</strong></label>
+{/if}
+{#if showQuestions == true}
 <br>
 <label for="selected-questions">SELECTED QUESTIONS</label>
 <table>
@@ -142,6 +156,7 @@
     <tr>
         <th>Question</th>
         <th>Answer</th>
+        <th>Category</th>
     </tr>
     </thead>
     <tbody>
@@ -158,8 +173,12 @@
             <tr>
                 <td>{question.questionBody}</td>
                 <td>{question.questionAnswer}</td>
+                <td>{question.category}</td>
                 <td>
                     <button on:click={() => startEditing(index)}>Edit</button>
+                </td>
+                <td>
+                    <button on:click={() => deleteQuestion(index)}>Delete</button>
                 </td>
             </tr>
         {/if}
