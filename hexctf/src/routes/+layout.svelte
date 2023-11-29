@@ -42,7 +42,6 @@
         <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/questions">Questions</a></li>
-            <li><a href="/LFG">LFG</a></li>
             <li><a href="/board">Leaderboard</a></li>
             {#if data.isAdmin}
             <li><a href="/admin">Admin Dashboard</a></li>

@@ -16,24 +16,10 @@ export const load: PageServerLoad = async ({ locals }) => {
 	  throw new Error("User not found");
 	}
 
-	const user_res = await prisma.quizResults.findFirst({
-		where: {
-			userId: session.user.userId,
-			score: {
-				gte: 0,
-			}
-		}
-	});
-
-	let res: boolean = (user_res) ? true : false;
-	console.log("res = ", res);
-
 	const isAdmin = user.isAdmin || false;
-	if (!user_res && !isAdmin) {
-		throw redirect(302, "/studentQuiz")
-	} else if (user_res && !isAdmin) {
-		throw redirect(302, "../questions")
-	}
+	if (!isAdmin) {
+		throw redirect(302, "/studentQuiz");
+	} 
 
 	const users = await prisma.user.findMany();
 	const quiz_questions = await prisma.quizQuestions.findMany();
@@ -46,7 +32,6 @@ export const load: PageServerLoad = async ({ locals }) => {
 	  users: users,
 	  quizQuestions: quiz_questions,
 	  quizRes: quiz_results,
-	  taken: res,
 	};
   };
   
