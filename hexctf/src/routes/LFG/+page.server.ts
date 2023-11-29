@@ -19,11 +19,16 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const user_res = await prisma.quizResults.findFirst({
 		where: {
 			userId: session.user.userId,
+			score: {
+				gte: 0,
+			}
 		}
 	});
 
+	let res: boolean = (user_res) ? true : false;
+	console.log("res = ", res);
+
 	const isAdmin = user.isAdmin || false;
-	console.log(user_res);
 	if (!user_res && !isAdmin) {
 		throw redirect(302, "/LFG/studentQuiz")
 	} else if (user_res && !isAdmin) {
@@ -41,7 +46,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	  users: users,
 	  quizQuestions: quiz_questions,
 	  quizRes: quiz_results,
-	  taken: user_res,
+	  taken: res,
 	};
   };
   
