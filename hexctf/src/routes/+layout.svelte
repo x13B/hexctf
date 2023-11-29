@@ -47,7 +47,7 @@
             {#if data.isAdmin}
             <li><a href="/admin">Admin Dashboard</a></li>
             {:else}
-            <li><a href="/LFG/studentQuiz">Quiz</a></li>
+            <li><a href="/studentQuiz">Quiz</a></li>
             {/if}
     </ul>
     </div>

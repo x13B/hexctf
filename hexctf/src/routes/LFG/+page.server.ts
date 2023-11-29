@@ -30,7 +30,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	const isAdmin = user.isAdmin || false;
 	if (!user_res && !isAdmin) {
-		throw redirect(302, "/LFG/studentQuiz")
+		throw redirect(302, "/studentQuiz")
 	} else if (user_res && !isAdmin) {
 		throw redirect(302, "../questions")
 	}
