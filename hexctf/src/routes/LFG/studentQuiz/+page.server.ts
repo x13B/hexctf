@@ -33,7 +33,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	  isAdmin: isAdmin,
 	  users: users,
 	  quizQuestions: quiz_questions,
-      results: user_res
+      quiz_results: user_res
 	};
   };
   
