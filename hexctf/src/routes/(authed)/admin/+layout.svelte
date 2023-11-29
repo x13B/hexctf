@@ -16,6 +16,8 @@
     <a href="/admin/students">Student Roster</a>
     <a href="/admin/addQuestions">Add Questions</a>
     <a href="/admin/createQuiz">Create Student Quiz</a>
+    <a href="/admin/assignQuestions">Assign Questions</a>
+    <a href="/admin/docker">Docker</a>
 </nav>
 
 <slot />

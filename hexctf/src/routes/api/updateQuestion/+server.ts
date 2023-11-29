@@ -3,7 +3,7 @@ import prisma from "$lib/prisma";
 /** @type {import('./$types').RequestHandler} */
 export async function PUT({ request }) {
     try {
-        const {id, title, description, answer, difficulty, points} = await request.json();
+        const {id, title, description, hint, hint2, hint3, answer, difficulty, points} = await request.json();
 
         const res = await prisma.questions.update({
             where: {
@@ -12,6 +12,9 @@ export async function PUT({ request }) {
             data: {
                 title: title,
                 description: description,
+                hint: hint,
+                hint2: hint2,
+                hint3: hint3,
                 answer: answer,
                 difficulty: difficulty,
                 points: points

@@ -1,12 +1,36 @@
-import { fail, redirect } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
+import prisma from "$lib/prisma";
 
-import type { PageServerLoad, Actions } from "./$types";
+import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ locals }) => {
-	const session = await locals.auth.validate();
-	if (!session) throw redirect(302, "/login");
+export const load: PageServerLoad = async ({ fetch }) => {
+	async function fetchSession() {
+		const response = await fetch('/api/users/id', { method: 'GET' });
+        const data = await response.json();
+
+        return data.session;
+	}
+
+	async function fetchTeam() {
+		const session = await fetchSession();
+		const userId = session.userId;
+		
+		const response = await fetch('/api/users/' + userId + '/team', { method: 'GET' });
+        const data = await response.json();
+
+        return data.team;
+	}
+
+	async function fetchAssignedQuestions() {
+		const team = await fetchTeam()
+		const teamId = team.teamId;
+		const response = await fetch('/api/teams/' + teamId + '/questions', { method: 'GET' });
+        const data = await response.json();
+
+        return data.assignedCategoriesQuestions;
+	}
 	return {
-		userId: session.user.userId,
-		username: session.user.username
+        assignedQuestions: fetchAssignedQuestions()
 	};
 };
+

@@ -59,18 +59,21 @@
         let id = questions[index].questionId;
         let title = questions[index].title;
         let description = questions[index].description;
+        let hint = questions[index].hint;
+        let hint2 = questions[index].hint2;
+        let hint3 = questions[index].hint3;
         let answer = questions[index].answer;
         let difficulty = questions[index].difficulty;
         let points = questions[index].points;
 
-        console.log(id, title, description, answer, difficulty, points);
+        console.log(id, title, description, hint, hint2, hint3, answer, difficulty, points);
 
         const res = await fetch('/api/updateQuestion', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({id, title, description, answer, difficulty, points}),
+            body: JSON.stringify({id, title, description, hint, hint2, hint3, answer, difficulty, points}),
         });
 
         if (res.ok) {
@@ -117,23 +120,28 @@
 
   let title: string = "";
   let question: string = "";
+  let hint: string = "";
+  let hint2: string = "";
+  let hint3: string = "";
   let answer: string = "";
   let points: number = 0;
   let difficulty: string = "";
   let category: number = 0;
 
   const addCompQuestion = async () => {
-    console.log(title, question, answer, points, difficulty, category-1);
+    console.log(title, question, hint, hint2, hint3, answer, points, difficulty, category);
     // let cat: string = categories[category-1].categoryName;
-    let cat = category-1;
-    let hint = "";
+    let cat = category;
+    //let hint = "";
+    //let hint2 = "";
+    //let hint3 = "";
 
     const res = await fetch("/api/addQuestion", {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json',
       },
-      body: JSON.stringify({title, question, answer, points, difficulty, cat, hint }),
+      body: JSON.stringify({title, question, hint, hint2, hint3, answer, points, difficulty, cat}),
     })
 
     let qID = questions[questions.length-1].questionId + 1;
@@ -144,6 +152,8 @@
       description: question, 
       difficulty: difficulty, 
       hint: hint, 
+      hint2: hint2,
+      hint3: hint3,
       points: points,  
       title: title,
       questionId: qID
@@ -154,6 +164,9 @@
 
     title = "";
     question = "";
+    hint = "";
+    hint2 = "";
+    hint3 = "";
     answer = "";
     points = 0;
     difficulty = "";
@@ -165,11 +178,21 @@
 
 <form action="#">
   <h3>Add Questions Form</h3>
+  <p>Please give one hint for hard questions, two hints for medium questions, and three hints for easy questions.</p>
   <label for="title">Title:</label>
   <input type="text" bind:value={title}>
   <br>
   <label for="question-body">Question:</label>
   <input type="text" bind:value={question}>
+  <br>
+  <label for="hint">Hint 1:</label>
+  <input type="text" bind:value={hint}>
+  <br>
+  <label for="hint2">Hint 2:</label>
+  <input type="text" bind:value={hint2}>
+  <br>
+  <label for="hint">Hint 3:</label>
+  <input type="text" bind:value={hint3}>
   <br>
   <label for="answer">Answer:</label>
   <input type="text" bind:value={answer}>
@@ -195,6 +218,16 @@
     {/if}
   </select>
   <br>
+ <label for="docker">Docker:</label>
+  <select name="docker">
+    <!--   {#each dockers as docker}
+        <option value={cat.categoryId}>{cat.categoryName}</option>
+      {/each}
+    {:else}
+      <option value="">No Categories Available</option>
+     -->
+  </select>
+  <br>
   <button on:click={addCompQuestion}>Add</button>
 </form>
 
@@ -213,6 +246,9 @@
           <tr>
             <th>Title</th>
             <th>Description</th>
+            <th>Hint 1</th>
+            <th>Hint 2</th>
+            <th>Hint 3</th>
             <th>Answer</th>
             <th>Difficulty</th>
             <th>Points</th>
@@ -224,6 +260,9 @@
                   {#if editingRow === index}
                       <td><input type="text" bind:value={questions[index].title} /></td>
                       <td><input type="text" bind:value={questions[index].description} /></td>
+                      <td><input type="text" bind:value={questions[index].hint} /></td>
+                      <td><input type="text" bind:value={questions[index].hint2} /></td>
+                      <td><input type="text" bind:value={questions[index].hint3} /></td>
                       <td><input type="text" bind:value={questions[index].answer}></td>
                       <td><input type="text" bind:value={questions[index].difficulty} /></td>
                       <td><input type="number" bind:value={questions[index].points} /></td>
@@ -234,6 +273,9 @@
                   {:else}
                       <td>{question.title}</td>
                       <td>{question.description}</td>
+                      <td>{question.hint}</td>
+                      <td>{question.hint2}</td>
+                      <td>{question.hint3}</td>
                       <td>{question.answer}</td>
                       <td>{question.difficulty}</td>
                       <td>{question.points}</td>

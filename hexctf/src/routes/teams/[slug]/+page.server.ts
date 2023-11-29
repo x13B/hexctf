@@ -1,33 +1,30 @@
-import prisma from "$lib/prisma";
-import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from "./$types";
 
-export const load = (async ({ params: { slug }}) => {
-    const teamInfo = await prisma.teams.findUnique({
-        where: { teamId: Number(slug) },
-    });
-    if (!teamInfo) throw error(404, 'Team not found');
-    const teamMembers = await prisma.teamMembers.findMany({
-        where: { teamId: Number(slug) },
-    });
-    let membersList = []
-    for (let member of teamMembers) {
-        const user = await prisma.user.findUnique({
-            where: {id: member.userId}
-        })
-        membersList.push(user);
+export const load = (async ({ fetch, params: { slug }}) => {
+    async function fetchTeam() {
+        const response = await fetch('/api/teams/' + slug + '');
+        const data = await response.json();
+
+        return data.team;
     }
-    //console.log(membersList)
-    const teamAnswered = await prisma.answerQuestions.findMany({
-        where: { teamId: Number(slug) }
-    });
-    let answersList = []
-    for (let answer of teamAnswered) {
-        const ans = await prisma.questions.findUnique({
-            where: {questionId: answer.questionId}
-        })
-        answersList.push(ans);
+
+    async function fetchTeamMembers() {
+        const response = await fetch('/api/teams/' + slug + '/members');
+        const data = await response.json();
+
+        return data.teamMembers;
     }
-    //console.log(answersList)
-    return { teamInfo, membersList, answersList }
+
+    async function fetchTeamAnswers() {
+        const response = await fetch('/api/teams/' + slug + '/questions/answered');
+        const data = await response.json();
+
+        return data.questionsAnswered;
+    }
+
+    return {
+        team: fetchTeam(),
+        teamMembers: fetchTeamMembers(),
+        teamAnswers: fetchTeamAnswers()
+    };
 }) satisfies PageServerLoad;

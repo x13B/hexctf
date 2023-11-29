@@ -17,6 +17,7 @@
 		"@sveltejs/kit": "^1.20.4",
 		"@types/bcrypt": "^5.0.0",
 		"@types/bcryptjs": "^2.4.4",
+		"@types/decompress": "^4.2.7",
 		"@types/express": "^4.17.17",
 		"@types/jsonwebtoken": "^9.0.3",
 		"@types/node": "^20.8.6",
@@ -35,6 +36,7 @@
 		"@prisma/client": "^5.4.2",
 		"bcrypt": "^5.1.1",
 		"bcryptjs": "^2.4.3",
+		"decompress": "^4.2.1",
 		"jsonwebtoken": "^9.0.2",
 		"lucia": "^2.7.1",
 		"sqlite3": "^5.1.6"
