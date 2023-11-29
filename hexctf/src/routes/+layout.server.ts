@@ -9,8 +9,10 @@ export async function load({ locals, url }) {
                         username: session.user.username,
                     }
                 });
+
+                const comp_timer = await prisma.competition.findFirst();
                 const isAdmin = user?.isAdmin;
                 const name = user?.username;
-                return {isAdmin, session, name};
+                return {isAdmin, session, name, comp_timer};
         }
     }
