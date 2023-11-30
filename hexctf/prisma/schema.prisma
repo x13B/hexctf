@@ -89,6 +89,7 @@ model Questions {
   categories  Categories          @relation("CategoryToQuestion", fields: [categoryId], references: [categoryId])
   answers     AnswerQuestions[]   @relation("QuestionToAnswer")
   assigned    AssignedQuestions[] @relation("QuestionToTeam")
+  docker      DockerState[]
 }
 
 model AnswerQuestions {
@@ -142,16 +143,18 @@ model Competition {
 }
 
 model DockerState {
-  imageId         Int     @id @default(autoincrement())
-  imageName       String  @unique
+  imageId         Int        @id @default(autoincrement())
+  imageName       String     @unique
   imagePath       String
   imageSHA        String?
-  imageIsUnique   Boolean @default(false)
-  imageIsBuilt    Boolean @default(false)
+  imageIsUnique   Boolean    @default(false)
+  imageIsBuilt    Boolean    @default(false)
   containerSHA    String?
   containerStatus String?
   containerPort   Int?
   containerIp     String?
-  team            Teams?  @relation(fields: [teamId], references: [teamId])
-  teamId          Int?    @unique
+  team            Teams?     @relation(fields: [teamId], references: [teamId])
+  teamId          Int?       @unique
+  question        Questions? @relation(fields: [questionId], references: [questionId])
+  questionId      Int?       @unique
 }
