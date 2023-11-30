@@ -6,6 +6,7 @@
 
     // Gets the start time for the competition
     let start_timer: string = (data.comp_timer?.startDate) ? data.comp_timer.startDate : "";
+    let end_timer: string = (data.comp_timer?.endDate) ? data.comp_timer.endDate : "";
 
     // Gets comp name
     let name: string = (data.comp_timer?.competitionName) ? data.comp_timer.competitionName : "";
@@ -15,17 +16,23 @@
 
     function startCountdown() {
         const startTime = new Date(start_timer).getTime();
+        const endTime = new Date(end_timer).getTime();
         const now = new Date().getTime();
-        const timeDifference = startTime - now;
+        const timeDifferenceBefore = startTime - now;
+        const timeDifferenceAfter = now - endTime;
 
-        if (timeDifference > 0) {
-            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+        if (timeDifferenceBefore > 0) {
+            const days = Math.floor(timeDifferenceBefore / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDifferenceBefore % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDifferenceBefore % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDifferenceBefore % (1000 * 60)) / 1000);
 
             countdown = `${name} starts in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-        } 
+        } else if(timeDifferenceAfter > 0){
+            countdown = `${name} has ended!`
+        } else {
+            countdown = `${name} has started!`
+        }
     }
 
     setInterval(() => {

@@ -1,12 +1,13 @@
-<!-- <h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p> -->
+<script lang="ts">
+	import type { PageData } from "./$types";
+  
+	export let data: PageData;
+	let competition = data.competition;
+  </script>
 
-<h1>Welcome</h1>
-<h2>HexCTF</h2>
+<svelte:head>
+	<title>{competition.competitionName}</title>
+</svelte:head>
 
-<!--<h1>Profile</h1>
-<p>User id: {data.userId}</p>
-<p>Username: {data.username}</p>
-<form method="post" action="?/logout" use:enhance>
-	<input type="submit" value="Sign out" />
-</form>-->
+<h1>{competition.competitionName}</h1>
+<h2>Welcome</h2>

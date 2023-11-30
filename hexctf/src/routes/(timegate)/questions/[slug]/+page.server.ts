@@ -11,14 +11,14 @@ async function findNextQuestion(locals: App.Locals, slug: number, difficulty: st
         if (difficulty === "Easy") {new_difficulty = "Medium"}
         else if (difficulty === "Medium") {new_difficulty = "Hard"}
         else {new_difficulty = difficulty}
-        console.log("Finding a harder question!");
-        console.log("" + difficulty + " > " + new_difficulty);
+        // console.log("Finding a harder question!");
+        // console.log("" + difficulty + " > " + new_difficulty);
     } else {
         if (difficulty === "Medium") {new_difficulty = "Easy"}
         else if (difficulty === "Hard") {new_difficulty = "Medium"}
         else {new_difficulty = difficulty}
-        console.log("Finding an easier question!");
-        console.log("" + difficulty + " > " + new_difficulty);
+        // console.log("Finding an easier question!");
+        // console.log("" + difficulty + " > " + new_difficulty);
     }
     
     // validate the session, question, and user's team
@@ -57,31 +57,31 @@ async function findNextQuestion(locals: App.Locals, slug: number, difficulty: st
     })
     // if this new question exists, assign it to the team
     if (new_question !== null) {
-        console.log("Question found!");
-        console.log("Difficulty:" + new_difficulty + "\n");
+        //console.log("Question found!");
+        //console.log("Difficulty:" + new_difficulty + "\n");
         return new_question;
         
     } else {
         // If this question does not exist, assign a question of a different difficulty
-        console.log("Looking for a new difficulty!");
+        //console.log("Looking for a new difficulty!");
         if (diffIncrease && new_difficulty === "Hard") {
-            console.log("No more questions!");
-            console.log("" + difficulty + " > " + new_difficulty);
+            //console.log("No more questions!");
+            //console.log("" + difficulty + " > " + new_difficulty);
             return null;
         }
         else if (diffIncrease && new_difficulty !== "Hard") {
-            console.log("Finding a harder question!");
-            console.log("" + difficulty + " > " + new_difficulty);
+            //console.log("Finding a harder question!");
+            //console.log("" + difficulty + " > " + new_difficulty);
             return findNextQuestion(locals, slug, new_difficulty, true);
         }
         else if (!diffIncrease && new_difficulty === "Easy") {
-            console.log("Finding a harder question!");
-            console.log("" + difficulty + " > " + new_difficulty);
+            //console.log("Finding a harder question!");
+            //console.log("" + difficulty + " > " + new_difficulty);
             return findNextQuestion(locals, slug, new_difficulty, true);
         }
         else {
-            console.log("Finding an easier question!");
-            console.log("" + difficulty + " > " + new_difficulty);
+            //console.log("Finding an easier question!");
+            //console.log("" + difficulty + " > " + new_difficulty);
             return findNextQuestion(locals, slug, new_difficulty, false);
         }
     }

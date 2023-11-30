@@ -1,12 +1,16 @@
-import {redirect } from "@sveltejs/kit";
-
 import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ locals }) => {
-	const session = await locals.auth.validate();
-	if (!session) throw redirect(302, "/login");
+export const load: PageServerLoad = async ({ fetch }) => {
+	
+	async function fetchCompetition() {
+		const response = await fetch('/api/competition', { method: 'GET' });
+		const data = await response.json();
+		if (data.status == "failure") { return {"competitionName": "HexCTF"}}
+
+		return data.competition;
+	}
+
 	return {
-		userId: session.user.userId,
-		username: session.user.username
+		competition: fetchCompetition()
 	};
 };

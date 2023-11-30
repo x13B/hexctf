@@ -12,8 +12,15 @@ export const GET: RequestHandler = async ({ url, params: { id } }) => {
             }
          });
          
+        var status;
+        if (team) {
+          status = "success"
+        } else {
+          status = "failure"
+        }
+
          const json_response = {
-          status: 'success',
+          status,
           team: team?.team
         };
         return json(json_response);

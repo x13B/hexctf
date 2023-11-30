@@ -7,6 +7,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 	async function fetchSession() {
 		const response = await fetch('/api/users/id', { method: 'GET' });
         const data = await response.json();
+		if (data.status === "failure") throw error(404, "You must be logged in to see questions");
 
         return data.session;
 	}
@@ -17,6 +18,8 @@ export const load: PageServerLoad = async ({ fetch }) => {
 		
 		const response = await fetch('/api/users/' + userId + '/team', { method: 'GET' });
         const data = await response.json();
+		if (data.status === "failure") throw error(404, "You must be in a team to see questions");
+
 
         return data.team;
 	}
