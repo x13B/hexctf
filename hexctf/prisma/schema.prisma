@@ -86,6 +86,7 @@ model Questions {
   points      Int
   categoryId  Int
   difficulty  String
+  isDocker    Boolean             @default(false)
   categories  Categories          @relation("CategoryToQuestion", fields: [categoryId], references: [categoryId])
   answers     AnswerQuestions[]   @relation("QuestionToAnswer")
   assigned    AssignedQuestions[] @relation("QuestionToTeam")
