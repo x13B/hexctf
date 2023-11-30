@@ -66,8 +66,6 @@
         let difficulty = questions[index].difficulty;
         let points = questions[index].points;
 
-        console.log(id, title, description, hint, hint2, hint3, answer, difficulty, points);
-
         const res = await fetch('/api/updateQuestion', {
             method: 'PUT',
             headers: {
@@ -79,6 +77,8 @@
         if (res.ok) {
             console.log('Question updated successfully in the database');
             editingRow = null; // Exit edit mode
+
+            questions = [...questions]; // TESTING
         } else {
             console.error('Failed to update question in the database:', res.statusText);
             // Handle error or display a message
@@ -108,14 +108,13 @@
 
       if (res.ok) {
         console.log("The question has been deleted!");
+
+        questions.splice(index, 1); // TESTING
+        questions = [...questions]; // TESTING
       }
     } catch (error) {
       console.log("Error occured trying to delete question: ", error);
     }
-  
-    questions.splice(index, 1);
-    questions = [...questions];
-    console.log(questions);
   }
 
   let title: string = "";
@@ -129,12 +128,7 @@
   let category: number = 0;
 
   const addCompQuestion = async () => {
-    console.log(title, question, hint, hint2, hint3, answer, points, difficulty, category);
-    // let cat: string = categories[category-1].categoryName;
     let cat = category;
-    //let hint = "";
-    //let hint2 = "";
-    //let hint3 = "";
 
     const res = await fetch("/api/addQuestion", {
       method: 'POST',
@@ -173,7 +167,38 @@
     category = 0;
   }
 
-  console.log(questions);
+  let searchQuery: string = "";
+
+  // Function to filter questions based on the search query
+  function filteredQuestions() {
+    if (questions.length === 0) {
+      return []; // Return an empty array if there are no questions
+    }
+
+    if (searchQuery === '') {
+      return questions; // Show all questions when search query is empty
+    } else {
+      // Filter questions based on the search query
+      return questions.filter((question) => {
+        return (
+          question.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          question.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          question.answer.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          question.difficulty.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      });
+    }
+  }
+
+  let filteredResults: any[] = [];
+  const updateFilteredQuestions = () => {
+    filteredResults = filteredQuestions();
+  }
+
+  // Function to handle filtering when the "Filter" button is clicked
+  const filterQuestions = () => {
+    updateFilteredQuestions(); // Update the filtered results based on the search query
+  }
 </script>
 
 <form action="#">
@@ -238,6 +263,9 @@
 
 <h3>QUESTIONS</h3>
 <h3>Search</h3>
+<input type="text" bind:value={searchQuery} placeholder="Search for questions">
+<button on:click={filterQuestions}>Search</button>
+<p>Click Search button with an empty field to see all questions without any filter</p>
 {#if questions_not_empty == false}
     <h4>Questions Not Available</h4>
 {:else}
@@ -255,7 +283,8 @@
           </tr>
         </thead>
         <tbody>
-          {#each questions as question, index (question.questionId)}
+          <!-- {#each questions as question, index (question.questionId)} -->
+          {#each filteredResults as question, index (question.questionId)}
               <tr>
                   {#if editingRow === index}
                       <td><input type="text" bind:value={questions[index].title} /></td>
@@ -274,8 +303,16 @@
                       <td>{question.title}</td>
                       <td>{question.description}</td>
                       <td>{question.hint}</td>
+                      {#if question.hint2 == ""}
+                      <td>None</td>
+                      {:else}
                       <td>{question.hint2}</td>
+                      {/if}
+                      {#if question.hint3 == ""}
+                      <td>None</td>
+                      {:else}
                       <td>{question.hint3}</td>
+                      {/if}
                       <td>{question.answer}</td>
                       <td>{question.difficulty}</td>
                       <td>{question.points}</td>
@@ -291,3 +328,7 @@
         </tbody>
       </table>      
 {/if}
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- NEED TO FIX THE DELETE/EDIT QUESTION WHEN FILTERING -->
+<!-- DOES NOT PROPERLY DELETE/EDIT SINCE IT USES THE INDEX OF THAT QUESION -->
