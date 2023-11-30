@@ -152,6 +152,6 @@ model DockerState {
   containerStatus String?
   containerPort   Int?
   containerIp     String?
-  team            Teams   @relation(fields: [teamId], references: [teamId])
-  teamId          Int     @unique
+  team            Teams?  @relation(fields: [teamId], references: [teamId])
+  teamId          Int?    @unique
 }
