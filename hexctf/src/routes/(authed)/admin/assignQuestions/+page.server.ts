@@ -15,7 +15,10 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions = {
-    default: async ({request}) => {
+    default: async ({request, fetch}) => {
+        //remove all assigned questions first
+        const response = await fetch('/api/questions/assigned', { method: 'DELETE' });
+
         const data = await request.formData();
         //console.log(data);
         let propose = data.getAll("select");
