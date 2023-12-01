@@ -58,7 +58,7 @@
   }
 </script>
 
-<h1>Welcome: {users_name}</h1>
+<h1>Create Competition</h1>
 
 <form action="#">
   <label for="name">Name of Competition</label>
