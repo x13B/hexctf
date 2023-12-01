@@ -3,6 +3,7 @@
   
 	export let data: PageData;
 	let competition = data.competition;
+	let comp_desc: string = (competition.description != null) ? competition.description : '';
   </script>
 
 <svelte:head>
@@ -11,3 +12,4 @@
 
 <h1>{competition.competitionName}</h1>
 <h2>Welcome</h2>
+<h2>{comp_desc}</h2>

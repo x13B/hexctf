@@ -200,6 +200,8 @@
   }
 </script>
 
+<h2>Add Questions Page</h2>
+
 <form action="#">
   <h3>Add Questions Form</h3>
   <p>Please give one hint for hard questions, two hints for medium questions, and three hints for easy questions.</p>
@@ -260,11 +262,15 @@
 <input type="text" name="new-cat" bind:value={newCategory}/>
 <button type="button" on:click={createNewCategory}>Create New</button><br>
 
-<h3>QUESTIONS</h3>
-<h3>Search</h3>
+<h3>Available Questions</h3>
+
 <input type="text" bind:value={searchQuery} placeholder="Search for questions">
 <button on:click={filterQuestions}>Search</button>
 <p>Click Search button with an empty field to see all questions without any filter</p>
+<p>CAUTION: 
+  <li>When deleting a filtered question, only click delete once.</li>
+  <li>Extra clicks will delete other questions!</li>
+</p>
 {#if questions_not_empty == false}
     <h4>Questions Not Available</h4>
 {:else}
