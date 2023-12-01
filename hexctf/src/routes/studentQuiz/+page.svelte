@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { PageData } from "../studentQuiz/$types";
     export let data: PageData;
-    let users_name: string = (data.username) ? data.username : "";
+
     let quiz_taken: boolean = (data.quiz_results == null) ? false : true;
 
     let quiz_questions: any[] = (data.quizQuestions) ? data.quizQuestions : [];
@@ -61,9 +61,6 @@
 </script>
 
 <h1>Student Quiz Page</h1>
-<h1>TEAM BUILDER (STUDENT)</h1>
-<h1>WELCOME: {users_name}</h1>
-<br>
 {#if quiz_taken === false}
     <h1>YOU HAVE NOT TAKEN THE QUIZ YET!</h1>
     <div>

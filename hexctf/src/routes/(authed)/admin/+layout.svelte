@@ -13,7 +13,7 @@
 
 <nav>
     <a href="/admin/createCompetition">Create Competition</a>
-    <a href="/admin/LFG">LFG</a>
+    <a href="/admin/LFG">Team Builder</a>
     <a href="/admin/students">Student Roster</a>
     <a href="/admin/addQuestions">Add Questions</a>
     <a href="/admin/createQuiz">Create Student Quiz</a>
