@@ -169,17 +169,16 @@
 
   let searchQuery: string = "";
 
-  // Function to filter questions based on the search query
-  function filteredQuestions() {
+  function filteredQuestionsWithIndex() {
     if (questions.length === 0) {
       return []; // Return an empty array if there are no questions
     }
 
     if (searchQuery === '') {
-      return questions; // Show all questions when search query is empty
+      return questions.map((question, index) => ({ originalIndex: index, question }));
     } else {
-      // Filter questions based on the search query
-      return questions.filter((question) => {
+      // Filter questions based on the search query and store their original index
+      return questions.map((question, index) => ({ originalIndex: index, question })).filter(({ question }) => {
         return (
           question.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
           question.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -192,7 +191,7 @@
 
   let filteredResults: any[] = [];
   const updateFilteredQuestions = () => {
-    filteredResults = filteredQuestions();
+    filteredResults = filteredQuestionsWithIndex();
   }
 
   // Function to handle filtering when the "Filter" button is clicked
@@ -283,21 +282,20 @@
           </tr>
         </thead>
         <tbody>
-          <!-- {#each questions as question, index (question.questionId)} -->
-          {#each filteredResults as question, index (question.questionId)}
+          {#each filteredResults as { originalIndex, question}}
               <tr>
-                  {#if editingRow === index}
-                      <td><input type="text" bind:value={questions[index].title} /></td>
-                      <td><input type="text" bind:value={questions[index].description} /></td>
-                      <td><input type="text" bind:value={questions[index].hint} /></td>
-                      <td><input type="text" bind:value={questions[index].hint2} /></td>
-                      <td><input type="text" bind:value={questions[index].hint3} /></td>
-                      <td><input type="text" bind:value={questions[index].answer}></td>
-                      <td><input type="text" bind:value={questions[index].difficulty} /></td>
-                      <td><input type="number" bind:value={questions[index].points} /></td>
+                  {#if editingRow === originalIndex}
+                      <td><input type="text" bind:value={questions[originalIndex].title} /></td>
+                      <td><input type="text" bind:value={questions[originalIndex].description} /></td>
+                      <td><input type="text" bind:value={questions[originalIndex].hint} /></td>
+                      <td><input type="text" bind:value={questions[originalIndex].hint2} /></td>
+                      <td><input type="text" bind:value={questions[originalIndex].hint3} /></td>
+                      <td><input type="text" bind:value={questions[originalIndex].answer}></td>
+                      <td><input type="text" bind:value={questions[originalIndex].difficulty} /></td>
+                      <td><input type="number" bind:value={questions[originalIndex].points} /></td>
                       <td>
-                          <button on:click={() => saveChanges(index)}>Save</button>
-                          <button on:click={() => cancelUpdates(index)}>Cancel</button>
+                          <button on:click={() => saveChanges(originalIndex)}>Save</button>
+                          <button on:click={() => cancelUpdates(originalIndex)}>Cancel</button>
                       </td>
                   {:else}
                       <td>{question.title}</td>
@@ -317,10 +315,10 @@
                       <td>{question.difficulty}</td>
                       <td>{question.points}</td>
                       <td>
-                          <button on:click={() => startEditing(index)}>Edit</button>
+                          <button on:click={() => startEditing(originalIndex)}>Edit</button>
                       </td>
                       <td>
-                        <button on:click={() => deleteQuestion(index)}>Delete</button>
+                        <button on:click={() => deleteQuestion(originalIndex)}>Delete</button>
                       </td>
                   {/if}
               </tr>
@@ -328,7 +326,3 @@
         </tbody>
       </table>      
 {/if}
-
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<!-- NEED TO FIX THE DELETE/EDIT QUESTION WHEN FILTERING -->
-<!-- DOES NOT PROPERLY DELETE/EDIT SINCE IT USES THE INDEX OF THAT QUESION -->
