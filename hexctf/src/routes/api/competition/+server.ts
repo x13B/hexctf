@@ -14,7 +14,7 @@ export const GET: RequestHandler = async ({ url }) => {
           const json_response = {
             status: status,
             competition
-    };
+          };
         return json(json_response);
      
     } catch (error: any) {

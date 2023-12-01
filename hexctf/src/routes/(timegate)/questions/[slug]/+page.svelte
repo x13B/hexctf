@@ -5,6 +5,7 @@
     export let data: PageData;
     const  question  = data.question;
     const  check  = data.check;
+    const dockerState = data.dockerState;
     export let form: ActionData;
     let hintClicked:boolean = false;
     let hintClicked2:boolean = false;
@@ -17,9 +18,13 @@
     <main>
       <h2>{question?.title}</h2>
       <p>{question?.description}</p>
-      <button on:click|once={() => hintClicked = true}>
-        Hint
-      </button>
+      <p>{question?.points} Points</p>
+
+      {#if question.hint != ""}
+        <button on:click|once={() => hintClicked = true}>
+          Hint
+        </button>
+      {/if}
       {#if hintClicked}
         <p>{question?.hint}</p>
       {/if}
@@ -39,7 +44,19 @@
       {#if hintClicked3}
         <p>{question?.hint3}</p>
       {/if}
-      <p>{question?.points} Points</p>
+
+      {#if dockerState}
+        <p>This question has docker</p>
+        {#if dockerState.containerStatus === "offline"}
+        <form method="POST" action="?/dockerDeploy" use:enhance>
+        Deploy Docker Image:<input type="submit" value="Deploy"/></form>
+          <br />
+          
+        {:else if dockerState.containerStatus === "online"}
+        <p>IP Address: {dockerState.containerIp}
+        Port: {dockerState.containerPort}</p>
+        {/if}
+      {/if}
       {#if check.resp}
         <p><b>Your team has already answered this question!</b></p>
       {:else}
@@ -54,10 +71,12 @@
         <input name="answer"/>
         <input type="submit" value="Submit" />
         </label></form>
+        <br />
         <form method="POST" action="?/forfeit" use:enhance>
         <input type="submit" value="Forfeit"/></form>
         
      {/if}
+     <br />
      <a href="./">Return</a>
     </main>
   </div>
