@@ -154,10 +154,22 @@ export const actions = {
                 // Create an AnswerQuestion record with the question's id and team's id
                 //      The team's id is taken from the user's model, the person logged in
                 // Update the team's points with the point value of the question
+                const getAssigned = await prisma.assignedQuestions.findUnique({
+                    where: {
+                        teamId_questionId: {
+                            teamId: teamOfUser.teamId,
+                            questionId: Number(slug),
+                        }
+                    }
+                })
+                if (!getAssigned) throw error(404)
+                const assignedCreated = getAssigned.createdAt;
+                console.log(assignedCreated);
                 const ans = await prisma.answerQuestions.create({
                     data: {
                         questionId: Number(slug),
                         teamId: teamOfUser.teamId,
+                        assignedCreatedAt: assignedCreated
                     },
                 })
                 const updatePoints = await prisma.teams.update({
