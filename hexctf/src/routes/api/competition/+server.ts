@@ -3,12 +3,18 @@ import prisma from '$lib/prisma';
 
 export const GET: RequestHandler = async ({ url }) => {
     try {
-          const competition = await prisma.competition.findFirst();
-         
-          const json_response = {
-            status: 'success',
-            competition
-    };
+      const competition = await prisma.competition.findFirst();
+      var status;
+      if (competition){
+        status = "success"
+      } else {
+        status = "failure"
+      }
+
+      const json_response = {
+        status: status,
+        competition
+      };
         return json(json_response);
      
     } catch (error: any) {
