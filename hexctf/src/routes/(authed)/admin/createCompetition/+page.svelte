@@ -2,11 +2,12 @@
   import type { PageData } from "./$types";
 
   export let data: PageData;
-  let users_name: string = data.username;
 
   // Bound variable from form for start date of competition
   let start: string = "";
   let end: string = "";
+  let hide_submit_button: boolean = (data.comp == null) ? false : true;
+  let comp_description: string = '';
 
   let start_date: string = (data.comp?.startDate) ? data.comp.startDate : "";
   let end_date: string = (data.comp?.endDate) ? data.comp.endDate : "";
@@ -28,6 +29,8 @@
     start = start.toString();
     end = end.toString();
 
+    let desc: string = comp_description;
+
     // Submit options to server file to upload to DB
     try {
       const res = await fetch("../api/submitCompDetails", {
@@ -35,7 +38,7 @@
         headers: {
           'Content-Type' : 'application/json',
         },
-        body: JSON.stringify({name, start, end})
+        body: JSON.stringify({name, start, end, desc})
       });
 
       if (res.ok) {
@@ -53,8 +56,17 @@
 
     // Reset competition_name
     competition_name = '';
+    comp_description = '';
 
     show_comp_details = true;
+  }
+
+  function editDetails() {
+    competition_name = comp_name;
+    start = start_date;
+    end = end_date;
+    show_comp_details = false;
+    hide_submit_button = false;
   }
 </script>
 
@@ -69,11 +81,11 @@
   <label for="length">End Date:</label>
   <input type="datetime-local" bind:value={end} required/><br>
   <label for="description">Competition Description</label><br>
-  <!-- <textarea placeholder="Enter details and notes about competition." bind:value={comp_description}></textarea> -->
-  <!-- {#if !hide_submit_button} -->
+  <textarea placeholder="Enter details and notes about competition." bind:value={comp_description}></textarea>
+  {#if !hide_submit_button}
   <p>Note: All fields required. Cannot submit form with empty input.</p>
   <button class="btn variant-filled" type="submit" on:click={submitOptions}>Submit</button>
-  <!-- {/if} -->
+  {/if}
 </form>
 
 {#if show_comp_details === true}
@@ -88,6 +100,7 @@
       <td>{comp_name}</td>
       <td>{start_date}</td>
       <td>{end_date}</td>
+      <td><button on:click={editDetails}>Edit</button></td>
     </tr>
   </table>
 {/if}
