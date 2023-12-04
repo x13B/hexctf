@@ -67,19 +67,13 @@
   <input type="datetime-local" bind:value={start}/><br>
   
   <label for="length">End Date:</label>
-<<<<<<< HEAD
   <input type="datetime-local" bind:value={end} required/><br>
   <label for="description">Competition Description</label><br>
-  <textarea placeholder="Enter details and notes about competition." bind:value={comp_description}></textarea>
-  {#if !hide_submit_button}
+  <!-- <textarea placeholder="Enter details and notes about competition." bind:value={comp_description}></textarea> -->
+  <!-- {#if !hide_submit_button} -->
   <p>Note: All fields required. Cannot submit form with empty input.</p>
   <button class="btn variant-filled" type="submit" on:click={submitOptions}>Submit</button>
-  {/if}
-=======
-  <input type="datetime-local" bind:value={end}/><br>
-  
-  <button type="submit" on:click={submitOptions}>Submit</button>
->>>>>>> parent of d4fa2d7 (updated comp model and working on comp details)
+  <!-- {/if} -->
 </form>
 
 {#if show_comp_details === true}
