@@ -79,7 +79,7 @@
   <textarea placeholder="Enter details and notes about competition." bind:value={comp_description}></textarea>
   {#if !hide_submit_button}
   <p>Note: All fields required. Cannot submit form with empty input.</p>
-  <button type="submit" on:click={submitOptions}>Submit</button>
+  <button class="btn variant-filled" type="submit" on:click={submitOptions}>Submit</button>
   {/if}
 </form>
 

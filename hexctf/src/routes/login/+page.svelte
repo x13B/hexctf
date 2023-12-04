@@ -15,7 +15,7 @@
         <label for="password">Password:</label>
         <input type="password" name="password" id="password" /><br />
         <br />
-        <button type="submit">Login</button>
+        <button class="btn variant-filled" type="submit">Login</button>
     </form>
-    <p>Don't have an account? <a href="/register">Register</a></p>
+    <p>Don't have an account? <a href="/register" class="btn variant-filled">Register</a></p>
 </main>
