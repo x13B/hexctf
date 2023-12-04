@@ -258,17 +258,17 @@
 <br>
 <label for="add">Create New Category: </label>
 <input type="text" name="new-cat" bind:value={newCategory}/>
-<button type="button" on:click={createNewCategory}>Create New</button><br>
+<button type="button" class="btn variant-filled" on:click={createNewCategory}>Create New</button><br>
 
 <h3>QUESTIONS</h3>
 <h3>Search</h3>
 <input type="text" bind:value={searchQuery} placeholder="Search for questions">
-<button on:click={filterQuestions}>Search</button>
+<button class="btn variant-filled" on:click={filterQuestions}>Search</button>
 <p>Click Search button with an empty field to see all questions without any filter</p>
 {#if questions_not_empty == false}
     <h4>Questions Not Available</h4>
 {:else}
-    <table>
+    <table class="table-auto">
         <thead>
           <tr>
             <th>Title</th>
@@ -294,8 +294,10 @@
                       <td><input type="text" bind:value={questions[originalIndex].difficulty} /></td>
                       <td><input type="number" bind:value={questions[originalIndex].points} /></td>
                       <td>
-                          <button on:click={() => saveChanges(originalIndex)}>Save</button>
-                          <button on:click={() => cancelUpdates(originalIndex)}>Cancel</button>
+                          <button class="btn variant-filled" on:click={() => saveChanges(originalIndex)}>Save</button>
+                      </td>
+                      <td>
+                          <button class="btn variant-filled" on:click={() => cancelUpdates(originalIndex)}>Cancel</button>
                       </td>
                   {:else}
                       <td>{question.title}</td>
@@ -315,10 +317,10 @@
                       <td>{question.difficulty}</td>
                       <td>{question.points}</td>
                       <td>
-                          <button on:click={() => startEditing(originalIndex)}>Edit</button>
+                          <button class="btn variant-filled" on:click={() => startEditing(originalIndex)}>Edit</button>
                       </td>
                       <td>
-                        <button on:click={() => deleteQuestion(originalIndex)}>Delete</button>
+                        <button class="btn variant-filled" on:click={() => deleteQuestion(originalIndex)}>Delete</button>
                       </td>
                   {/if}
               </tr>

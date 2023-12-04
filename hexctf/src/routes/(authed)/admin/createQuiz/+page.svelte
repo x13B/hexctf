@@ -119,7 +119,7 @@
 <form action="#">
     <label for="name">ENTER QUIZ NAME: </label>
     <input type="text" bind:value={quiz_name} placeholder="Enter Quiz Name"/>
-    <button on:click={createQuizName}>Submit</button>
+    <button class="btn variant-filled" on:click={createQuizName}>Submit</button>
 </form>
 <br>
 <form action="#">
@@ -139,9 +139,9 @@
             {/each}
         </select>
     {/if}
-    <button type="submit" on:click={addQuestion}>Add Question</button>
+    <button type="submit" class="btn variant-filled" on:click={addQuestion}>Add Question</button>
     <br>
-    <button type="submit" on:click={submitQuiz}>Submit Quiz</button>
+    <button type="submit" class="btn variant-filled" on:click={submitQuiz}>Submit Quiz</button>
 </form>
 
 {#if quizName}
@@ -166,7 +166,7 @@
                 <td><input type="text" bind:value={questions[index].questionBody}></td>
                 <td><input type="text" bind:value={questions[index].questionAnswer}></td>
                 <td>
-                    <button on:click={() => cancelUpdates(index)}>Cancel</button>
+                    <button class="btn variant-filled" on:click={() => cancelUpdates(index)}>Cancel</button>
                 </td>
             </tr>
         {:else}
@@ -175,10 +175,10 @@
                 <td>{question.questionAnswer}</td>
                 <td>{question.category}</td>
                 <td>
-                    <button on:click={() => startEditing(index)}>Edit</button>
+                    <button class="btn variant-filled" on:click={() => startEditing(index)}>Edit</button>
                 </td>
                 <td>
-                    <button on:click={() => deleteQuestion(index)}>Delete</button>
+                    <button class="btn variant-filled" on:click={() => deleteQuestion(index)}>Delete</button>
                 </td>
             </tr>
         {/if}

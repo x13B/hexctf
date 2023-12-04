@@ -226,7 +226,7 @@
   {#if groupsButtonVisible === true && inputVisible === true} 
   Select the number of teams:
   <input type="number" bind:value={numGroups}>
-  <button on:click={hideButton} class="group-button" disabled={numGroups <= 1}>Submit</button>
+  <button on:click={hideButton} class="group-button btn variant-filled" disabled={numGroups <= 1}>Submit</button>
   {/if}
 </form>
 <br>
@@ -235,9 +235,9 @@
 <div>
   {#if showSortButtons === true}
     <strong>Select a sorting method:</strong>
-    <button on:click={easySort}>Easy Sort</button>
-    <button on:click={randomSort}>Random Sort</button>
-    <button on:click={createTeamsManually}>Create Teams (Manually)</button>
+    <button class="btn variant-filled" on:click={easySort}>Easy Sort</button>
+    <button class="btn variant-filled" on:click={randomSort}>Random Sort</button>
+    <button class="btn variant-filled" on:click={createTeamsManually}>Create Teams (Manually)</button>
   {/if}
 </div>
 
@@ -253,7 +253,7 @@
     <br>
     <label for="student-name">Enter Student ID:</label>
     <input type="text" bind:value={student_id}>
-    <button on:click={addStudentToTeam} class="add-to-team-button">Add Student</button>
+    <button on:click={addStudentToTeam} class="add-to-team-button btn variant-filled">Add Student</button>
   </div>
 {/if}
   
@@ -282,9 +282,9 @@
         <input type="text" bind:value={new_name}><br>
         <label for="team-number">Team #:</label>
         <input type="number" bind:value={number}><br>
-        <button on:click={updateTeamName} class="update-name-button">Update Name</button>
+        <button on:click={updateTeamName} class="update-name-button btn variant-filled">Update Name</button>
     </div>
   {/if}
 </div>
-<button on:click={submitTeamsToDB} class="submit-teams-button">Submit Teams</button>
-<button on:click={clearTeams} class="clear-teams-button">Clear Teams</button>
+<button on:click={submitTeamsToDB} class="submit-teams-button btn variant-filled">Submit Teams</button>
+<button on:click={clearTeams} class="clear-teams-button btn variant-filled">Clear Teams</button>
