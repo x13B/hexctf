@@ -136,5 +136,4 @@ model Competition {
   competitionName String
   startDate       String
   endDate         String
-  description     String
 }
