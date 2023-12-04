@@ -8,6 +8,7 @@
   let end: string = "";
   let hide_submit_button: boolean = (data.comp == null) ? false : true;
   let comp_description: string = '';
+  let editing: boolean = false;
 
   let start_date: string = (data.comp?.startDate) ? data.comp.startDate : "";
   let end_date: string = (data.comp?.endDate) ? data.comp.endDate : "";
@@ -67,6 +68,18 @@
     end = end_date;
     show_comp_details = false;
     hide_submit_button = false;
+    editing = true;
+  }
+
+  // Function to handle cancel button click
+  function cancelEdit() {
+    // Reset the input fields to their original values
+    competition_name = '';
+    start = '';
+    end = '';
+    show_comp_details = true; // Show the competition details again
+    hide_submit_button = true; // Hide the submit button
+    editing = false;
   }
 </script>
 
@@ -85,6 +98,9 @@
   {#if !hide_submit_button}
   <p>Note: All fields required. Cannot submit form with empty input.</p>
   <button class="btn variant-filled" type="submit" on:click={submitOptions}>Submit</button>
+  {#if editing}
+    <button on:click={cancelEdit}>Cancel</button>
+  {/if}
   {/if}
 </form>
 
