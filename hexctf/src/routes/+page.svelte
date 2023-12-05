@@ -17,7 +17,6 @@
 
 <h1>{competition.competitionName}</h1>
 <h2>Welcome</h2>
-<!-- <p>{desc}</p> -->
 <div>
 	{@html displayParagraphs()}
 </div>
