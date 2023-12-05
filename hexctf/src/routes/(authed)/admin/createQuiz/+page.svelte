@@ -116,6 +116,8 @@
 </script>
 
 <h1>CREATE A QUIZ PAGE</h1>
+
+
 <form action="#">
     <label for="name">ENTER QUIZ NAME: </label>
     <input type="text" bind:value={quiz_name} placeholder="Enter Quiz Name"/>

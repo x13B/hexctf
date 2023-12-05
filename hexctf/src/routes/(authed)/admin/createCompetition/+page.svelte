@@ -26,11 +26,15 @@
 
     // Assign to new variables to prevent undefined
     let name: string = competition_name;
-
     start = start.toString();
     end = end.toString();
-
+    
     let desc: string = comp_description;
+
+    console.log(desc);
+    if (!name || !start || !end || !desc) {
+      return;
+    }
 
     // Submit options to server file to upload to DB
     try {
@@ -86,14 +90,16 @@
 <h1>Create Competition</h1>
 
 <form action="#">
-  <label for="name">Name of Competition</label>
+  <label for="name">Name of Competition:</label>
   <input type="text" name="comp-name" placeholder="Name of competition" bind:value={competition_name}/><br>
   <label for="length">Start Date:</label>
   <input type="datetime-local" bind:value={start}/><br>
   
   <label for="length">End Date:</label>
   <input type="datetime-local" bind:value={end} required/><br>
-  <label for="description">Competition Description</label><br>
+  <p>
+    Competition Description
+  </p>
   <textarea placeholder="Enter details and notes about competition." bind:value={comp_description}></textarea>
   {#if !hide_submit_button}
   <p>Note: All fields required. Cannot submit form with empty input.</p>
