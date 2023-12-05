@@ -49,7 +49,6 @@ model Teams {
   teamName String       @unique
   points Int            @default(0)
   answers  AnswerQuestions[] @relation("TeamToAnswer")
-  teams Leaderboard? @relation("TeamToLeaderboard")
   members TeamMembers[] @relation("TeamToMembers")
   assigned AssignedQuestions[] @relation("TeamToQuestion")
 
@@ -62,11 +61,6 @@ model TeamMembers {
   user User @relation("TeamToUsers", fields: [userId], references: [id])
   @@unique([teamId, userId])
 
-}
-
-model Leaderboard {
-  teamId  Int    @id
-  teams   Teams  @relation("TeamToLeaderboard", fields: [teamId], references: [teamId])
 }
 
 model Categories {
@@ -86,6 +80,7 @@ model Questions {
   points      Int
   categoryId  Int 
   difficulty  String
+  forfeits    Int   @default(0)
   categories  Categories @relation("CategoryToQuestion", fields: [categoryId], references: [categoryId])
   answers     AnswerQuestions[] @relation("QuestionToAnswer")
   assigned    AssignedQuestions[] @relation("QuestionToTeam")
@@ -94,6 +89,8 @@ model Questions {
 model AnswerQuestions {
   questionId Int 
   teamId     Int
+  createdAt DateTime @default(now())
+  assignedCreatedAt DateTime
   questions  Questions @relation("QuestionToAnswer", fields: [questionId], references: [questionId])
   teams      Teams     @relation("TeamToAnswer", fields: [teamId], references: [teamId])
   @@unique([questionId, teamId])
@@ -102,6 +99,7 @@ model AnswerQuestions {
 model AssignedQuestions {
   questionId Int
   teamId     Int
+  createdAt DateTime @default(now())
   question Questions @relation("QuestionToTeam", fields: [questionId], references: [questionId])
   team Teams @relation("TeamToQuestion", fields: [teamId], references: [teamId])
   @@unique([teamId, questionId])
