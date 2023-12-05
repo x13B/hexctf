@@ -12,6 +12,7 @@
 
   let start_date: string = (data.comp?.startDate) ? data.comp.startDate : "";
   let end_date: string = (data.comp?.endDate) ? data.comp.endDate : "";
+  let comp_desc:string  = (data.comp?.description) ? data.comp.description : "";
   
   // Bound variable for name of competition
   let competition_name: string = '';
@@ -70,6 +71,7 @@
     competition_name = comp_name;
     start = start_date;
     end = end_date;
+    comp_description = comp_desc;
     show_comp_details = false;
     hide_submit_button = false;
     editing = true;
@@ -81,6 +83,7 @@
     competition_name = '';
     start = '';
     end = '';
+    comp_description = '';
     show_comp_details = true; // Show the competition details again
     hide_submit_button = true; // Hide the submit button
     editing = false;
@@ -97,10 +100,26 @@
   
   <label for="length">End Date:</label>
   <input type="datetime-local" bind:value={end} required/><br>
-  <p>
-    Competition Description
-  </p>
-  <textarea placeholder="Enter details and notes about competition." bind:value={comp_description}></textarea>
+
+  <h3>Markdown Instructions</h3>
+  <ol>
+    <li>
+      To bold text, wrap text in #.
+      <ul>
+        <li>Example: #text#</li>
+      </ul>
+    </li>
+    <li>
+      To make a header text, wrap text in !. 
+      <ul>Example: !text!</ul>
+    </li>
+    <li>
+      Paragraphs will formatted automatically.
+    </li>
+  </ol>
+
+  <label for="des">Competition Description</label><br>
+    <textarea placeholder="Enter details and notes about competition." bind:value={comp_description}></textarea>
   {#if !hide_submit_button}
   <p>Note: All fields required. Cannot submit form with empty input.</p>
   <button class="btn variant-filled" type="submit" on:click={submitOptions}>Submit</button>
