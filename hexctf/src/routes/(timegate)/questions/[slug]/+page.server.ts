@@ -46,6 +46,15 @@ async function findNextQuestion(locals: App.Locals, slug: number, difficulty: st
         ansQuesArr.push(obj.questionId);
     }
     //console.log(ansQuesArr);
+    // check to see if there are any questions unanswered
+    // not been answered already
+    const available_question = await prisma.questions.findFirst({
+        where: {
+            categoryId: question.categoryId,
+            questionId: { notIn: ansQuesArr },
+        },
+    })
+    if (available_question === null) {return null}
     // find a new question that is in the new difficulty and same category, but has
     // not been answered already
     const new_question = await prisma.questions.findFirst({
@@ -65,23 +74,23 @@ async function findNextQuestion(locals: App.Locals, slug: number, difficulty: st
         // If this question does not exist, assign a question of a different difficulty
         //console.log("Looking for a new difficulty!");
         if (diffIncrease && new_difficulty === "Hard") {
-            //console.log("No more questions!");
-            //console.log("" + difficulty + " > " + new_difficulty);
-            return null;
+            // console.log("Finding an easier question!");
+            // console.log("" + difficulty + " > " + new_difficulty);
+            return findNextQuestion(locals, slug, new_difficulty, false);
         }
         else if (diffIncrease && new_difficulty !== "Hard") {
-            //console.log("Finding a harder question!");
-            //console.log("" + difficulty + " > " + new_difficulty);
+            // console.log("Finding a harder question!");
+            // console.log("" + difficulty + " > " + new_difficulty);
             return findNextQuestion(locals, slug, new_difficulty, true);
         }
         else if (!diffIncrease && new_difficulty === "Easy") {
-            //console.log("Finding a harder question!");
-            //console.log("" + difficulty + " > " + new_difficulty);
+            // console.log("Finding a harder question!");
+            // console.log("" + difficulty + " > " + new_difficulty);
             return findNextQuestion(locals, slug, new_difficulty, true);
         }
         else {
-            //console.log("Finding an easier question!");
-            //console.log("" + difficulty + " > " + new_difficulty);
+            // console.log("Finding an easier question!");
+            // console.log("" + difficulty + " > " + new_difficulty);
             return findNextQuestion(locals, slug, new_difficulty, false);
         }
     }
