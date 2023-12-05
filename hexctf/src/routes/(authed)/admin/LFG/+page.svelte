@@ -218,7 +218,25 @@
 </script>
 
 <h1>TEAM BUILDER</h1>
-
+<p>
+  Steps to create teams:
+</p>
+<ol>
+    <li>Select the number of teams.</li>
+    <ul>
+      <li>The number of teams must be greater than 1.</li>
+      <li>Once submitted, you can no longer change the number of teams.</li>
+    </ul>
+    <li>Select the sorting method.</li>
+    <ul>
+      <li>The teams can be changed until they are submitted.</li>
+      <li>Easy Sort: Sorts the teams based on score.</li>
+      <li>Random Sort: Sorts the teams randomly.</li>
+      <li>Create Teams (Manually): Choose members of each team.</li>
+    </ul>
+    <li>Team Names must be updated before submitting teams.</li>
+    <li>Select the number of the team that is being updated.</li>
+</ol>
 <!-- This form wil submit the number of groups -->
 <!-- Once submitted, it will hide the button to prevent resubmitting -->
 <!-- The button is disabled until a postive value in entered -->
