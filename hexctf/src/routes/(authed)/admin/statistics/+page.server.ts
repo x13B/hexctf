@@ -20,18 +20,34 @@ export const load = (async ({fetch}) => {
     let final = []
 
     for( let ques of ansQuestions) {
-        const sub = new Date(ques.createdAt).getTime() - new Date(ques.assignedCreatedAt).getTime()
-        final.push([ques.questionId, sub])
+        //console.log(ques.questionId)
+        var min = 0;
+        var max = 0;
+        var avg = 0;
+        var count = 0;
+        for (let ans of ques.answers) {
+            //console.log(ans);
+            count++;
+            var time = new Date(ans.createdAt).getTime() - new Date(ans.assignedCreatedAt).getTime()
+            //console.log(time)
+            avg += time;
+            if (min == 0) {min = time}
+            if (time > max) {max = time}
+            if (time < min) {min = time}
+        }
+        var avg_final = avg / count;
+        //if (Number.isNaN(avg_final)) {avg_final = 0}
+        //console.log(min, avg_final, max)
+        //final.push({"qid": ques.questionId, "min": min, "avg": avg_final, "max": max})
+        questions[ques.questionId - 1]["min"] = min
+        questions[ques.questionId - 1]["avg"] = avg_final
+        questions[ques.questionId - 1]["max"] = max
     }
-    console.log(final)
+    //console.log(final)
 
-    for (let stat of final) {
-
-    }
     
 	return {
         questions,
-        ansQuestions
 	};
 
 }) satisfies PageServerLoad;

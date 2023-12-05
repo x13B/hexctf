@@ -3,8 +3,12 @@ import prisma from '$lib/prisma';
 
 export const GET: RequestHandler = async ({ url }) => {
   try {
-      const ansQuestions = await prisma.answerQuestions.findMany({
-        
+      const ansQuestions = await prisma.questions.findMany({
+          select: {
+            questionId: true,
+            answers: true,
+            
+          }
       });
        
       var status;

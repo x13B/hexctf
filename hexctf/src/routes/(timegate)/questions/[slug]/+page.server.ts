@@ -223,6 +223,16 @@ export const actions = {
         if (!teamOfUser) return fail(400, {
             message: "User is not apart of a team"
         });
+        const updateForfeit = await prisma.questions.update({
+            where: {
+                questionId: Number(slug)
+            },
+            data: {
+                forfeits: {
+                    increment: 1
+                }
+            }
+        })
         const removeAssigned = await prisma.assignedQuestions.delete({
             where: {
                 teamId_questionId: {
