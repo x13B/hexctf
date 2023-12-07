@@ -7,7 +7,7 @@
 
 	function displayParagraphs() {
 		if (!desc) {
-			return;
+			return '';
 		}
 		const bold = /#([^#]+)#/g;
 		const headers = /!([^!]+)!/g;
@@ -25,8 +25,7 @@
 	<title>{competition.competitionName}</title>
 </svelte:head>
 
-<h1>{competition.competitionName}</h1>
-<h2>Welcome</h2>
+<!-- <h1>{competition.competitionName}</h1> -->
 <div>
 	{@html displayParagraphs()}
 </div>
