@@ -11,11 +11,11 @@
 		}
 		const bold = /#([^#]+)#/g;
 		const headers = /!([^!]+)!/g;
-		const italics = /`([^`]+)`/g;
+		const small_header = /@([^@]+)@/g;
 		let formattedDesc = desc.split('\n').map(para => `<p>${para}</p>`).join('');
 		formattedDesc = formattedDesc.replace(bold, `<strong>$1</strong>`);
 		formattedDesc = formattedDesc.replace(headers, `<h1>$1</h1>`)
-		formattedDesc = formattedDesc.replace(italics, `<em>$1</em>`);
+		formattedDesc = formattedDesc.replace(small_header, `<h2>$1</h2>`);
 		
 		return formattedDesc;
 	}
