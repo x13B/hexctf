@@ -19,12 +19,13 @@
 		
 		return formattedDesc;
 	}
+	import homepage_image from "../images/hexctf.jpg";
   </script>
 
 <svelte:head>
 	<title>{competition.competitionName}</title>
 </svelte:head>
-
-<div>
+<main>
+	<img src={homepage_image} alt="HexCTF"/>
 	{@html displayParagraphs()}
-</div>
+</main>
