@@ -35,86 +35,31 @@ async function seed() {
       });
       num += 1;
     }
-    /*const createUser1 = await prisma.user.create({
-      data: {
-        id: '2',
-        username: 'Student 1'
-      }
-    });
-    const createUser2 = await prisma.user.create({
-      data: {
-        id: '3',
-        username: 'Student 2'
-      }
-    });
-    const createUser3 = await prisma.user.create({
-      data: {
-        id: '4',
-        username: 'Student 3'
-      }
-    });
-    const createUser4 = await prisma.user.create({
-      data: {
-        id: '5',
-        username: 'Student 4'
-      }
-    });
-    const createUser5 = await prisma.user.create({
-      data: {
-        id: '6',
-        username: 'Student 5'
-      }
-    });
-    const createUser6 = await prisma.user.create({
-      data: {
-        id: '7',
-        username: 'Student 6'
-      }
-    });
-    const createUser7 = await prisma.user.create({
-      data: {
-        id: '8',
-        username: 'Student 7'
-      }
-    });
-    const createUser8 = await prisma.user.create({
-      data: {
-        id: '9',
-        username: 'Student 8'
-      }
-    });
-    const createUser9 = await prisma.user.create({
-      data: {
-        id: '10',
-        username: 'Student 9'
-      }
-    });
     // =====================================================================
-    */
 
     // THIS IS FOR CATEGORIES ================================================    
     const createcategory = await prisma.categories.create({
       data: {
         categoryId: 1,
-        categoryName: "Math"
+        categoryName: "Neworks"
       }
     });
     const createcategory2 = await prisma.categories.create({
       data: {
         categoryId: 2,
-        categoryName: "Physics"
+        categoryName: "Algorithms"
       }
     });
     const createcategory3 = await prisma.categories.create({
       data: {
         categoryId: 3,
-        categoryName: "Networks"
+        categoryName: "Programming Fundamentals"
       }
     });
     const createcategory4 = await prisma.categories.create({
       data: {
         categoryId: 4,
-        categoryName: "Algorithms"
+        categoryName: "Dockers"
       }
     });
     // =================================================================
@@ -123,90 +68,61 @@ async function seed() {
     const createQuiz = await prisma.quiz.create({
       data: {
         quizId: 1,
-        quizName: "My First Quiz"
+        quizName: "HexCTF Demo Quiz"
       }
     });
     // =================================================================
+
+    // THIS IS FOR COMP DETAILS ========================================
+    const createComp = await prisma.competition.create({
+      data: {
+        competitionId: 1,
+        competitionName: 'HexCTF Demo',
+        startDate: '2023-12-08T10:30',
+        endDate: '2023-12-08T11:00',
+        description: '!Welcome to the HexCTF Demo!',
+      }
+    });
 
     // THIS IS FOR QUIZ QUESTIONS ======================================
     const createQuizQuestion1 = await prisma.quizQuestions.create({
       data: {
         quizQuestionsId: 1,
-        questionBody: "What is 2 + 2?",
-        questionAnswer: "4",
-        hint: "You don't need a hint for this one.",
-        category: "Math",
-        questionValue: 3,
+        questionBody: "Which command is used to check the connectivity between two computers?",
+        questionAnswer: "Ping",
+        hint: "Think of a simple network diagnostic tool that sends packets to a specific IP address to test the connection",
+        category: "Networks",
+        questionValue: 1,
       }
     });
     const createQuizQuestion2 = await prisma.quizQuestions.create({
       data: {
         quizQuestionsId: 2,
-        questionBody: "What is 3 * 1?",
-        questionAnswer: "3",
-        hint: "You really don't need a hint for this one.",
-        category: "Math",
-        questionValue: 3,
+        questionBody: "Which algorithm works by repeatedly dividing the array in half until it finds the target value or determines that it's not present?",
+        questionAnswer: "Binary Search",
+        hint: "Logarithmic time complexity; divides the search space in half.",
+        category: "Algorithms",
+        questionValue: 1,
       }
     });
     const createQuizQuestion3 = await prisma.quizQuestions.create({
       data: {
         quizQuestionsId: 3,
-        questionBody: "What is the force that pulls objects towards Earth's center?",
-        questionAnswer: "gravity",
-        hint: "It's gravity",
-        category: "Physics",
-        questionValue: 3,
+        questionBody: "Which graph traversal algorithm explores all the neighbors of a node before proceeding to its children?",
+        questionAnswer: "BFS",
+        hint: "It's not DFS.",
+        category: "Algorithms",
+        questionValue: 1,
       }
     });
     const createQuizQuestion4 = await prisma.quizQuestions.create({
       data: {
         quizQuestionsId: 4,
-        questionBody: "What is the measure of the amount of matter in an object?",
-        questionAnswer: "mass",
-        hint: "You multiply it by gravitational force to get its weight!",
-        category: "Physics",
-        questionValue: 3,
-      }
-    });
-    const createQuizQuestion5 = await prisma.quizQuestions.create({
-      data: {
-        quizQuestionsId: 5,
-        questionBody: "What does LAN stand for?",
-        questionAnswer: "local area network",
-        hint: "It's in your immediate vicinity.",
-        category: "Networks", 
-        questionValue: 3,
-      }
-    });
-    const createQuizQuestion6 = await prisma.quizQuestions.create({
-      data: {
-        quizQuestionsId: 6,
-        questionBody: "What is the device to connect multiple computers in a network?",
-        questionAnswer: "router",
-        hint: "You could say it provides routes for the network.",
-        category: "Networks",
-        questionValue: 3,
-      }
-    });
-    const createQuizQuestion7 = await prisma.quizQuestions.create({
-      data: {
-        quizQuestionsId: 7,
-        questionBody: "What do you call a data structure that stores elements in a linear order?",
-        questionAnswer: "array",
-        hint: "It can have rows and columns.",
-        category: "Algorithms",
-        questionValue: 3,
-      }
-    });
-    const createQuizQuestion8 = await prisma.quizQuestions.create({
-      data: {
-        quizQuestionsId: 8,
-        questionBody: "What data structure organizes elements in a hierarchical way?",
-        questionAnswer: "tree",
-        hint: "It shares a name with a large plant that consists of a trunk and various branches and leaves.",
-        category: "Algorithms",
-        questionValue: 3,
+        questionBody: "What is the process of hiding the internal implementation details and showing only the necessary functionality to the user?",
+        questionAnswer: "Encapsulation",
+        hint: "Hiding the complexities and exposing only the necessary interfaces to interact with an object-oriented program often involves this principle.",
+        category: "Programming Fundamentals",
+        questionValue: 1,
       }
     });
     // =================================================================
@@ -333,23 +249,6 @@ async function seed() {
     });
     // ===========================================================
 
-    // FOR TEAMS ONLY ========================================
-    // const createTeam1 = await prisma.teams.create({
-    //   data: {
-    //     teamName: 'The A Team',
-    //   }
-    // });
-    // const createTeam2 = await prisma.teams.create({
-    //   data: {
-    //     teamName: 'The B Team',
-    //   }
-    // });
-    // const createTeam3 = await prisma.teams.create({
-    //   data: {
-    //     teamName: 'l33t hax0rs',
-    //     points: 99999,
-    //   }
-    // });
   } catch (error) {
     console.error(error);
   } finally {
