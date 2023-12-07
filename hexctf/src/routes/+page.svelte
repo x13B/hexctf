@@ -3,7 +3,7 @@
   
 	export let data: PageData;
 	let competition = data.competition;
-	let desc: string = (data.comp_timer == null) ? '' : data.competition.description;
+	let desc: string = (data.competition == null) ? '' : data.competition.description;
 
 	function displayParagraphs() {
 		if (!desc) {
@@ -25,7 +25,6 @@
 	<title>{competition.competitionName}</title>
 </svelte:head>
 
-<!-- <h1>{competition.competitionName}</h1> -->
 <div>
 	{@html displayParagraphs()}
 </div>
