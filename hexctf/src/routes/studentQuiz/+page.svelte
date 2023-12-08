@@ -23,7 +23,8 @@
 
         // Checks answers to give score
         for (let i = 1; i < student_answers.length; i++) {
-        if (student_answers[i] === quiz_questions[i-1].questionAnswer) {
+            //console.log(student_answers[i] + " === " + quiz_questions[i-1].questionAnswer)
+        if (student_answers[i] === quiz_questions[i-1].questionAnswer.toLowerCase()) {
             student_score++;
         }
         }

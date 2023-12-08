@@ -79,7 +79,7 @@ async function seed() {
         competitionId: 1,
         competitionName: 'HexCTF Demo',
         startDate: '2023-12-08T10:30',
-        endDate: '2023-12-08T11:00',
+        endDate: '2023-12-08T12:00',
         description: `!Welcome to the HexCTF Demo 2023!\n
         @#Join the Ultimate Cybersecurity Battle#@\n
         Are you ready to immerse yourself in the exhilarating world of cybersecurity? 
@@ -168,21 +168,21 @@ async function seed() {
       data: {
         quizId: 1,
         userId: '3',
-        score: 7
+        score: 2
       }
     });
     const createResult4 = await prisma.quizResults.create({
       data: {
         quizId: 1,
         userId: '4',
-        score: 10
+        score: 3
       }
     });
     const createResult5 = await prisma.quizResults.create({
       data: {
         quizId: 1,
         userId: '5',
-        score: 8
+        score: 2
       }
     });
     const createResult6 = await prisma.quizResults.create({
