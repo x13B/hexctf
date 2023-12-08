@@ -286,6 +286,90 @@ async function seed() {
         difficulty: "Hard"
       }
     });
+    const createQuestion7 = await prisma.questions.create({
+      data: {
+        questionId: 7,
+        title: "Algorithms",
+        description: "What is the process of arranging items in ascending order?",
+        hint: "It's not searching.",
+        hint2: "",
+        hint3: "",
+        answer: "sorting",
+        points: 50,
+        categoryId: 2,
+        difficulty: "Easy"
+      }
+    });
+    const createQuestion8 = await prisma.questions.create({
+      data: {
+        questionId: 8,
+        title: "Sorting",
+        description: "What is the process of exchanging the values of two variables?",
+        hint: "It's not sorting.",
+        hint2: "It's common in most sorting algorithms.",
+        hint3: "",
+        answer: "swap",
+        points: 50,
+        categoryId: 2,
+        difficulty: 'Easy'
+      }
+    });
+    const createQuestion9 = await prisma.questions.create({
+      data: {
+        questionId: 9,
+        title: "Problem Solving",
+        description: "What is the term for an algorithmic problem-solving strategy that exhaustively searches through all possible solutions?",
+        hint: "",
+        hint2: "",
+        hint3: "",
+        answer: "brute force",
+        points: 75,
+        categoryId: 2,
+        difficulty: 'Medium'
+      }
+    });
+    const createQuestion10 = await prisma.questions.create({
+      data: {
+        questionId: 10,
+        title: "Algorithm Techniques",
+        description: "What algorithmic technique involves breaking a problem into smaller subproblems, solving each independently, and combining their solutions?",
+        hint: "",
+        hint2: "",
+        hint3: "",
+        answer: "divide and conquer",
+        points: 75,
+        categoryId: 2,
+        difficulty: 'Medium'
+      }
+    });
+    const createQuestion11 = await prisma.questions.create({
+      data: {
+        questionId: 11,
+        title: "Graph Traversal",
+        description: "Whose algorithm efficiently solves the shortest path problem in a weighted graph from a single source to all other nodes?",
+        hint: "His name is hard to spell.",
+        hint2: "",
+        hint3: "",
+        answer: "djikstras",
+        points: 100,
+        categoryId: 2,
+        difficulty: 'Hard'
+      }
+    });
+    const createQuestion12 = await prisma.questions.create({
+      data: {
+        questionId: 12,
+        title: "Minimum Spanning Tree",
+        description: "Whose algorithm is used to efficiently construct a minimum spanning tree for a connected, undirected graph with weighted edges?",
+        hint: "",
+        hint2: "",
+        hint3: "",
+        answer: "Prims",
+        points: 100,
+        categoryId: 2,
+        difficulty: 'Hard'
+      }
+    });
     
     // ===========================================================
 
