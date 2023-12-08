@@ -115,13 +115,15 @@
     };
 </script>
 
-<h1>CREATE A QUIZ PAGE</h1>
+<main>
+    <div class="container">
+<h1>Create Quiz</h1>
 
 
 <form action="#">
     <label for="name">ENTER QUIZ NAME: </label>
     <input type="text" bind:value={quiz_name} placeholder="Enter Quiz Name"/>
-    <button class="btn variant-filled" on:click={createQuizName}>Submit</button>
+    <button class="btn btn-outline-primary" on:click={createQuizName}>Submit</button>
 </form>
 <br>
 <form action="#">
@@ -141,9 +143,9 @@
             {/each}
         </select>
     {/if}
-    <button type="submit" class="btn variant-filled" on:click={addQuestion}>Add Question</button>
+    <button type="submit" class="btn btn-outline-primary" on:click={addQuestion}>Add Question</button>
     <br>
-    <button type="submit" class="btn variant-filled" on:click={submitQuiz}>Submit Quiz</button>
+    <button type="submit" class="btn btn-outline-primary" on:click={submitQuiz}>Submit Quiz</button>
 </form>
 
 {#if quizName}
@@ -153,7 +155,7 @@
 {#if showQuestions == true}
 <br>
 <label for="selected-questions">SELECTED QUESTIONS</label>
-<table>
+<table class="table table-striped">
     <thead>
     <tr>
         <th>Question</th>
@@ -168,7 +170,7 @@
                 <td><input type="text" bind:value={questions[index].questionBody}></td>
                 <td><input type="text" bind:value={questions[index].questionAnswer}></td>
                 <td>
-                    <button class="btn variant-filled" on:click={() => cancelUpdates(index)}>Cancel</button>
+                    <button class="btn btn-outline-primary" on:click={() => cancelUpdates(index)}>Cancel</button>
                 </td>
             </tr>
         {:else}
@@ -177,10 +179,10 @@
                 <td>{question.questionAnswer}</td>
                 <td>{question.category}</td>
                 <td>
-                    <button class="btn variant-filled" on:click={() => startEditing(index)}>Edit</button>
+                    <button class="btn btn-outline-primary" on:click={() => startEditing(index)}>Edit</button>
                 </td>
                 <td>
-                    <button class="btn variant-filled" on:click={() => deleteQuestion(index)}>Delete</button>
+                    <button class="btn btn-outline-danger" on:click={() => deleteQuestion(index)}>Delete</button>
                 </td>
             </tr>
         {/if}
@@ -188,3 +190,5 @@
     </tbody>
 </table>
 {/if}
+</div>
+</main>

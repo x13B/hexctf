@@ -200,8 +200,10 @@
   }
 </script>
 
+<main>
+<div class="container">
 <form action="#">
-  <h3>Add Questions Form</h3>
+  <h1>Add Questions Form</h1>
   <p>Please give one hint for hard questions, two hints for medium questions, and three hints for easy questions.</p>
   <label for="title">Title:</label>
   <input type="text" bind:value={title}>
@@ -252,23 +254,23 @@
      -->
   </select>
   <br>
-  <button on:click={addCompQuestion}>Add</button>
+  <button class="btn btn-outline-primary" on:click={addCompQuestion}>Add</button>
 </form>
 
 <br>
 <label for="add">Create New Category: </label>
 <input type="text" name="new-cat" bind:value={newCategory}/>
-<button type="button" class="btn variant-filled" on:click={createNewCategory}>Create New</button><br>
+<button type="button" class="btn btn-outline-primary" on:click={createNewCategory}>Create New</button><br>
 
 <h3>QUESTIONS</h3>
 <h3>Search</h3>
 <input type="text" bind:value={searchQuery} placeholder="Search for questions">
-<button class="btn variant-filled" on:click={filterQuestions}>Search</button>
+<button class="btn btn-outline-primary" on:click={filterQuestions}>Search</button>
 <p>Click Search button with an empty field to see all questions without any filter</p>
 {#if questions_not_empty == false}
     <h4>Questions Not Available</h4>
 {:else}
-    <table class="table-auto">
+    <table class="table table-striped">
         <thead>
           <tr>
             <th>Title</th>
@@ -294,10 +296,10 @@
                       <td><input type="text" bind:value={questions[originalIndex].difficulty} /></td>
                       <td><input type="number" bind:value={questions[originalIndex].points} /></td>
                       <td>
-                          <button class="btn variant-filled" on:click={() => saveChanges(originalIndex)}>Save</button>
+                          <button class="btn btn-outline-primary" on:click={() => saveChanges(originalIndex)}>Save</button>
                       </td>
                       <td>
-                          <button class="btn variant-filled" on:click={() => cancelUpdates(originalIndex)}>Cancel</button>
+                          <button class="btn btn-outline-danger" on:click={() => cancelUpdates(originalIndex)}>Cancel</button>
                       </td>
                   {:else}
                       <td>{question.title}</td>
@@ -317,10 +319,10 @@
                       <td>{question.difficulty}</td>
                       <td>{question.points}</td>
                       <td>
-                          <button class="btn variant-filled" on:click={() => startEditing(originalIndex)}>Edit</button>
+                          <button class="btn btn-outline-primary" on:click={() => startEditing(originalIndex)}>Edit</button>
                       </td>
                       <td>
-                        <button class="btn variant-filled" on:click={() => deleteQuestion(originalIndex)}>Delete</button>
+                        <button class="btn btn-outline-danger" on:click={() => deleteQuestion(originalIndex)}>Delete</button>
                       </td>
                   {/if}
               </tr>
@@ -328,3 +330,5 @@
         </tbody>
       </table>      
 {/if}
+</div>
+</main>

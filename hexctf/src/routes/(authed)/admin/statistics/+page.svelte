@@ -8,9 +8,10 @@
 </script>
 
 <main>
+    <div class="container">
     <h1>Statistics</h1>
 
-    <table>
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th colspan="2"></th>
@@ -36,4 +37,5 @@
             {/each}
         </tbody>
     </table>
+</div>
 </main>

@@ -26,6 +26,8 @@
 	<title>{competition.competitionName}</title>
 </svelte:head>
 <main>
-	<img src={homepage_image} alt="HexCTF"/>
-	{@html displayParagraphs()}
+	<div class="container">
+		<img src={homepage_image} alt="HexCTF"/>
+		{@html displayParagraphs()}
+</div>
 </main>

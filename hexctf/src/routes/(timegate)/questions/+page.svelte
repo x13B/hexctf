@@ -6,15 +6,23 @@
   
 </script>
 
+<main>
+  <div class="container">
 <h1>Questions</h1>
-<ul>
     {#each questions as q (q.categoryId)}
-      <li><h3>{q.categoryName}</h3></li>
+    <div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">{q.categoryName}</h5>
       {#each q.questions as ques}
-        <ul><a href="/questions/{ques.questionId}">{ques.title}</a> - {ques.points} points</ul>
+        <a href="/questions/{ques.questionId}">
+          <h6 class="card-subtitle mb-2 text-body-secondary">{ques.title}</h6>
+        </a>
+        <p class="card-text">{ques.points} points</p>
       {:else}
-      <ul>No more questions in this category!</ul>
+      <p class="card-text">No more questions in this category!</p>
       {/each}
+      </div></div>
       <br>
     {/each}
-</ul>
+</div>
+</main>

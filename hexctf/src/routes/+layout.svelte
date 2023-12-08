@@ -52,38 +52,44 @@
 </script>
 
 <header class="header">
-  <nav class="nav">
-    <div class="nav-left">
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/questions">Questions</a></li>
-        <li><a href="/board">Leaderboard</a></li>
+  <nav class="nav navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container">
+    <div class="nav-left collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/questions">Questions</a></li>
+        <li class="nav-item"><a class="nav-link" href="/board">Leaderboard</a></li>
         {#if data.isAdmin}
-          <li><a href="/admin">Admin Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="/admin">Admin Dashboard</a></li>
         {:else}
-          <li><a href="/studentQuiz">Quiz</a></li>
+          <li class="nav-item"><a class="nav-link" href="/studentQuiz">Quiz</a></li>
         {/if}
 
         {#if start_timer}
-          <li>{countdown}</li>
+          <li class="nav-item">
+            <span class="navbar-text">
+              {countdown}
+            </span>
+          </li>
         {/if}
       </ul>
     </div>
-    <div class="nav-right">
+    <div class="nav-right" id="navbarNav">
       <ul>
         {#if !data.session}
-          <li><a href="/login">Login</a></li>
-          <li><a href="/register">Register</a></li>
+          <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
         {:else}
           <li>
             <form method="post" action="/api/logout?/logout" use:enhance>
-              <input type="submit" value="Sign out" />
+              <input class="btn btn-outline-secondary"type="submit" value="Sign out" />
             </form>
           </li>
-          <li>Welcome, {data.name}</li>
+          <li class="nav-item"><span class="navbar-text">Welcome, {data.name}</span></li>
         {/if}
       </ul>
     </div>
+  </div>
   </nav>
 </header>
 

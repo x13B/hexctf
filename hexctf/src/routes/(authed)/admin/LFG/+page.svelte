@@ -216,8 +216,9 @@
     team_names = [...team_names];
   }
 </script>
-
-<h1>TEAM BUILDER</h1>
+<main>
+  <div class="container">
+<h1>Team Builder</h1>
 <p>
   Steps to create teams:
 </p>
@@ -244,7 +245,7 @@
   {#if groupsButtonVisible === true && inputVisible === true} 
   Select the number of teams:
   <input type="number" bind:value={numGroups}>
-  <button on:click={hideButton} class="group-button btn variant-filled" disabled={numGroups <= 1}>Submit</button>
+  <button on:click={hideButton} class="group-button btn btn-outline-primary" disabled={numGroups <= 1}>Submit</button>
   {/if}
 </form>
 <br>
@@ -306,3 +307,5 @@
 </div>
 <button on:click={submitTeamsToDB} class="submit-teams-button btn variant-filled">Submit Teams</button>
 <button on:click={clearTeams} class="clear-teams-button btn variant-filled">Clear Teams</button>
+</div>
+</main>
