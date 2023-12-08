@@ -254,9 +254,9 @@
 <div>
   {#if showSortButtons === true}
     <strong>Select a sorting method:</strong>
-    <button class="btn variant-filled" on:click={easySort}>Easy Sort</button>
-    <button class="btn variant-filled" on:click={randomSort}>Random Sort</button>
-    <button class="btn variant-filled" on:click={createTeamsManually}>Create Teams (Manually)</button>
+    <button class="btn btn-outline-primary" on:click={easySort}>Easy Sort</button>
+    <button class="btn btn-outline-primary" on:click={randomSort}>Random Sort</button>
+    <button class="btn btn-outline-primary" on:click={createTeamsManually}>Create Teams (Manually)</button>
   {/if}
 </div>
 
@@ -301,11 +301,11 @@
         <input type="text" bind:value={new_name}><br>
         <label for="team-number">Team #:</label>
         <input type="number" bind:value={number}><br>
-        <button on:click={updateTeamName} class="update-name-button btn variant-filled">Update Name</button>
+        <button on:click={updateTeamName} class="update-name-button btn btn-outline-primary">Update Name</button>
     </div>
   {/if}
 </div>
-<button on:click={submitTeamsToDB} class="submit-teams-button btn variant-filled">Submit Teams</button>
-<button on:click={clearTeams} class="clear-teams-button btn variant-filled">Clear Teams</button>
+<button on:click={submitTeamsToDB} class="submit-teams-button btn btn-outline-primary">Submit Teams</button>
+<button on:click={clearTeams} class="clear-teams-button btn btn-outline-primary">Clear Teams</button>
 </div>
 </main>
