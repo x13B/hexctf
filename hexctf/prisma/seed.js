@@ -373,7 +373,7 @@ async function seed() {
     const createQuestion13 = await prisma.questions.create({
       data: {
         questionId: 13,
-        title: "Networks",
+        title: "Protocols I",
         description: "What protocol is used for sending emails?",
         hint: "",
         hint2: "",
@@ -388,7 +388,7 @@ async function seed() {
     const createQuestion14 = await prisma.questions.create({
       data: {
         questionId: 14,
-        title: "Networks",
+        title: "Network Hardware I",
         description: "What device forwards data packets between networks?",
         hint: "",
         hint2: "",
@@ -402,7 +402,7 @@ async function seed() {
     const createQuestion15 = await prisma.questions.create({
       data: {
         questionId: 15,
-        title: "Programming",
+        title: "90% of Coding",
         description: "What is the process of finding and fixing errors in a program called?",
         hint: "",
         hint2: "",
