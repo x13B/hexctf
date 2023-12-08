@@ -18,6 +18,12 @@
   <div class="container">
   <h2>{question?.title}</h2>
   <p>{question?.description}</p>
+  {#if dockerState?.containerStatus === "running"}
+    <p>{dockerState.containerIp}:{dockerState.containerPort}</p>
+    <p>{dockerState.containerInfo}</p>
+    {:else}
+    <p>container is offline</p>
+  {/if}
       <p>{question?.points} Points</p>
 
       {#if question.hint != ""}

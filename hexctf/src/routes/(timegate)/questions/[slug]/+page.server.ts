@@ -2,7 +2,6 @@ import prisma from "$lib/prisma";
 import { fail, redirect, error } from "@sveltejs/kit";
 import type { PageServerLoad, Actions } from './$types';
 
-
 async function findNextQuestion(locals: App.Locals, slug: number, difficulty: string, diffIncrease: boolean): Promise<any> {
     try{
     // increase or decrease the difficulty depending on the diffIncrease bool    
@@ -149,10 +148,18 @@ export const load = (async ({ locals, params: { slug }, fetch }) => {
     }
 
     async function fetchDockerState() {
-        const response = await fetch('/api/questions/' + slug + '/dockerstate', { method: 'GET' });
-        const data = await response.json();
-        
-        return data.dockerState;
+        const team = await fetchTeam()
+
+        // get dockerState for question from prisma using questionId and teamId composite
+        const dockerState = await prisma.dockerState.findUnique({
+           where: {
+                teamId_questionId: {
+                     teamId: team.teamId,
+                     questionId: Number(slug),
+                }
+           }
+        });
+        return dockerState;
     }
 
     // Check if the question is assigned or if it has been answered
@@ -175,7 +182,7 @@ export const load = (async ({ locals, params: { slug }, fetch }) => {
 
 
 export const actions = {
-    answerQues: async ({locals, request, params: { slug }}) => {
+    answerQues: async ({fetch, locals, request, params: { slug }}) => {
         const session = await locals.auth.validate();
         if (!session)  throw redirect(302, "/login");
         //const user = await auth.getUser(session.user.userId);
@@ -249,7 +256,33 @@ export const actions = {
                             teamId: teamOfUser.teamId,
                         }
                     })
+
+                    // start the new docker container
+                    const response2 = await fetch('/api/docker/containers/start', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ questionId: nextQuestion.questionId, teamId: teamOfUser.teamId })
+                    });
+
+                    const result2 = await response2.json();
+                    console.log(result2);
                 }
+
+                // stop the docker container
+                const response = await fetch('/api/docker/containers/stop', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ questionId: Number(slug), teamId: teamOfUser.teamId })
+                });
+
+                const result = await response.json();
+                console.log(result);
+
+                
                 return {response: true}
             }
             else {

@@ -39,6 +39,16 @@ export const actions = {
                         teamId: team.teamId,
                     },
                 })
+                // send start request to docker container
+                const response = await fetch('/api/docker/containers/start', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ questionId: Number(ques), teamId: team.teamId })
+                });
+                const result = await response.json();
+                console.log(result);
             }
         }
     }
