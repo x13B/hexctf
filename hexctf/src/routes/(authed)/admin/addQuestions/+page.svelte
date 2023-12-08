@@ -5,6 +5,7 @@
   
   // Holds categories from DB
   let categories: any[] = data.categories;
+  let dockers: any[] = data.dockers;
   let newCategory: string = "";
   let questions: any[] = data.questions;
   let questions_not_empty: boolean = (questions.length > 0) ? true : false;
@@ -126,16 +127,19 @@
   let points: number = 0;
   let difficulty: string = "";
   let category: number = 0;
+  let docker: number = 0;
 
   const addCompQuestion = async () => {
     let cat = category;
+
+    console.log({title, question, hint, hint2, hint3, answer, points, difficulty, cat, docker})
 
     const res = await fetch("/api/addQuestion", {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json',
       },
-      body: JSON.stringify({title, question, hint, hint2, hint3, answer, points, difficulty, cat}),
+      body: JSON.stringify({title, question, hint, hint2, hint3, answer, points, difficulty, cat, docker}),
     })
 
     let qID = questions[questions.length-1].questionId + 1;
@@ -245,13 +249,15 @@
   </select>
   <br>
  <label for="docker">Docker:</label>
-  <select name="docker">
-    <!--   {#each dockers as docker}
-        <option value={cat.categoryId}>{cat.categoryName}</option>
+  <select name="docker" bind:value={docker}>
+    {#if dockers.length > 0}
+      {#each dockers as docker (docker.imageId)}
+        <option value={docker.imageId}>{docker.imageName}</option>
       {/each}
+        <option value="">None</option>
     {:else}
       <option value="">No Categories Available</option>
-     -->
+      {/if}
   </select>
   <br>
   <button class="btn btn-outline-primary" on:click={addCompQuestion}>Add</button>

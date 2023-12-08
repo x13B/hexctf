@@ -4,7 +4,7 @@ import { json } from "@sveltejs/kit";
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
     try {
-        const {title, question, hint, hint2, hint3, answer, points, difficulty, cat } = await request.json();
+        const {title, question, hint, hint2, hint3, answer, points, difficulty, cat, docker } = await request.json();
         
         const res = await prisma.questions.create({
             data: {
@@ -17,6 +17,11 @@ export async function POST({ request }) {
                 points: points,
                 difficulty: difficulty,
                 categoryId: cat,
+                docker: {
+                    connect: {
+                        imageId: docker
+                    }
+                }
             }
         })
 

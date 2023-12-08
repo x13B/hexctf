@@ -23,6 +23,10 @@ export async function GET() {
         // get all the teams from db
         const teams = await prisma.teams.findMany();
 
+        if (teams.length === 0) {
+            return json({ error: 'No teams found.' }, { status: 404 });
+        }
+
         // get all the base images from dockerstate
         const baseImages = await prisma.dockerState.findMany({
             where: {
@@ -32,6 +36,12 @@ export async function GET() {
 
         for (const team of teams) {
             for (const baseImage of baseImages) {
+
+                if (baseImage.questionId === null) {
+                    console.log(`Skipping base image ${baseImage.imageName} because it has no associated question.`);
+                    continue;
+                }
+
                 const password = crypto.randomBytes(12).toString('hex').slice(0, 12)
                 const stream = await docker.buildImage({
                     context: baseImage.imagePath,
@@ -66,7 +76,12 @@ export async function GET() {
                                 teamId: team.teamId
                             },
                         },
-                        containerInfo: `Login to ssh with these credentials: ${team.teamId}:${password}`
+                        containerInfo: `Credentials: team-${team.teamId}:${password}`,
+                        question: {
+                            connect: {
+                                questionId: baseImage.questionId
+                            }
+                        }
                     },
                 });
             }
