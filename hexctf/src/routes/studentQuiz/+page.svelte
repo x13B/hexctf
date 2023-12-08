@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { PageData } from "../studentQuiz/$types";
     export let data: PageData;
-    let users_name: string = (data.username) ? data.username : "";
+
     let quiz_taken: boolean = (data.quiz_results == null) ? false : true;
 
     let quiz_questions: any[] = (data.quizQuestions) ? data.quizQuestions : [];
@@ -59,25 +59,25 @@
         // This function should redirect student to Questions page for Competition
     }
 </script>
-
+<main>
+    <div class="container">
 <h1>Student Quiz Page</h1>
-<h1>TEAM BUILDER (STUDENT)</h1>
-<h1>WELCOME: {users_name}</h1>
-<br>
 {#if quiz_taken === false}
-    <h1>YOU HAVE NOT TAKEN THE QUIZ YET!</h1>
+    <h2>YOU HAVE NOT TAKEN THE QUIZ YET!</h2>
     <div>
     <form on:submit|preventDefault class="student-quiz-form">
         {#each quiz_questions as question (question.quizQuestionsId)}
         <p>Question: {question.questionBody}</p>
-        <input type="text" bind:value={student_answers[question.quizQuestionsId]}>
+        <input class="form-control" type="text" bind:value={student_answers[question.quizQuestionsId]}>
         {/each}
         <br>
-        <button on:click={scoreQuiz} class="submit-quiz-button">Submit Quiz</button>
+        <button on:click={scoreQuiz} class="submit-quiz-button btn btn-outline-secondary">Submit Quiz</button>
     </form>
     </div>
 {:else}
     <div>
-    <h1>Quiz Taken!</h1>
+    <h2>Quiz Taken!</h2>
     </div>
 {/if}
+</div>
+</main>

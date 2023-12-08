@@ -31,7 +31,7 @@ async function findNextQuestion(locals: App.Locals, slug: number, difficulty: st
     const teamOfUser = await prisma.teamMembers.findUnique({
         where: { userId: session.user.userId }
     });
-    if (teamOfUser === null) throw error(404, "User is not in a team");
+    if (teamOfUser === null) throw error(403, "User is not in a team");
     // find the team's answered questions
     const answeredQuestions = await prisma.answerQuestions.findMany({
         where: {
@@ -46,6 +46,15 @@ async function findNextQuestion(locals: App.Locals, slug: number, difficulty: st
         ansQuesArr.push(obj.questionId);
     }
     //console.log(ansQuesArr);
+    // check to see if there are any questions unanswered
+    // not been answered already
+    const available_question = await prisma.questions.findFirst({
+        where: {
+            categoryId: question.categoryId,
+            questionId: { notIn: ansQuesArr },
+        },
+    })
+    if (available_question === null) {return null}
     // find a new question that is in the new difficulty and same category, but has
     // not been answered already
     const new_question = await prisma.questions.findFirst({
@@ -65,23 +74,23 @@ async function findNextQuestion(locals: App.Locals, slug: number, difficulty: st
         // If this question does not exist, assign a question of a different difficulty
         //console.log("Looking for a new difficulty!");
         if (diffIncrease && new_difficulty === "Hard") {
-            //console.log("No more questions!");
-            //console.log("" + difficulty + " > " + new_difficulty);
-            return null;
+            // console.log("Finding an easier question!");
+            // console.log("" + difficulty + " > " + new_difficulty);
+            return findNextQuestion(locals, slug, new_difficulty, false);
         }
         else if (diffIncrease && new_difficulty !== "Hard") {
-            //console.log("Finding a harder question!");
-            //console.log("" + difficulty + " > " + new_difficulty);
+            // console.log("Finding a harder question!");
+            // console.log("" + difficulty + " > " + new_difficulty);
             return findNextQuestion(locals, slug, new_difficulty, true);
         }
         else if (!diffIncrease && new_difficulty === "Easy") {
-            //console.log("Finding a harder question!");
-            //console.log("" + difficulty + " > " + new_difficulty);
+            // console.log("Finding a harder question!");
+            // console.log("" + difficulty + " > " + new_difficulty);
             return findNextQuestion(locals, slug, new_difficulty, true);
         }
         else {
-            //console.log("Finding an easier question!");
-            //console.log("" + difficulty + " > " + new_difficulty);
+            // console.log("Finding an easier question!");
+            // console.log("" + difficulty + " > " + new_difficulty);
             return findNextQuestion(locals, slug, new_difficulty, false);
         }
     }
@@ -193,10 +202,22 @@ export const actions = {
                 // Create an AnswerQuestion record with the question's id and team's id
                 //      The team's id is taken from the user's model, the person logged in
                 // Update the team's points with the point value of the question
+                const getAssigned = await prisma.assignedQuestions.findUnique({
+                    where: {
+                        teamId_questionId: {
+                            teamId: teamOfUser.teamId,
+                            questionId: Number(slug),
+                        }
+                    }
+                })
+                if (!getAssigned) throw error(404)
+                const assignedCreated = getAssigned.createdAt;
+                //console.log(assignedCreated);
                 const ans = await prisma.answerQuestions.create({
                     data: {
                         questionId: Number(slug),
                         teamId: teamOfUser.teamId,
+                        assignedCreatedAt: assignedCreated
                     },
                 })
                 const updatePoints = await prisma.teams.update({
@@ -250,6 +271,16 @@ export const actions = {
         if (!teamOfUser) return fail(400, {
             message: "User is not apart of a team"
         });
+        const updateForfeit = await prisma.questions.update({
+            where: {
+                questionId: Number(slug)
+            },
+            data: {
+                forfeits: {
+                    increment: 1
+                }
+            }
+        })
         const removeAssigned = await prisma.assignedQuestions.delete({
             where: {
                 teamId_questionId: {

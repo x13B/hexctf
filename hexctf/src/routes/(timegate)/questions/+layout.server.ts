@@ -18,9 +18,9 @@ export async function load({fetch}) {
     const timeDifferenceAfter = now - endTime;
     
     if (timeDifferenceBefore > 0) {
-        throw error(404, "Competition has not begun");
+        throw error(403, "Competition has not begun");
     } else if(timeDifferenceAfter > 0) {
-        throw error(404, "Competition is over!");
+        throw error(403, "Competition is over!");
     }
 
 

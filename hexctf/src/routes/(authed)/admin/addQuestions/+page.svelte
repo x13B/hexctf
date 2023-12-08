@@ -66,8 +66,6 @@
         let difficulty = questions[index].difficulty;
         let points = questions[index].points;
 
-        console.log(id, title, description, hint, hint2, hint3, answer, difficulty, points);
-
         const res = await fetch('/api/updateQuestion', {
             method: 'PUT',
             headers: {
@@ -79,6 +77,8 @@
         if (res.ok) {
             console.log('Question updated successfully in the database');
             editingRow = null; // Exit edit mode
+
+            questions = [...questions]; // TESTING
         } else {
             console.error('Failed to update question in the database:', res.statusText);
             // Handle error or display a message
@@ -108,14 +108,13 @@
 
       if (res.ok) {
         console.log("The question has been deleted!");
+
+        questions.splice(index, 1); // TESTING
+        questions = [...questions]; // TESTING
       }
     } catch (error) {
       console.log("Error occured trying to delete question: ", error);
     }
-  
-    questions.splice(index, 1);
-    questions = [...questions];
-    console.log(questions);
   }
 
   let title: string = "";
@@ -129,12 +128,7 @@
   let category: number = 0;
 
   const addCompQuestion = async () => {
-    console.log(title, question, hint, hint2, hint3, answer, points, difficulty, category);
-    // let cat: string = categories[category-1].categoryName;
     let cat = category;
-    //let hint = "";
-    //let hint2 = "";
-    //let hint3 = "";
 
     const res = await fetch("/api/addQuestion", {
       method: 'POST',
@@ -173,11 +167,43 @@
     category = 0;
   }
 
-  console.log(questions);
+  let searchQuery: string = "";
+
+  function filteredQuestionsWithIndex() {
+    if (questions.length === 0) {
+      return []; // Return an empty array if there are no questions
+    }
+
+    if (searchQuery === '') {
+      return questions.map((question, index) => ({ originalIndex: index, question }));
+    } else {
+      // Filter questions based on the search query and store their original index
+      return questions.map((question, index) => ({ originalIndex: index, question })).filter(({ question }) => {
+        return (
+          question.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          question.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          question.answer.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          question.difficulty.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      });
+    }
+  }
+
+  let filteredResults: any[] = [];
+  const updateFilteredQuestions = () => {
+    filteredResults = filteredQuestionsWithIndex();
+  }
+
+  // Function to handle filtering when the "Filter" button is clicked
+  const filterQuestions = () => {
+    updateFilteredQuestions(); // Update the filtered results based on the search query
+  }
 </script>
 
+<main>
+<div class="container">
 <form action="#">
-  <h3>Add Questions Form</h3>
+  <h1>Add Questions Form</h1>
   <p>Please give one hint for hard questions, two hints for medium questions, and three hints for easy questions.</p>
   <label for="title">Title:</label>
   <input type="text" bind:value={title}>
@@ -228,20 +254,23 @@
      -->
   </select>
   <br>
-  <button on:click={addCompQuestion}>Add</button>
+  <button class="btn btn-outline-primary" on:click={addCompQuestion}>Add</button>
 </form>
 
 <br>
 <label for="add">Create New Category: </label>
 <input type="text" name="new-cat" bind:value={newCategory}/>
-<button type="button" on:click={createNewCategory}>Create New</button><br>
+<button type="button" class="btn btn-outline-primary" on:click={createNewCategory}>Create New</button><br>
 
 <h3>QUESTIONS</h3>
 <h3>Search</h3>
+<input type="text" bind:value={searchQuery} placeholder="Search for questions">
+<button class="btn btn-outline-primary" on:click={filterQuestions}>Search</button>
+<p>Click Search button with an empty field to see all questions without any filter</p>
 {#if questions_not_empty == false}
     <h4>Questions Not Available</h4>
 {:else}
-    <table>
+    <table class="table table-striped">
         <thead>
           <tr>
             <th>Title</th>
@@ -255,35 +284,45 @@
           </tr>
         </thead>
         <tbody>
-          {#each questions as question, index (question.questionId)}
+          {#each filteredResults as { originalIndex, question}}
               <tr>
-                  {#if editingRow === index}
-                      <td><input type="text" bind:value={questions[index].title} /></td>
-                      <td><input type="text" bind:value={questions[index].description} /></td>
-                      <td><input type="text" bind:value={questions[index].hint} /></td>
-                      <td><input type="text" bind:value={questions[index].hint2} /></td>
-                      <td><input type="text" bind:value={questions[index].hint3} /></td>
-                      <td><input type="text" bind:value={questions[index].answer}></td>
-                      <td><input type="text" bind:value={questions[index].difficulty} /></td>
-                      <td><input type="number" bind:value={questions[index].points} /></td>
+                  {#if editingRow === originalIndex}
+                      <td><input type="text" bind:value={questions[originalIndex].title} /></td>
+                      <td><input type="text" bind:value={questions[originalIndex].description} /></td>
+                      <td><input type="text" bind:value={questions[originalIndex].hint} /></td>
+                      <td><input type="text" bind:value={questions[originalIndex].hint2} /></td>
+                      <td><input type="text" bind:value={questions[originalIndex].hint3} /></td>
+                      <td><input type="text" bind:value={questions[originalIndex].answer}></td>
+                      <td><input type="text" bind:value={questions[originalIndex].difficulty} /></td>
+                      <td><input type="number" bind:value={questions[originalIndex].points} /></td>
                       <td>
-                          <button on:click={() => saveChanges(index)}>Save</button>
-                          <button on:click={() => cancelUpdates(index)}>Cancel</button>
+                          <button class="btn btn-outline-primary" on:click={() => saveChanges(originalIndex)}>Save</button>
+                      </td>
+                      <td>
+                          <button class="btn btn-outline-danger" on:click={() => cancelUpdates(originalIndex)}>Cancel</button>
                       </td>
                   {:else}
                       <td>{question.title}</td>
                       <td>{question.description}</td>
                       <td>{question.hint}</td>
+                      {#if question.hint2 == ""}
+                      <td>None</td>
+                      {:else}
                       <td>{question.hint2}</td>
+                      {/if}
+                      {#if question.hint3 == ""}
+                      <td>None</td>
+                      {:else}
                       <td>{question.hint3}</td>
+                      {/if}
                       <td>{question.answer}</td>
                       <td>{question.difficulty}</td>
                       <td>{question.points}</td>
                       <td>
-                          <button on:click={() => startEditing(index)}>Edit</button>
+                          <button class="btn btn-outline-primary" on:click={() => startEditing(originalIndex)}>Edit</button>
                       </td>
                       <td>
-                        <button on:click={() => deleteQuestion(index)}>Delete</button>
+                        <button class="btn btn-outline-danger" on:click={() => deleteQuestion(originalIndex)}>Delete</button>
                       </td>
                   {/if}
               </tr>
@@ -291,3 +330,5 @@
         </tbody>
       </table>      
 {/if}
+</div>
+</main>

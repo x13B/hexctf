@@ -3,9 +3,6 @@
 
   /** @type {import('./$types').PageData} */
   export let data: PageData; 
-  // const usersid: string = data.userId;
-  const users_name: string = data.username;
-  const user_is_admin: boolean = data.isAdmin;
 
   let sortUsed: string = '';
 
@@ -219,78 +216,96 @@
     team_names = [...team_names];
   }
 </script>
+<main>
+  <div class="container">
+<h1>Team Builder</h1>
+<p>
+  Steps to create teams:
+</p>
+<ol>
+    <li>Select the number of teams.</li>
+    <ul>
+      <li>The number of teams must be greater than 1.</li>
+      <li>Once submitted, you can no longer change the number of teams.</li>
+    </ul>
+    <li>Select the sorting method.</li>
+    <ul>
+      <li>The teams can be changed until they are submitted.</li>
+      <li>Easy Sort: Sorts the teams based on score.</li>
+      <li>Random Sort: Sorts the teams randomly.</li>
+      <li>Create Teams (Manually): Choose members of each team.</li>
+    </ul>
+    <li>Team Names must be updated before submitting teams.</li>
+    <li>Select the number of the team that is being updated.</li>
+</ol>
+<!-- This form wil submit the number of groups -->
+<!-- Once submitted, it will hide the button to prevent resubmitting -->
+<!-- The button is disabled until a postive value in entered -->
+<form on:submit|preventDefault>
+  {#if groupsButtonVisible === true && inputVisible === true} 
+  Select the number of teams:
+  <input type="number" bind:value={numGroups}>
+  <button on:click={hideButton} class="group-button btn btn-outline-primary" disabled={numGroups <= 1}>Submit</button>
+  {/if}
+</form>
+<br>
 
-{#if user_is_admin === true}
-  <h1>TEAM BUILDER (ADMIN)</h1>
-  <h1>WELCOME: {users_name}</h1>
+<!-- Check to see if the number of groups is valid before sorting teams -->
+<div>
+  {#if showSortButtons === true}
+    <strong>Select a sorting method:</strong>
+    <button class="btn variant-filled" on:click={easySort}>Easy Sort</button>
+    <button class="btn variant-filled" on:click={randomSort}>Random Sort</button>
+    <button class="btn variant-filled" on:click={createTeamsManually}>Create Teams (Manually)</button>
+  {/if}
+</div>
 
-  <!-- This form wil submit the number of groups -->
-  <!-- Once submitted, it will hide the button to prevent resubmitting -->
-  <!-- The button is disabled until a postive value in entered -->
-  <form on:submit|preventDefault>
-    {#if groupsButtonVisible === true && inputVisible === true} 
-    Select the number of teams:
-    <input type="number" bind:value={numGroups}>
-    <button on:click={hideButton} class="group-button" disabled={numGroups <= 1}>Submit</button>
-    {/if}
-  </form>
-  <br>
-
-  <!-- Check to see if the number of groups is valid before sorting teams -->
-  <div>
-    {#if showSortButtons === true}
-      <strong>Select a sorting method:</strong>
-      <button on:click={easySort}>Easy Sort</button>
-      <button on:click={randomSort}>Random Sort</button>
-      <button on:click={createTeamsManually}>Create Teams (Manually)</button>
-    {/if}
-  </div>
-
-  {#if show_manual_teams_form === true}
-    <div id="manual-teams">
-      <h2>This form will let the admin create teams manually!</h2>
-      {#each userScores as score (score.userId)}
-        Student ID: <strong>{score.userId}</strong> Score: <strong>{score.score}</strong>
-        <br>
-      {/each}
-      <label for="team#">Enter Team #:</label>
-      <input type="number" bind:value={team_number}>
+{#if show_manual_teams_form === true}
+  <div id="manual-teams">
+    <h2>This form will let the admin create teams manually!</h2>
+    {#each userScores as score (score.userId)}
+      Student ID: <strong>{score.userId}</strong> Score: <strong>{score.score}</strong>
       <br>
-      <label for="student-name">Enter Student ID:</label>
-      <input type="text" bind:value={student_id}>
-      <button on:click={addStudentToTeam} class="add-to-team-button">Add Student</button>
-    </div>
-    {/if}
-    
+    {/each}
+    <label for="team#">Enter Team #:</label>
+    <input type="number" bind:value={team_number}>
+    <br>
+    <label for="student-name">Enter Student ID:</label>
+    <input type="text" bind:value={student_id}>
+    <button on:click={addStudentToTeam} class="add-to-team-button btn variant-filled">Add Student</button>
+  </div>
+{/if}
+  
+<div>
+  {#if showTeamsButton === false}
+    <h3>Currently no teams are formed</h3>
+  {:else}
+    <h2>Teams for the Competition</h2>
+    <h3>Current Teams using {sortUsed}</h3>
+    {#each teamsMadeBySort as teamArray, i}
     <div>
-      {#if showTeamsButton === false}
-      <h3>Currently no teams are formed</h3>
+      {#if team_names[i] === undefined}
+        <h2>{i+1}: Team {i+1}</h2>
       {:else}
-      <h2>Teams for the Competition</h2>
-      <h3>Current Teams using {sortUsed}</h3>
-      {#each teamsMadeBySort as teamArray, i}
-      <div>
-        {#if team_names[i] === undefined}
-          <h2>{i+1}: Team {i+1}</h2>
-        {:else}
-          <h2>{i+1}: { team_names[i] }</h2>
-        {/if}
-        <ul>
-          {#each teamArray as player (player.userId)}
-          <li>Team member: {player.userId}, score: {player.score}</li>
-          {/each}
-        </ul>
-      </div>
-      {/each}
+        <h2>{i+1}: { team_names[i] }</h2>
+      {/if}
+      <ul>
+        {#each teamArray as player (player.userId)}
+        <li>Team member: {player.userId}, score: {player.score}</li>
+        {/each}
+      </ul>
+    </div>
+    {/each}
       <div>
         <label for="team-names">Enter a Team Name:</label>
         <input type="text" bind:value={new_name}><br>
         <label for="team-number">Team #:</label>
         <input type="number" bind:value={number}><br>
-        <button on:click={updateTeamName} class="update-name-button">Update Name</button>
-      </div>
-      {/if}
+        <button on:click={updateTeamName} class="update-name-button btn variant-filled">Update Name</button>
     </div>
-    <button on:click={submitTeamsToDB} class="submit-teams-button">Submit Teams</button>
-    <button on:click={clearTeams} class="clear-teams-button">Clear Teams</button>
-{/if}
+  {/if}
+</div>
+<button on:click={submitTeamsToDB} class="submit-teams-button btn variant-filled">Submit Teams</button>
+<button on:click={clearTeams} class="clear-teams-button btn variant-filled">Clear Teams</button>
+</div>
+</main>

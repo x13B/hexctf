@@ -1,10 +1,11 @@
+import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
 export const load = (async ({ fetch, params: { slug }}) => {
     async function fetchTeam() {
         const response = await fetch('/api/teams/' + slug + '');
         const data = await response.json();
-
+        if (data.team === null) throw error(404, "Team does not exist");
         return data.team;
     }
 

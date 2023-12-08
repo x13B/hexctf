@@ -8,6 +8,7 @@
     
 </script>
 <main>
+    <div class="container">
     <h1>{team.teamName}</h1>
     <p>Points: {team.points}</p>
     { #if members.length !== 0}
@@ -31,4 +32,5 @@
     <p>This team has no questions answered!</p>
     {/if}
     <a href="/board">Return</a>
+</div>
 </main>

@@ -18,10 +18,12 @@
     }
 </script>
 
-<h3>Student Roster Page</h3>
+<main>
+    <div class="container">
+<h1>Student Roster</h1>
 
 {#if show_students}
-    <table>
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Username</th>
@@ -50,6 +52,8 @@
         </tbody>
     </table>
 {/if}
+</div>
+</main>
 
 
 

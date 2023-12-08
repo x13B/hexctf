@@ -2,14 +2,17 @@
   import type { PageData } from "./$types";
 
   export let data: PageData;
-  let users_name: string = data.username;
 
   // Bound variable from form for start date of competition
   let start: string = "";
   let end: string = "";
+  let hide_submit_button: boolean = (data.comp == null) ? false : true;
+  let comp_description: string = '';
+  let editing: boolean = false;
 
   let start_date: string = (data.comp?.startDate) ? data.comp.startDate : "";
   let end_date: string = (data.comp?.endDate) ? data.comp.endDate : "";
+  let comp_desc:string  = (data.comp?.description) ? data.comp.description : "";
   
   // Bound variable for name of competition
   let competition_name: string = '';
@@ -24,9 +27,15 @@
 
     // Assign to new variables to prevent undefined
     let name: string = competition_name;
-
     start = start.toString();
     end = end.toString();
+    
+    let desc: string = comp_description;
+
+    console.log(desc);
+    if (!name || !start || !end || !desc) {
+      return;
+    }
 
     // Submit options to server file to upload to DB
     try {
@@ -35,7 +44,7 @@
         headers: {
           'Content-Type' : 'application/json',
         },
-        body: JSON.stringify({name, start, end})
+        body: JSON.stringify({name, start, end, desc})
       });
 
       if (res.ok) {
@@ -53,23 +62,72 @@
 
     // Reset competition_name
     competition_name = '';
+    comp_description = '';
 
     show_comp_details = true;
   }
-</script>
 
-<h1>Welcome: {users_name}</h1>
+  function editDetails() {
+    competition_name = comp_name;
+    start = start_date;
+    end = end_date;
+    comp_description = comp_desc;
+    show_comp_details = false;
+    hide_submit_button = false;
+    editing = true;
+  }
+
+  // Function to handle cancel button click
+  function cancelEdit() {
+    // Reset the input fields to their original values
+    competition_name = '';
+    start = '';
+    end = '';
+    comp_description = '';
+    show_comp_details = true; // Show the competition details again
+    hide_submit_button = true; // Hide the submit button
+    editing = false;
+  }
+</script>
+<main>
+  <div class="container">
+<h1>Create Competition</h1>
 
 <form action="#">
-  <label for="name">Name of Competition</label>
+  <label for="name">Name of Competition:</label>
   <input type="text" name="comp-name" placeholder="Name of competition" bind:value={competition_name}/><br>
   <label for="length">Start Date:</label>
   <input type="datetime-local" bind:value={start}/><br>
   
   <label for="length">End Date:</label>
-  <input type="datetime-local" bind:value={end}/><br>
-  
-  <button type="submit" on:click={submitOptions}>Submit</button>
+  <input type="datetime-local" bind:value={end} required/><br>
+
+  <h3>Markdown Instructions</h3>
+  <ol>
+    <li>
+      To bold text, wrap text in #.
+      <ul>
+        <li>Example: #text#</li>
+      </ul>
+    </li>
+    <li>
+      To make a header text, wrap text in !. 
+      <ul>Example: !text!</ul>
+    </li>
+    <li>
+      Paragraphs will formatted automatically.
+    </li>
+  </ol>
+
+  <label for="des">Competition Description</label><br>
+    <textarea placeholder="Enter details and notes about competition." bind:value={comp_description}></textarea>
+  {#if !hide_submit_button}
+  <p>Note: All fields required. Cannot submit form with empty input.</p>
+  <button class="btn btn-outline-primary" type="submit" on:click={submitOptions}>Submit</button>
+  {#if editing}
+    <button on:click={cancelEdit}>Cancel</button>
+  {/if}
+  {/if}
 </form>
 
 {#if show_comp_details === true}
@@ -84,6 +142,9 @@
       <td>{comp_name}</td>
       <td>{start_date}</td>
       <td>{end_date}</td>
+      <td><button class="btn btn-outline-primary" on:click={editDetails}>Edit</button></td>
     </tr>
   </table>
 {/if}
+</div>
+</main>
