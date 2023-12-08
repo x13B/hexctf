@@ -148,14 +148,16 @@ model DockerState {
   imageName       String     @unique
   imagePath       String
   imageSHA        String?
-  imageIsUnique   Boolean    @default(false)
+  imageIsBaseContainer Boolean @default(true)
   imageIsBuilt    Boolean    @default(false)
   containerSHA    String?
   containerStatus String?
   containerPort   Int?
   containerIp     String?
+  containerInfo   String?
   team            Teams?     @relation(fields: [teamId], references: [teamId])
-  teamId          Int?       @unique
+  teamId          Int?
   question        Questions? @relation(fields: [questionId], references: [questionId])
-  questionId      Int?       @unique
+  questionId      Int?
+  @@unique([teamId, questionId])
 }
