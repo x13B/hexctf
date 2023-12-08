@@ -11,10 +11,10 @@ export const GET: RequestHandler = async ({ url }) => {
         status = "failure"
       }
 
-      const json_response = {
-        status: status,
-        competition
-      };
+          const json_response = {
+            status: status,
+            competition
+          };
         return json(json_response);
      
     } catch (error: any) {

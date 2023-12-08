@@ -100,38 +100,77 @@ async function findNextQuestion(locals: App.Locals, slug: number, difficulty: st
 }
 
 
-export const load = (async ({ locals, params: { slug } }) => {
-    const session = await locals.auth.validate();
-    if (!session)  throw redirect(302, "/login");
-    const question = await prisma.questions.findUnique({
-        where: { questionId: Number(slug) },
-    });
-    if (question === null) throw error(404, "Question not found");
-    const teamOfUser = await prisma.teamMembers.findUnique({
-        where: { userId: session.user.userId }
-    });
-    if (teamOfUser === null) throw error(403, "User is not assigned to a team");
-    const assignedQuestions = await prisma.assignedQuestions.findUnique({
-        where: { 
-            teamId_questionId: {
-                teamId: teamOfUser.teamId,
-                questionId: Number(slug),
-            }
-         },
-    });
-    const qAnswered = await prisma.answerQuestions.findUnique({
-        where: {
-            questionId_teamId: {
-                questionId: Number(slug),
-                teamId: teamOfUser.teamId,
-            },
-        },
-    });
-    // Prevents directory hopping to questions not assigned to team
-    if (assignedQuestions === null && qAnswered === null) throw error(403, "You are not assigned to this question");
+export const load = (async ({ locals, params: { slug }, fetch }) => {
+
+    async function fetchSession() {
+		const response = await fetch('/api/users/id', { method: 'GET' });
+        const data = await response.json();
+		if (data.status === "failure") throw error(404, "You must be logged in to see questions");
+
+        return data.session;
+	}
+
+	async function fetchTeam() {
+		const session = await fetchSession();
+		const userId = session.userId;
+		
+		const response = await fetch('/api/users/' + userId + '/team', { method: 'GET' });
+        const data = await response.json();
+		if (data.status === "failure") throw error(404, "You must be in a team to see questions");
+
+
+        return data.team;
+	}
+
+    async function fetchAssignedQuestion() {
+		const team = await fetchTeam()
+		const teamId = team.teamId;
+		const response = await fetch('/api/teams/' + teamId + '/questions/' + slug + '', { method: 'GET' });
+        const data = await response.json();
+
+        return data.assignedQuestion;
+	}
+
+	async function fetchAnsweredQuestion() {
+		const team = await fetchTeam()
+		const teamId = team.teamId;
+		const response = await fetch('/api/teams/' + teamId + '/questions/' + slug + '/answered', { method: 'GET' });
+        const data = await response.json();
+
+        return data.questionAnswered;
+	}
+
+    async function fetchQuestion() {
+        const response = await fetch('/api/questions/' + slug + '', { method: 'GET' });
+        const data = await response.json();
+        if (data.question === null) throw error(404, "This question does not exist");
+
+        return data.question;
+    }
+
+    async function fetchDockerState() {
+        const response = await fetch('/api/questions/' + slug + '/dockerstate', { method: 'GET' });
+        const data = await response.json();
+        
+        return data.dockerState;
+    }
+
+    // Check if the question is assigned or if it has been answered
+    // We will allow answered questions to be viewed
+    const question = await fetchQuestion()
+
+    const questionAnswered = await fetchAnsweredQuestion()
+    const assignedQuestion = await fetchAssignedQuestion()
+    
+    if (questionAnswered === null && assignedQuestion === null) throw error(404, "You are not assigned to this question");
     const check = {resp: false}
-    if (qAnswered !== null) {check.resp = true}
-    return { question, check }
+    if (questionAnswered !== null) {check.resp = true}
+
+    return { 
+        question,
+        dockerState: fetchDockerState(),
+        check 
+    }
 }) satisfies PageServerLoad;
 
 
@@ -263,5 +302,8 @@ export const actions = {
             })
         }
         throw redirect(302, "./");
+    },
+    dockerDeploy: async ({params: { slug }}) => {
+        console.log("dockerDeploy POST")
     }
 } satisfies Actions;
