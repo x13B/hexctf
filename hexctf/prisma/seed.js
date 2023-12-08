@@ -232,7 +232,7 @@ async function seed() {
     });
     const createQuestion3 = await prisma.questions.create({
       data: {
-        questionId: 2,
+        questionId: 3,
         title: "Searching",
         description: "What is the time complexity of the Quicksort algorithm in the worst-case scenario?",
         hint: "It's not O(log n).",
@@ -246,7 +246,7 @@ async function seed() {
     });
     const createQuestion4 = await prisma.questions.create({
       data: {
-        questionId: 2,
+        questionId: 4,
         title: "Queues",
         description: "What data structure is used to implement a priority queue efficiently? ",
         hint: "This data structure is a specialized binary tree-based structure.",
@@ -260,7 +260,7 @@ async function seed() {
     });
     const createQuestion5 = await prisma.questions.create({
       data: {
-        questionId: 2,
+        questionId: 5,
         title: "Dynamic Programming",
         description: "What is the term for an algorithm that divides a problem into smaller sub-problems and solves each sub-problem only once, storing its solutions to avoid redundant computations?",
         hint: "This technique is often used to optimize recursive algorithms.",
@@ -274,7 +274,7 @@ async function seed() {
     });
     const createQuestion6 = await prisma.questions.create({
       data: {
-        questionId: 2,
+        questionId: 6,
         title: "Data Structures",
         description: "What is the term for a data structure that allows elements to be inserted or removed from both ends with time complexity O(1)?",
         hint: "This data structure allows insertion and deletion of elements at both ends in constant time.",
