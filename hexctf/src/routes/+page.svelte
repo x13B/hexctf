@@ -27,7 +27,7 @@
 </svelte:head>
 <main>
 	<div class="container">
-		<img src={homepage_image} alt="HexCTF"/>
+		<img style="padding: 10px;" src={homepage_image} alt="HexCTF"/>
 		{@html displayParagraphs()}
 </div>
 </main>
