@@ -24,9 +24,12 @@
 <svelte:head>
 	<title>{competition.competitionName}</title>
 </svelte:head>
-
-<h1>{competition.competitionName}</h1>
-<h2>Welcome</h2>
-<div>
-	{@html displayParagraphs()}
+<main>
+	<div class="container">
+	<h1>{competition.competitionName}</h1>
+	<h2>Welcome</h2>
+	<div>
+		{@html displayParagraphs()}
+	</div>
 </div>
+</main>

@@ -7,6 +7,7 @@
 
 
 <main>
+    <div class="container">
     <h1>Docker Management</h1>
 
 
@@ -18,10 +19,11 @@
         <input name="filename"/> </label>
         <input type="checkbox" name="unique-image" value="true">
         <label for="unique-image">Unique Image</label>
-        <br><br><button class="btn variant-filled">Upload</button>
+        <br><br><button class="btn btn-outline-primary">Upload</button>
       </form> 
 
       {#if data?.success}
       <p>file successfully uploaded</p>
       {/if}
+    </div>
 </main>

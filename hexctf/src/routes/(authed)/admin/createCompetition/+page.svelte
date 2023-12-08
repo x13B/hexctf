@@ -89,7 +89,8 @@
     editing = false;
   }
 </script>
-
+<main>
+  <div class="container">
 <h1>Create Competition</h1>
 
 <form action="#">
@@ -122,7 +123,7 @@
     <textarea placeholder="Enter details and notes about competition." bind:value={comp_description}></textarea>
   {#if !hide_submit_button}
   <p>Note: All fields required. Cannot submit form with empty input.</p>
-  <button class="btn variant-filled" type="submit" on:click={submitOptions}>Submit</button>
+  <button class="btn btn-outline-primary" type="submit" on:click={submitOptions}>Submit</button>
   {#if editing}
     <button on:click={cancelEdit}>Cancel</button>
   {/if}
@@ -141,7 +142,9 @@
       <td>{comp_name}</td>
       <td>{start_date}</td>
       <td>{end_date}</td>
-      <td><button on:click={editDetails}>Edit</button></td>
+      <td><button class="btn btn-outline-primary" on:click={editDetails}>Edit</button></td>
     </tr>
   </table>
 {/if}
+</div>
+</main>
