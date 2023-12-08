@@ -205,18 +205,88 @@ async function seed() {
     const createQuestion1 = await prisma.questions.create({
       data: {
         questionId: 1,
-        title: "",
-        description: "",
-        hint: "",
-        hint2: "",
-        hint3: "",
-        answer: '',
-        points: 10,
-        categoryId: 1,
-        difficulty: ''
+        title: "Data Structures",
+        description: "Which data structure uses Last-In-First-Out (LIFO) principle?",
+        hint: "It's not a queue.",
+        hint2: "It's not a linked list.",
+        hint3: "It's begin with s.",
+        answer: 'stack',
+        points: 50,
+        categoryId: 2,
+        difficulty: 'Easy'
       }
     });
-
+    const createQuestion2 = await prisma.questions.create({
+      data: {
+        questionId: 2,
+        title: "Graphs",
+        description: "What does DFS stand for in graph traversal?",
+        hint: "It's a searching algorithm.",
+        hint2: "It checks the first neighbor.",
+        hint3: "It goes DEEP.",
+        answer: 'depth first search',
+        points: 50,
+        categoryId: 2,
+        difficulty: 'Easy'
+      }
+    });
+    const createQuestion3 = await prisma.questions.create({
+      data: {
+        questionId: 2,
+        title: "Searching",
+        description: "What is the time complexity of the Quicksort algorithm in the worst-case scenario?",
+        hint: "It's not O(log n).",
+        hint2: "It's not O(2^n).",
+        hint3: "",
+        answer: 'O(n^2)',
+        points: 75,
+        categoryId: 2,
+        difficulty: 'Medium'
+      }
+    });
+    const createQuestion4 = await prisma.questions.create({
+      data: {
+        questionId: 2,
+        title: "Queues",
+        description: "What data structure is used to implement a priority queue efficiently? ",
+        hint: "This data structure is a specialized binary tree-based structure.",
+        hint2: "It allows for efficient retrieval of the maximum or minimum element.",
+        hint3: "",
+        answer: 'heap',
+        points: 75,
+        categoryId: 2,
+        difficulty: 'Medium'
+      }
+    });
+    const createQuestion5 = await prisma.questions.create({
+      data: {
+        questionId: 2,
+        title: "Dynamic Programming",
+        description: "What is the term for an algorithm that divides a problem into smaller sub-problems and solves each sub-problem only once, storing its solutions to avoid redundant computations?",
+        hint: "This technique is often used to optimize recursive algorithms.",
+        hint2: "It involves storing the results of expensive function calls and reusing those results instead of re-computing them.",
+        hint3: "Its primary objective is to improve the efficiency of algorithms by eliminating redundant computations through the use of a storage mechanism.",
+        answer: 'memoization',
+        points: 100,
+        categoryId: 2,
+        difficulty: 'Hard'
+      }
+    });
+    const createQuestion6 = await prisma.questions.create({
+      data: {
+        questionId: 2,
+        title: "Data Structures",
+        description: "What is the term for a data structure that allows elements to be inserted or removed from both ends with time complexity O(1)?",
+        hint: "This data structure allows insertion and deletion of elements at both ends in constant time.",
+        hint2: "It can be implemented using arrays or linked lists.",
+        hint3: "It supports operations such as push/pop at both ends and is versatile for various algorithms, including graph traversal and implementing stacks or queues.",
+        answer: "deque",
+        points: 100,
+        categoryId: 2,
+        difficulty: "Hard"
+      }
+    });
+    
     // ===========================================================
 
   } catch (error) {
