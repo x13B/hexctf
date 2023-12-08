@@ -31,7 +31,7 @@ async function findNextQuestion(locals: App.Locals, slug: number, difficulty: st
     const teamOfUser = await prisma.teamMembers.findUnique({
         where: { userId: session.user.userId }
     });
-    if (teamOfUser === null) throw error(404, "User is not in a team");
+    if (teamOfUser === null) throw error(403, "User is not in a team");
     // find the team's answered questions
     const answeredQuestions = await prisma.answerQuestions.findMany({
         where: {
@@ -110,7 +110,7 @@ export const load = (async ({ locals, params: { slug } }) => {
     const teamOfUser = await prisma.teamMembers.findUnique({
         where: { userId: session.user.userId }
     });
-    if (teamOfUser === null) throw error(404, "User is not assigned to a team");
+    if (teamOfUser === null) throw error(403, "User is not assigned to a team");
     const assignedQuestions = await prisma.assignedQuestions.findUnique({
         where: { 
             teamId_questionId: {
@@ -128,7 +128,7 @@ export const load = (async ({ locals, params: { slug } }) => {
         },
     });
     // Prevents directory hopping to questions not assigned to team
-    if (assignedQuestions === null && qAnswered === null) throw error(404, "You are not assigned to this question");
+    if (assignedQuestions === null && qAnswered === null) throw error(403, "You are not assigned to this question");
     const check = {resp: false}
     if (qAnswered !== null) {check.resp = true}
     return { question, check }
@@ -173,7 +173,7 @@ export const actions = {
                 })
                 if (!getAssigned) throw error(404)
                 const assignedCreated = getAssigned.createdAt;
-                console.log(assignedCreated);
+                //console.log(assignedCreated);
                 const ans = await prisma.answerQuestions.create({
                     data: {
                         questionId: Number(slug),
