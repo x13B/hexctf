@@ -370,7 +370,49 @@ async function seed() {
         difficulty: 'Hard'
       }
     });
-    
+    const createQuestion13 = await prisma.questions.create({
+      data: {
+        questionId: 13,
+        title: "Networks",
+        description: "What protocol is used for sending emails?",
+        hint: "",
+        hint2: "",
+        hint3: "",
+        answer: "smtp",
+        points: 50,
+        categoryId: 1,
+        difficulty: 'Easy'
+      }
+    });
+
+    const createQuestion14 = await prisma.questions.create({
+      data: {
+        questionId: 14,
+        title: "Networks",
+        description: "What device forwards data packets between networks?",
+        hint: "",
+        hint2: "",
+        hint3: "",
+        answer: "router",
+        points: 50,
+        categoryId: 1,
+        difficulty: 'Easy'
+      }
+    });
+    const createQuestion15 = await prisma.questions.create({
+      data: {
+        questionId: 15,
+        title: "Programming",
+        description: "What is the process of finding and fixing errors in a program called?",
+        hint: "",
+        hint2: "",
+        hint3: "",
+        answer: "debugging",
+        points: 50,
+        categoryId: 3,
+        difficulty: 'Easy'
+      }
+    });
     // ===========================================================
 
   } catch (error) {
